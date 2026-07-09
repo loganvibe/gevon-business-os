@@ -18,14 +18,14 @@ export const Route = createFileRoute("/_authenticated/app")({
   component: AppShell,
 });
 
-const NAV = [
+const NAV: Array<{ to: string; label: string; icon: any; exact?: boolean }> = [
   { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/app/settings", label: "Company Settings", icon: Settings },
   { to: "/app/settings/users", label: "Team", icon: Users },
   { to: "/app/settings/branches", label: "Branches", icon: Building2 },
   { to: "/app/settings/roles", label: "Roles", icon: ShieldCheck },
   { to: "/app/settings/audit", label: "Audit Log", icon: ScrollText },
-] as const;
+];
 
 function AppShell() {
   const location = useLocation();
