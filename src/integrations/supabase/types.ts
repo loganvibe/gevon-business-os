@@ -14,7 +14,476 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      branches: {
+        Row: {
+          code: string | null
+          company_id: string
+          country_code: string | null
+          created_at: string
+          currency_code: string | null
+          id: string
+          is_headquarters: boolean
+          name: string
+          status: string
+          timezone: string | null
+          updated_at: string
+        }
+        Insert: {
+          code?: string | null
+          company_id: string
+          country_code?: string | null
+          created_at?: string
+          currency_code?: string | null
+          id?: string
+          is_headquarters?: boolean
+          name: string
+          status?: string
+          timezone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          code?: string | null
+          company_id?: string
+          country_code?: string | null
+          created_at?: string
+          currency_code?: string | null
+          id?: string
+          is_headquarters?: boolean
+          name?: string
+          status?: string
+          timezone?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "branches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "branches_country_code_fkey"
+            columns: ["country_code"]
+            isOneToOne: false
+            referencedRelation: "countries"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "branches_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "branches_timezone_fkey"
+            columns: ["timezone"]
+            isOneToOne: false
+            referencedRelation: "timezones"
+            referencedColumns: ["name"]
+          },
+        ]
+      }
+      companies: {
+        Row: {
+          country_code: string
+          created_at: string
+          created_by: string
+          currency_code: string
+          fiscal_year_start_month: number
+          id: string
+          locale: string
+          name: string
+          slug: string
+          status: string
+          timezone: string
+          updated_at: string
+        }
+        Insert: {
+          country_code: string
+          created_at?: string
+          created_by: string
+          currency_code: string
+          fiscal_year_start_month?: number
+          id?: string
+          locale?: string
+          name: string
+          slug: string
+          status?: string
+          timezone: string
+          updated_at?: string
+        }
+        Update: {
+          country_code?: string
+          created_at?: string
+          created_by?: string
+          currency_code?: string
+          fiscal_year_start_month?: number
+          id?: string
+          locale?: string
+          name?: string
+          slug?: string
+          status?: string
+          timezone?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companies_country_code_fkey"
+            columns: ["country_code"]
+            isOneToOne: false
+            referencedRelation: "countries"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "companies_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "companies_locale_fkey"
+            columns: ["locale"]
+            isOneToOne: false
+            referencedRelation: "locales"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "companies_timezone_fkey"
+            columns: ["timezone"]
+            isOneToOne: false
+            referencedRelation: "timezones"
+            referencedColumns: ["name"]
+          },
+        ]
+      }
+      company_invites: {
+        Row: {
+          accepted_at: string | null
+          company_id: string
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string
+          role_id: string
+          token_hash: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          company_id: string
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          invited_by: string
+          role_id: string
+          token_hash: string
+        }
+        Update: {
+          accepted_at?: string | null
+          company_id?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string
+          role_id?: string
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_invites_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_invites_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_members: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          invited_by: string | null
+          joined_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          invited_by?: string | null
+          joined_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          invited_by?: string | null
+          joined_at?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_members_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      countries: {
+        Row: {
+          code: string
+          default_currency: string | null
+          dial_code: string | null
+          name: string
+        }
+        Insert: {
+          code: string
+          default_currency?: string | null
+          dial_code?: string | null
+          name: string
+        }
+        Update: {
+          code?: string
+          default_currency?: string | null
+          dial_code?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
+      currencies: {
+        Row: {
+          code: string
+          decimals: number
+          name: string
+          symbol: string | null
+        }
+        Insert: {
+          code: string
+          decimals?: number
+          name: string
+          symbol?: string | null
+        }
+        Update: {
+          code?: string
+          decimals?: number
+          name?: string
+          symbol?: string | null
+        }
+        Relationships: []
+      }
+      locales: {
+        Row: {
+          code: string
+          name: string
+        }
+        Insert: {
+          code: string
+          name: string
+        }
+        Update: {
+          code?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      member_roles: {
+        Row: {
+          member_id: string
+          role_id: string
+        }
+        Insert: {
+          member_id: string
+          role_id: string
+        }
+        Update: {
+          member_id?: string
+          role_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_roles_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "company_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "member_roles_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      permissions: {
+        Row: {
+          description: string
+          key: string
+          module: string
+        }
+        Insert: {
+          description: string
+          key: string
+          module: string
+        }
+        Update: {
+          description?: string
+          key?: string
+          module?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          default_company_id: string | null
+          full_name: string | null
+          id: string
+          locale: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          default_company_id?: string | null
+          full_name?: string | null
+          id: string
+          locale?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          default_company_id?: string | null
+          full_name?: string | null
+          id?: string
+          locale?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_default_company_fk"
+            columns: ["default_company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profiles_locale_fkey"
+            columns: ["locale"]
+            isOneToOne: false
+            referencedRelation: "locales"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      role_permissions: {
+        Row: {
+          permission_key: string
+          role_id: string
+        }
+        Insert: {
+          permission_key: string
+          role_id: string
+        }
+        Update: {
+          permission_key?: string
+          role_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_permissions_permission_key_fkey"
+            columns: ["permission_key"]
+            isOneToOne: false
+            referencedRelation: "permissions"
+            referencedColumns: ["key"]
+          },
+          {
+            foreignKeyName: "role_permissions_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roles: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_system: boolean
+          key: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_system?: boolean
+          key: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_system?: boolean
+          key?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      timezones: {
+        Row: {
+          name: string
+        }
+        Insert: {
+          name: string
+        }
+        Update: {
+          name?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
