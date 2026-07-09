@@ -89,13 +89,14 @@ export const updateCompany = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => updateCompanyInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
-    const patch: Record<string, unknown> = {};
-    if (data.name !== undefined) patch.name = data.name;
-    if (data.countryCode !== undefined) patch.country_code = data.countryCode;
-    if (data.currencyCode !== undefined) patch.currency_code = data.currencyCode;
-    if (data.timezone !== undefined) patch.timezone = data.timezone;
-    if (data.locale !== undefined) patch.locale = data.locale;
-    if (data.fiscalYearStartMonth !== undefined) patch.fiscal_year_start_month = data.fiscalYearStartMonth;
+    const patch = {
+      ...(data.name !== undefined && { name: data.name }),
+      ...(data.countryCode !== undefined && { country_code: data.countryCode }),
+      ...(data.currencyCode !== undefined && { currency_code: data.currencyCode }),
+      ...(data.timezone !== undefined && { timezone: data.timezone }),
+      ...(data.locale !== undefined && { locale: data.locale }),
+      ...(data.fiscalYearStartMonth !== undefined && { fiscal_year_start_month: data.fiscalYearStartMonth }),
+    };
 
     const { data: before } = await supabase.from("companies").select("*").eq("id", data.companyId).maybeSingle();
     const { data: after, error } = await supabase
@@ -442,7 +443,7 @@ export const listAuditLog = createServerFn({ method: "POST" })
       .from("company_members").select("id").eq("company_id", data.companyId).eq("user_id", context.userId).eq("status", "active").maybeSingle();
     if (!allowed) throw new Error("Forbidden");
     // Check permission through user client (RLS on audit_logs already enforces this, but we filter here for cleaner errors)
-    const { data: rows, error } = await supabaseAdmin
+    const { data: rows, error } = await (supabaseAdmin as any)
       .schema("audit")
       .from("audit_logs")
       .select("*")
@@ -513,7 +514,7 @@ async function writeAudit(
 ) {
   try {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    await supabaseAdmin.schema("audit").from("audit_logs").insert({
+    await (supabaseAdmin as any).schema("audit").from("audit_logs").insert({
       company_id: entry.companyId,
       actor_user_id: context.userId,
       action: entry.action,
