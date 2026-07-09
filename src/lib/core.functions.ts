@@ -452,7 +452,7 @@ export const listAuditLog = createServerFn({ method: "POST" })
       .range(data.offset, data.offset + data.limit - 1);
     if (error) throw new Error(error.message);
     // Enrich actor names
-    const actorIds = Array.from(new Set((rows ?? []).map((r: any) => r.actor_user_id).filter(Boolean)));
+    const actorIds = Array.from(new Set((rows ?? []).map((r: any) => r.actor_user_id).filter(Boolean))) as string[];
     let actors: Record<string, string | null> = {};
     if (actorIds.length) {
       const { data: profs } = await supabaseAdmin.from("profiles").select("id, full_name").in("id", actorIds);
