@@ -33,12 +33,12 @@ function AuditPage() {
             {data.length === 0 && (
               <TableRow><TableCell colSpan={4} className="py-10 text-center text-sm text-muted-foreground">No activity yet.</TableCell></TableRow>
             )}
-            {data.map((r) => (
+            {data.map((r: any) => (
               <TableRow key={r.id}>
                 <TableCell className="text-sm text-muted-foreground">{new Date(r.createdAt).toLocaleString()}</TableCell>
-                <TableCell className="text-sm">{r.actor?.name ?? (r.actor?.id?.slice(0, 8) + "…") ?? "System"}</TableCell>
+                <TableCell className="text-sm">{r.actor?.name ?? (r.actor?.id ? r.actor.id.slice(0, 8) + "…" : "System")}</TableCell>
                 <TableCell><Badge variant="outline" className="font-mono text-[10px]">{r.action}</Badge></TableCell>
-                <TableCell className="text-sm text-muted-foreground">{r.entityType} {r.entityId?.slice(0, 8) ?? ""}</TableCell>
+                <TableCell className="text-sm text-muted-foreground">{r.entityType} {r.entityId ? r.entityId.slice(0, 8) : ""}</TableCell>
               </TableRow>
             ))}
           </TableBody>

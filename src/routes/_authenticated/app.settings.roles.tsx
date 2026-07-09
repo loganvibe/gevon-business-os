@@ -55,7 +55,7 @@ function RolesPage() {
               </div>
               {r.description && <p className="mt-1 text-sm text-muted-foreground">{r.description}</p>}
               <div className="mt-3 flex flex-wrap gap-1">
-                {r.permissions.slice(0, 8).map((p) => <Badge key={p} variant="outline" className="text-[10px]">{p}</Badge>)}
+                {r.permissions.slice(0, 8).map((p: string) => <Badge key={p} variant="outline" className="text-[10px]">{p}</Badge>)}
                 {r.permissions.length > 8 && <Badge variant="outline" className="text-[10px]">+{r.permissions.length - 8} more</Badge>}
               </div>
             </div>

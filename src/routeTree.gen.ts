@@ -19,6 +19,12 @@ import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
+import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
+import { Route as AuthenticatedAppSettingsUsersRouteImport } from './routes/_authenticated/app.settings.users'
+import { Route as AuthenticatedAppSettingsRolesRouteImport } from './routes/_authenticated/app.settings.roles'
+import { Route as AuthenticatedAppSettingsBranchesRouteImport } from './routes/_authenticated/app.settings.branches'
+import { Route as AuthenticatedAppSettingsAuditRouteImport } from './routes/_authenticated/app.settings.audit'
+import { Route as AuthenticatedAppAcceptInviteTokenRouteImport } from './routes/_authenticated/app.accept-invite.$token'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -70,6 +76,42 @@ const AuthenticatedAppOnboardingRoute =
     path: '/onboarding',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppSettingsIndexRoute =
+  AuthenticatedAppSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppSettingsUsersRoute =
+  AuthenticatedAppSettingsUsersRouteImport.update({
+    id: '/settings/users',
+    path: '/settings/users',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppSettingsRolesRoute =
+  AuthenticatedAppSettingsRolesRouteImport.update({
+    id: '/settings/roles',
+    path: '/settings/roles',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppSettingsBranchesRoute =
+  AuthenticatedAppSettingsBranchesRouteImport.update({
+    id: '/settings/branches',
+    path: '/settings/branches',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppSettingsAuditRoute =
+  AuthenticatedAppSettingsAuditRouteImport.update({
+    id: '/settings/audit',
+    path: '/settings/audit',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppAcceptInviteTokenRoute =
+  AuthenticatedAppAcceptInviteTokenRouteImport.update({
+    id: '/accept-invite/$token',
+    path: '/accept-invite/$token',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -81,6 +123,12 @@ export interface FileRoutesByFullPath {
   '/legal/terms': typeof LegalTermsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app/': typeof AuthenticatedAppIndexRoute
+  '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
+  '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
+  '/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
+  '/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
+  '/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -91,6 +139,12 @@ export interface FileRoutesByTo {
   '/legal/terms': typeof LegalTermsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app': typeof AuthenticatedAppIndexRoute
+  '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
+  '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
+  '/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
+  '/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
+  '/app/settings': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -104,6 +158,12 @@ export interface FileRoutesById {
   '/legal/terms': typeof LegalTermsRoute
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
+  '/_authenticated/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/_authenticated/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
+  '/_authenticated/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
+  '/_authenticated/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
+  '/_authenticated/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
+  '/_authenticated/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,6 +177,12 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/app/onboarding'
     | '/app/'
+    | '/app/accept-invite/$token'
+    | '/app/settings/audit'
+    | '/app/settings/branches'
+    | '/app/settings/roles'
+    | '/app/settings/users'
+    | '/app/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -127,6 +193,12 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/app/onboarding'
     | '/app'
+    | '/app/accept-invite/$token'
+    | '/app/settings/audit'
+    | '/app/settings/branches'
+    | '/app/settings/roles'
+    | '/app/settings/users'
+    | '/app/settings'
   id:
     | '__root__'
     | '/'
@@ -139,6 +211,12 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/_authenticated/app/onboarding'
     | '/_authenticated/app/'
+    | '/_authenticated/app/accept-invite/$token'
+    | '/_authenticated/app/settings/audit'
+    | '/_authenticated/app/settings/branches'
+    | '/_authenticated/app/settings/roles'
+    | '/_authenticated/app/settings/users'
+    | '/_authenticated/app/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,17 +301,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppOnboardingRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/settings/': {
+      id: '/_authenticated/app/settings/'
+      path: '/settings'
+      fullPath: '/app/settings/'
+      preLoaderRoute: typeof AuthenticatedAppSettingsIndexRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/settings/users': {
+      id: '/_authenticated/app/settings/users'
+      path: '/settings/users'
+      fullPath: '/app/settings/users'
+      preLoaderRoute: typeof AuthenticatedAppSettingsUsersRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/settings/roles': {
+      id: '/_authenticated/app/settings/roles'
+      path: '/settings/roles'
+      fullPath: '/app/settings/roles'
+      preLoaderRoute: typeof AuthenticatedAppSettingsRolesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/settings/branches': {
+      id: '/_authenticated/app/settings/branches'
+      path: '/settings/branches'
+      fullPath: '/app/settings/branches'
+      preLoaderRoute: typeof AuthenticatedAppSettingsBranchesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/settings/audit': {
+      id: '/_authenticated/app/settings/audit'
+      path: '/settings/audit'
+      fullPath: '/app/settings/audit'
+      preLoaderRoute: typeof AuthenticatedAppSettingsAuditRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/accept-invite/$token': {
+      id: '/_authenticated/app/accept-invite/$token'
+      path: '/accept-invite/$token'
+      fullPath: '/app/accept-invite/$token'
+      preLoaderRoute: typeof AuthenticatedAppAcceptInviteTokenRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
   }
 }
 
 interface AuthenticatedAppRouteChildren {
   AuthenticatedAppOnboardingRoute: typeof AuthenticatedAppOnboardingRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
+  AuthenticatedAppAcceptInviteTokenRoute: typeof AuthenticatedAppAcceptInviteTokenRoute
+  AuthenticatedAppSettingsAuditRoute: typeof AuthenticatedAppSettingsAuditRoute
+  AuthenticatedAppSettingsBranchesRoute: typeof AuthenticatedAppSettingsBranchesRoute
+  AuthenticatedAppSettingsRolesRoute: typeof AuthenticatedAppSettingsRolesRoute
+  AuthenticatedAppSettingsUsersRoute: typeof AuthenticatedAppSettingsUsersRoute
+  AuthenticatedAppSettingsIndexRoute: typeof AuthenticatedAppSettingsIndexRoute
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppOnboardingRoute: AuthenticatedAppOnboardingRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
+  AuthenticatedAppAcceptInviteTokenRoute:
+    AuthenticatedAppAcceptInviteTokenRoute,
+  AuthenticatedAppSettingsAuditRoute: AuthenticatedAppSettingsAuditRoute,
+  AuthenticatedAppSettingsBranchesRoute: AuthenticatedAppSettingsBranchesRoute,
+  AuthenticatedAppSettingsRolesRoute: AuthenticatedAppSettingsRolesRoute,
+  AuthenticatedAppSettingsUsersRoute: AuthenticatedAppSettingsUsersRoute,
+  AuthenticatedAppSettingsIndexRoute: AuthenticatedAppSettingsIndexRoute,
 }
 
 const AuthenticatedAppRouteWithChildren =
