@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
-  LayoutDashboard, Settings, Users, Building2, ShieldCheck, ScrollText,
+  LayoutDashboard, Settings, Users, Building2, ShieldCheck, ScrollText, Blocks, Gem,
   ChevronsUpDown, LogOut, Plus, Loader2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
