@@ -33,7 +33,9 @@ import { Route as PlatformAdminAnalyticsRouteImport } from './routes/_platform/a
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
 import { Route as AuthenticatedAppSettingsUsersRouteImport } from './routes/_authenticated/app.settings.users'
+import { Route as AuthenticatedAppSettingsSubscriptionRouteImport } from './routes/_authenticated/app.settings.subscription'
 import { Route as AuthenticatedAppSettingsRolesRouteImport } from './routes/_authenticated/app.settings.roles'
+import { Route as AuthenticatedAppSettingsModulesRouteImport } from './routes/_authenticated/app.settings.modules'
 import { Route as AuthenticatedAppSettingsBranchesRouteImport } from './routes/_authenticated/app.settings.branches'
 import { Route as AuthenticatedAppSettingsAuditRouteImport } from './routes/_authenticated/app.settings.audit'
 import { Route as AuthenticatedAppAcceptInviteTokenRouteImport } from './routes/_authenticated/app.accept-invite.$token'
@@ -161,10 +163,22 @@ const AuthenticatedAppSettingsUsersRoute =
     path: '/settings/users',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppSettingsSubscriptionRoute =
+  AuthenticatedAppSettingsSubscriptionRouteImport.update({
+    id: '/settings/subscription',
+    path: '/settings/subscription',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppSettingsRolesRoute =
   AuthenticatedAppSettingsRolesRouteImport.update({
     id: '/settings/roles',
     path: '/settings/roles',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppSettingsModulesRoute =
+  AuthenticatedAppSettingsModulesRouteImport.update({
+    id: '/settings/modules',
+    path: '/settings/modules',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
 const AuthenticatedAppSettingsBranchesRoute =
@@ -210,7 +224,9 @@ export interface FileRoutesByFullPath {
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
+  '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
   '/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
+  '/app/settings/subscription': typeof AuthenticatedAppSettingsSubscriptionRoute
   '/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
   '/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
@@ -235,7 +251,9 @@ export interface FileRoutesByTo {
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
+  '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
   '/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
+  '/app/settings/subscription': typeof AuthenticatedAppSettingsSubscriptionRoute
   '/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
   '/app/settings': typeof AuthenticatedAppSettingsIndexRoute
 }
@@ -266,7 +284,9 @@ export interface FileRoutesById {
   '/_authenticated/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/_authenticated/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/_authenticated/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
+  '/_authenticated/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
   '/_authenticated/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
+  '/_authenticated/app/settings/subscription': typeof AuthenticatedAppSettingsSubscriptionRoute
   '/_authenticated/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
   '/_authenticated/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
@@ -296,7 +316,9 @@ export interface FileRouteTypes {
     | '/app/accept-invite/$token'
     | '/app/settings/audit'
     | '/app/settings/branches'
+    | '/app/settings/modules'
     | '/app/settings/roles'
+    | '/app/settings/subscription'
     | '/app/settings/users'
     | '/app/settings/'
   fileRoutesByTo: FileRoutesByTo
@@ -321,7 +343,9 @@ export interface FileRouteTypes {
     | '/app/accept-invite/$token'
     | '/app/settings/audit'
     | '/app/settings/branches'
+    | '/app/settings/modules'
     | '/app/settings/roles'
+    | '/app/settings/subscription'
     | '/app/settings/users'
     | '/app/settings'
   id:
@@ -351,7 +375,9 @@ export interface FileRouteTypes {
     | '/_authenticated/app/accept-invite/$token'
     | '/_authenticated/app/settings/audit'
     | '/_authenticated/app/settings/branches'
+    | '/_authenticated/app/settings/modules'
     | '/_authenticated/app/settings/roles'
+    | '/_authenticated/app/settings/subscription'
     | '/_authenticated/app/settings/users'
     | '/_authenticated/app/settings/'
   fileRoutesById: FileRoutesById
@@ -537,11 +563,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSettingsUsersRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/settings/subscription': {
+      id: '/_authenticated/app/settings/subscription'
+      path: '/settings/subscription'
+      fullPath: '/app/settings/subscription'
+      preLoaderRoute: typeof AuthenticatedAppSettingsSubscriptionRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/settings/roles': {
       id: '/_authenticated/app/settings/roles'
       path: '/settings/roles'
       fullPath: '/app/settings/roles'
       preLoaderRoute: typeof AuthenticatedAppSettingsRolesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/settings/modules': {
+      id: '/_authenticated/app/settings/modules'
+      path: '/settings/modules'
+      fullPath: '/app/settings/modules'
+      preLoaderRoute: typeof AuthenticatedAppSettingsModulesRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/settings/branches': {
@@ -574,7 +614,9 @@ interface AuthenticatedAppRouteChildren {
   AuthenticatedAppAcceptInviteTokenRoute: typeof AuthenticatedAppAcceptInviteTokenRoute
   AuthenticatedAppSettingsAuditRoute: typeof AuthenticatedAppSettingsAuditRoute
   AuthenticatedAppSettingsBranchesRoute: typeof AuthenticatedAppSettingsBranchesRoute
+  AuthenticatedAppSettingsModulesRoute: typeof AuthenticatedAppSettingsModulesRoute
   AuthenticatedAppSettingsRolesRoute: typeof AuthenticatedAppSettingsRolesRoute
+  AuthenticatedAppSettingsSubscriptionRoute: typeof AuthenticatedAppSettingsSubscriptionRoute
   AuthenticatedAppSettingsUsersRoute: typeof AuthenticatedAppSettingsUsersRoute
   AuthenticatedAppSettingsIndexRoute: typeof AuthenticatedAppSettingsIndexRoute
 }
@@ -586,7 +628,10 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
     AuthenticatedAppAcceptInviteTokenRoute,
   AuthenticatedAppSettingsAuditRoute: AuthenticatedAppSettingsAuditRoute,
   AuthenticatedAppSettingsBranchesRoute: AuthenticatedAppSettingsBranchesRoute,
+  AuthenticatedAppSettingsModulesRoute: AuthenticatedAppSettingsModulesRoute,
   AuthenticatedAppSettingsRolesRoute: AuthenticatedAppSettingsRolesRoute,
+  AuthenticatedAppSettingsSubscriptionRoute:
+    AuthenticatedAppSettingsSubscriptionRoute,
   AuthenticatedAppSettingsUsersRoute: AuthenticatedAppSettingsUsersRoute,
   AuthenticatedAppSettingsIndexRoute: AuthenticatedAppSettingsIndexRoute,
 }
