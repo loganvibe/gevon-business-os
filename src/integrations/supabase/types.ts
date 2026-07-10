@@ -93,6 +93,7 @@ export type Database = {
           currency_code: string
           fiscal_year_start_month: number
           id: string
+          is_internal: boolean
           locale: string
           name: string
           slug: string
@@ -107,6 +108,7 @@ export type Database = {
           currency_code: string
           fiscal_year_start_month?: number
           id?: string
+          is_internal?: boolean
           locale?: string
           name: string
           slug: string
@@ -121,6 +123,7 @@ export type Database = {
           currency_code?: string
           fiscal_year_start_month?: number
           id?: string
+          is_internal?: boolean
           locale?: string
           name?: string
           slug?: string
@@ -251,6 +254,54 @@ export type Database = {
           },
         ]
       }
+      company_modules: {
+        Row: {
+          company_id: string
+          created_at: string
+          enabled_at: string
+          enabled_by: string | null
+          id: string
+          module_id: string
+          settings: Json
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          enabled_at?: string
+          enabled_by?: string | null
+          id?: string
+          module_id: string
+          settings?: Json
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          enabled_at?: string
+          enabled_by?: string | null
+          id?: string
+          module_id?: string
+          settings?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_modules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "company_modules_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       countries: {
         Row: {
           code: string
@@ -292,6 +343,92 @@ export type Database = {
           symbol?: string | null
         }
         Relationships: []
+      }
+      feature_flag_overrides: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          flag_key: string
+          id: string
+          note: string | null
+          set_by: string | null
+          status: Database["public"]["Enums"]["feature_flag_status"]
+          updated_at: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          flag_key: string
+          id?: string
+          note?: string | null
+          set_by?: string | null
+          status: Database["public"]["Enums"]["feature_flag_status"]
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          flag_key?: string
+          id?: string
+          note?: string | null
+          set_by?: string | null
+          status?: Database["public"]["Enums"]["feature_flag_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_flag_overrides_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feature_flag_overrides_flag_key_fkey"
+            columns: ["flag_key"]
+            isOneToOne: false
+            referencedRelation: "feature_flags"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      feature_flags: {
+        Row: {
+          created_at: string
+          default_status: Database["public"]["Enums"]["feature_flag_status"]
+          description: string | null
+          key: string
+          module_id: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_status?: Database["public"]["Enums"]["feature_flag_status"]
+          description?: string | null
+          key: string
+          module_id?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_status?: Database["public"]["Enums"]["feature_flag_status"]
+          description?: string | null
+          key?: string
+          module_id?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_flags_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       locales: {
         Row: {
@@ -338,6 +475,155 @@ export type Database = {
           },
         ]
       }
+      module_ai_capabilities: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          input_schema: Json
+          key: string
+          module_id: string
+          name: string
+          output_schema: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          input_schema?: Json
+          key: string
+          module_id: string
+          name: string
+          output_schema?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          input_schema?: Json
+          key?: string
+          module_id?: string
+          name?: string
+          output_schema?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_ai_capabilities_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      module_dependencies: {
+        Row: {
+          depends_on_id: string
+          module_id: string
+        }
+        Insert: {
+          depends_on_id: string
+          module_id: string
+        }
+        Update: {
+          depends_on_id?: string
+          module_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_dependencies_depends_on_id_fkey"
+            columns: ["depends_on_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "module_dependencies_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      module_permissions: {
+        Row: {
+          module_id: string
+          permission_key: string
+        }
+        Insert: {
+          module_id: string
+          permission_key: string
+        }
+        Update: {
+          module_id?: string
+          permission_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_permissions_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "module_permissions_permission_key_fkey"
+            columns: ["permission_key"]
+            isOneToOne: false
+            referencedRelation: "permissions"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      modules: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          is_core: boolean
+          manifest_hash: string | null
+          name: string
+          status: Database["public"]["Enums"]["module_status"]
+          subscription_tier: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id: string
+          is_core?: boolean
+          manifest_hash?: string | null
+          name: string
+          status?: Database["public"]["Enums"]["module_status"]
+          subscription_tier?: string
+          updated_at?: string
+          version?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_core?: boolean
+          manifest_hash?: string | null
+          name?: string
+          status?: Database["public"]["Enums"]["module_status"]
+          subscription_tier?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
       permissions: {
         Row: {
           description: string
@@ -353,6 +639,96 @@ export type Database = {
           description?: string
           key?: string
           module?: string
+        }
+        Relationships: []
+      }
+      plan_modules: {
+        Row: {
+          module_id: string
+          plan_key: string
+        }
+        Insert: {
+          module_id: string
+          plan_key: string
+        }
+        Update: {
+          module_id?: string
+          plan_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_modules_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plan_modules_plan_key_fkey"
+            columns: ["plan_key"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          is_custom: boolean
+          key: string
+          name: string
+          tier: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          is_custom?: boolean
+          key: string
+          name: string
+          tier?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          is_custom?: boolean
+          key?: string
+          name?: string
+          tier?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      platform_admins: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["platform_role"]
+          status: Database["public"]["Enums"]["platform_admin_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["platform_role"]
+          status?: Database["public"]["Enums"]["platform_admin_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["platform_role"]
+          status?: Database["public"]["Enums"]["platform_admin_status"]
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -472,6 +848,57 @@ export type Database = {
           },
         ]
       }
+      subscriptions: {
+        Row: {
+          company_id: string
+          created_at: string
+          created_by: string | null
+          current_period_end: string | null
+          id: string
+          plan_key: string
+          status: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          current_period_end?: string | null
+          id?: string
+          plan_key: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          current_period_end?: string | null
+          id?: string
+          plan_key?: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_plan_key_fkey"
+            columns: ["plan_key"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
       timezones: {
         Row: {
           name: string
@@ -492,7 +919,25 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      feature_flag_status:
+        | "development"
+        | "internal"
+        | "beta"
+        | "premium"
+        | "public"
+        | "disabled"
+      module_status: "active" | "deprecated" | "disabled_global"
+      platform_admin_status: "active" | "disabled"
+      platform_role:
+        | "super_admin"
+        | "support"
+        | "developer"
+        | "operations"
+        | "finance"
+        | "compliance"
+        | "security"
+        | "billing"
+      subscription_status: "trial" | "active" | "past_due" | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -619,6 +1064,28 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      feature_flag_status: [
+        "development",
+        "internal",
+        "beta",
+        "premium",
+        "public",
+        "disabled",
+      ],
+      module_status: ["active", "deprecated", "disabled_global"],
+      platform_admin_status: ["active", "disabled"],
+      platform_role: [
+        "super_admin",
+        "support",
+        "developer",
+        "operations",
+        "finance",
+        "compliance",
+        "security",
+        "billing",
+      ],
+      subscription_status: ["trial", "active", "past_due", "cancelled"],
+    },
   },
 } as const

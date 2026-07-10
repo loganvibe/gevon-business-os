@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
-  LayoutDashboard, Settings, Users, Building2, ShieldCheck, ScrollText,
+  LayoutDashboard, Settings, Users, Building2, ShieldCheck, ScrollText, Blocks, Gem,
   ChevronsUpDown, LogOut, Plus, Loader2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,6 +24,8 @@ const NAV: Array<{ to: string; label: string; icon: any; exact?: boolean }> = [
   { to: "/app/settings/users", label: "Team", icon: Users },
   { to: "/app/settings/branches", label: "Branches", icon: Building2 },
   { to: "/app/settings/roles", label: "Roles", icon: ShieldCheck },
+  { to: "/app/settings/modules", label: "Modules", icon: Blocks },
+  { to: "/app/settings/subscription", label: "Subscription", icon: Gem },
   { to: "/app/settings/audit", label: "Audit Log", icon: ScrollText },
 ];
 
