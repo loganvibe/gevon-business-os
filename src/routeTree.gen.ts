@@ -12,12 +12,24 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as PlatformRouteRouteImport } from './routes/_platform/route'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
+import { Route as PlatformDevelopersRouteImport } from './routes/_platform/developers'
+import { Route as PlatformAdminRouteImport } from './routes/_platform/admin'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
+import { Route as PlatformDevelopersIndexRouteImport } from './routes/_platform/developers.index'
+import { Route as PlatformAdminIndexRouteImport } from './routes/_platform/admin.index'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as PlatformAdminUsersRouteImport } from './routes/_platform/admin.users'
+import { Route as PlatformAdminSubscriptionsRouteImport } from './routes/_platform/admin.subscriptions'
+import { Route as PlatformAdminModulesRouteImport } from './routes/_platform/admin.modules'
+import { Route as PlatformAdminFeatureFlagsRouteImport } from './routes/_platform/admin.feature-flags'
+import { Route as PlatformAdminCompaniesRouteImport } from './routes/_platform/admin.companies'
+import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
+import { Route as PlatformAdminAnalyticsRouteImport } from './routes/_platform/admin.analytics'
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
 import { Route as AuthenticatedAppSettingsUsersRouteImport } from './routes/_authenticated/app.settings.users'
@@ -41,6 +53,10 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlatformRouteRoute = PlatformRouteRouteImport.update({
+  id: '/_platform',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -60,15 +76,72 @@ const LegalPrivacyRoute = LegalPrivacyRouteImport.update({
   path: '/legal/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlatformDevelopersRoute = PlatformDevelopersRouteImport.update({
+  id: '/developers',
+  path: '/developers',
+  getParentRoute: () => PlatformRouteRoute,
+} as any)
+const PlatformAdminRoute = PlatformAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => PlatformRouteRoute,
+} as any)
 const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const PlatformDevelopersIndexRoute = PlatformDevelopersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlatformDevelopersRoute,
+} as any)
+const PlatformAdminIndexRoute = PlatformAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
 const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthenticatedAppRoute,
+} as any)
+const PlatformAdminUsersRoute = PlatformAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
+const PlatformAdminSubscriptionsRoute =
+  PlatformAdminSubscriptionsRouteImport.update({
+    id: '/subscriptions',
+    path: '/subscriptions',
+    getParentRoute: () => PlatformAdminRoute,
+  } as any)
+const PlatformAdminModulesRoute = PlatformAdminModulesRouteImport.update({
+  id: '/modules',
+  path: '/modules',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
+const PlatformAdminFeatureFlagsRoute =
+  PlatformAdminFeatureFlagsRouteImport.update({
+    id: '/feature-flags',
+    path: '/feature-flags',
+    getParentRoute: () => PlatformAdminRoute,
+  } as any)
+const PlatformAdminCompaniesRoute = PlatformAdminCompaniesRouteImport.update({
+  id: '/companies',
+  path: '/companies',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
+const PlatformAdminAuditRoute = PlatformAdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
+const PlatformAdminAnalyticsRoute = PlatformAdminAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => PlatformAdminRoute,
 } as any)
 const AuthenticatedAppOnboardingRoute =
   AuthenticatedAppOnboardingRouteImport.update({
@@ -119,10 +192,21 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
+  '/admin': typeof PlatformAdminRouteWithChildren
+  '/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
+  '/admin/analytics': typeof PlatformAdminAnalyticsRoute
+  '/admin/audit': typeof PlatformAdminAuditRoute
+  '/admin/companies': typeof PlatformAdminCompaniesRoute
+  '/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/admin/modules': typeof PlatformAdminModulesRoute
+  '/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
+  '/admin/users': typeof PlatformAdminUsersRoute
   '/app/': typeof AuthenticatedAppIndexRoute
+  '/admin/': typeof PlatformAdminIndexRoute
+  '/developers/': typeof PlatformDevelopersIndexRoute
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
@@ -138,7 +222,16 @@ export interface FileRoutesByTo {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
+  '/admin/analytics': typeof PlatformAdminAnalyticsRoute
+  '/admin/audit': typeof PlatformAdminAuditRoute
+  '/admin/companies': typeof PlatformAdminCompaniesRoute
+  '/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/admin/modules': typeof PlatformAdminModulesRoute
+  '/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
+  '/admin/users': typeof PlatformAdminUsersRoute
   '/app': typeof AuthenticatedAppIndexRoute
+  '/admin': typeof PlatformAdminIndexRoute
+  '/developers': typeof PlatformDevelopersIndexRoute
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
@@ -150,14 +243,26 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_platform': typeof PlatformRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
+  '/_platform/admin': typeof PlatformAdminRouteWithChildren
+  '/_platform/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
+  '/_platform/admin/analytics': typeof PlatformAdminAnalyticsRoute
+  '/_platform/admin/audit': typeof PlatformAdminAuditRoute
+  '/_platform/admin/companies': typeof PlatformAdminCompaniesRoute
+  '/_platform/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/_platform/admin/modules': typeof PlatformAdminModulesRoute
+  '/_platform/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
+  '/_platform/admin/users': typeof PlatformAdminUsersRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
+  '/_platform/admin/': typeof PlatformAdminIndexRoute
+  '/_platform/developers/': typeof PlatformDevelopersIndexRoute
   '/_authenticated/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/_authenticated/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/_authenticated/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
@@ -173,10 +278,21 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/reset-password'
     | '/app'
+    | '/admin'
+    | '/developers'
     | '/legal/privacy'
     | '/legal/terms'
     | '/app/onboarding'
+    | '/admin/analytics'
+    | '/admin/audit'
+    | '/admin/companies'
+    | '/admin/feature-flags'
+    | '/admin/modules'
+    | '/admin/subscriptions'
+    | '/admin/users'
     | '/app/'
+    | '/admin/'
+    | '/developers/'
     | '/app/accept-invite/$token'
     | '/app/settings/audit'
     | '/app/settings/branches'
@@ -192,7 +308,16 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/app/onboarding'
+    | '/admin/analytics'
+    | '/admin/audit'
+    | '/admin/companies'
+    | '/admin/feature-flags'
+    | '/admin/modules'
+    | '/admin/subscriptions'
+    | '/admin/users'
     | '/app'
+    | '/admin'
+    | '/developers'
     | '/app/accept-invite/$token'
     | '/app/settings/audit'
     | '/app/settings/branches'
@@ -203,14 +328,26 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/_platform'
     | '/auth'
     | '/pricing'
     | '/reset-password'
     | '/_authenticated/app'
+    | '/_platform/admin'
+    | '/_platform/developers'
     | '/legal/privacy'
     | '/legal/terms'
     | '/_authenticated/app/onboarding'
+    | '/_platform/admin/analytics'
+    | '/_platform/admin/audit'
+    | '/_platform/admin/companies'
+    | '/_platform/admin/feature-flags'
+    | '/_platform/admin/modules'
+    | '/_platform/admin/subscriptions'
+    | '/_platform/admin/users'
     | '/_authenticated/app/'
+    | '/_platform/admin/'
+    | '/_platform/developers/'
     | '/_authenticated/app/accept-invite/$token'
     | '/_authenticated/app/settings/audit'
     | '/_authenticated/app/settings/branches'
@@ -222,6 +359,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  PlatformRouteRoute: typeof PlatformRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -252,6 +390,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_platform': {
+      id: '/_platform'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PlatformRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -280,6 +425,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LegalPrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_platform/developers': {
+      id: '/_platform/developers'
+      path: '/developers'
+      fullPath: '/developers'
+      preLoaderRoute: typeof PlatformDevelopersRouteImport
+      parentRoute: typeof PlatformRouteRoute
+    }
+    '/_platform/admin': {
+      id: '/_platform/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof PlatformAdminRouteImport
+      parentRoute: typeof PlatformRouteRoute
+    }
     '/_authenticated/app': {
       id: '/_authenticated/app'
       path: '/app'
@@ -287,12 +446,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_platform/developers/': {
+      id: '/_platform/developers/'
+      path: '/'
+      fullPath: '/developers/'
+      preLoaderRoute: typeof PlatformDevelopersIndexRouteImport
+      parentRoute: typeof PlatformDevelopersRoute
+    }
+    '/_platform/admin/': {
+      id: '/_platform/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof PlatformAdminIndexRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
     '/_authenticated/app/': {
       id: '/_authenticated/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
       parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_platform/admin/users': {
+      id: '/_platform/admin/users'
+      path: '/users'
+      fullPath: '/admin/users'
+      preLoaderRoute: typeof PlatformAdminUsersRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/subscriptions': {
+      id: '/_platform/admin/subscriptions'
+      path: '/subscriptions'
+      fullPath: '/admin/subscriptions'
+      preLoaderRoute: typeof PlatformAdminSubscriptionsRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/modules': {
+      id: '/_platform/admin/modules'
+      path: '/modules'
+      fullPath: '/admin/modules'
+      preLoaderRoute: typeof PlatformAdminModulesRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/feature-flags': {
+      id: '/_platform/admin/feature-flags'
+      path: '/feature-flags'
+      fullPath: '/admin/feature-flags'
+      preLoaderRoute: typeof PlatformAdminFeatureFlagsRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/companies': {
+      id: '/_platform/admin/companies'
+      path: '/companies'
+      fullPath: '/admin/companies'
+      preLoaderRoute: typeof PlatformAdminCompaniesRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/audit': {
+      id: '/_platform/admin/audit'
+      path: '/audit'
+      fullPath: '/admin/audit'
+      preLoaderRoute: typeof PlatformAdminAuditRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/analytics': {
+      id: '/_platform/admin/analytics'
+      path: '/analytics'
+      fullPath: '/admin/analytics'
+      preLoaderRoute: typeof PlatformAdminAnalyticsRouteImport
+      parentRoute: typeof PlatformAdminRoute
     }
     '/_authenticated/app/onboarding': {
       id: '/_authenticated/app/onboarding'
@@ -383,9 +605,61 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface PlatformAdminRouteChildren {
+  PlatformAdminAnalyticsRoute: typeof PlatformAdminAnalyticsRoute
+  PlatformAdminAuditRoute: typeof PlatformAdminAuditRoute
+  PlatformAdminCompaniesRoute: typeof PlatformAdminCompaniesRoute
+  PlatformAdminFeatureFlagsRoute: typeof PlatformAdminFeatureFlagsRoute
+  PlatformAdminModulesRoute: typeof PlatformAdminModulesRoute
+  PlatformAdminSubscriptionsRoute: typeof PlatformAdminSubscriptionsRoute
+  PlatformAdminUsersRoute: typeof PlatformAdminUsersRoute
+  PlatformAdminIndexRoute: typeof PlatformAdminIndexRoute
+}
+
+const PlatformAdminRouteChildren: PlatformAdminRouteChildren = {
+  PlatformAdminAnalyticsRoute: PlatformAdminAnalyticsRoute,
+  PlatformAdminAuditRoute: PlatformAdminAuditRoute,
+  PlatformAdminCompaniesRoute: PlatformAdminCompaniesRoute,
+  PlatformAdminFeatureFlagsRoute: PlatformAdminFeatureFlagsRoute,
+  PlatformAdminModulesRoute: PlatformAdminModulesRoute,
+  PlatformAdminSubscriptionsRoute: PlatformAdminSubscriptionsRoute,
+  PlatformAdminUsersRoute: PlatformAdminUsersRoute,
+  PlatformAdminIndexRoute: PlatformAdminIndexRoute,
+}
+
+const PlatformAdminRouteWithChildren = PlatformAdminRoute._addFileChildren(
+  PlatformAdminRouteChildren,
+)
+
+interface PlatformDevelopersRouteChildren {
+  PlatformDevelopersIndexRoute: typeof PlatformDevelopersIndexRoute
+}
+
+const PlatformDevelopersRouteChildren: PlatformDevelopersRouteChildren = {
+  PlatformDevelopersIndexRoute: PlatformDevelopersIndexRoute,
+}
+
+const PlatformDevelopersRouteWithChildren =
+  PlatformDevelopersRoute._addFileChildren(PlatformDevelopersRouteChildren)
+
+interface PlatformRouteRouteChildren {
+  PlatformAdminRoute: typeof PlatformAdminRouteWithChildren
+  PlatformDevelopersRoute: typeof PlatformDevelopersRouteWithChildren
+}
+
+const PlatformRouteRouteChildren: PlatformRouteRouteChildren = {
+  PlatformAdminRoute: PlatformAdminRouteWithChildren,
+  PlatformDevelopersRoute: PlatformDevelopersRouteWithChildren,
+}
+
+const PlatformRouteRouteWithChildren = PlatformRouteRoute._addFileChildren(
+  PlatformRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  PlatformRouteRoute: PlatformRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
