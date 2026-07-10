@@ -1,236 +1,237 @@
 
-# Milestone 1 — Gevon Core: Identity & Tenancy
+# Milestone 2 — Gevon Core Platform
 
-Foundation every future module of Gevon BusinessOS plugs into. Nothing business-facing ships in M1 — this is the multi-tenant substrate, auth, RBAC, RLS, and audit spine.
+Foundation for every future module. No business modules (CRM, HR, Payroll…) are built here — only the substrate they plug into, plus the hard split between Customer Business Portal (`/app/*`) and Gevon Admin Portal (`/admin/*`).
 
 ## 1. Requirements
 
 **In scope**
-- Email/password + Google sign-in (Lovable Cloud managed).
-- Multi-company (tenant) and multi-branch org model. One user ∈ many companies, with per-company roles.
-- RBAC: roles + granular permissions, seeded system roles, custom roles per company.
-- Row Level Security on every tenant-scoped table.
-- Audit log for every privileged mutation.
-- Company Settings shell (name, country, currency, timezone, locale, fiscal year) — values sourced from lookup tables, nothing hardcoded.
-- Auth UI: sign-in, sign-up, forgot/reset password, email confirmation, company-switcher.
-- Owner-only admin surfaces: Users, Roles, Branches, Settings, Audit Log viewer.
+- Portal split: `/app/*` (customers) vs `/admin/*` (Gevon staff). Two isolated permission systems, two isolated route trees, two isolated audit surfaces.
+- Module Registry (DB + in-code manifest) — every module self-describes.
+- Plugin Loader — Core discovers, validates, mounts modules at runtime (with lazy code-splitting).
+- Feature Flag Engine — status enum (dev, internal, beta, premium, public, disabled) + global overrides + per-company overrides + evaluation API.
+- Company Module Manager — company enables/disables modules; disabled ⇒ hidden from nav + routes 404.
+- Dependency Engine — module A requires B; activation is blocked if deps missing; deactivation blocked if dependents active.
+- Dynamic Navigation — sidebar/topbar generated from registry ∩ enabled modules ∩ user permissions ∩ feature flags.
+- Licensing Foundation — plans (Starter/Pro/Enterprise/Custom), plan↔module mapping, subscription record per company (no payments yet).
+- AI Capability Registry — module contributes AI capabilities; central discovery API (no LLM calls yet).
+- Admin Portal shell — Companies, Users (platform admins), Subscriptions, Feature Flags, Module Management, Global Audit, Platform Analytics stubs.
+- Platform admin identity — new `platform_admins` table + `platform_role` enum, fully separate from `company_members`.
+- Developer Portal architecture (`/developers/*`) — route tree + gate only; no features.
 
-**Out of scope (later milestones)**
-- Business modules (CRM, Inventory, Sales, POS, …).
-- Feature-flag & Plugin loader (M2).
-- Billing (M3).
-- AI Copilot (M4+).
+**Out of scope**
+- Any business module (CRM, Inventory, Sales, HR, Payroll, Reports).
+- Payment/billing integration.
+- Real LLM/AI execution.
+- Email delivery for invites (still deferred).
 
 **Non-functional**
-- Multi-tenant isolation verifiable by test.
-- All schema/data changes via migrations.
-- No secrets in client bundle.
-- Every route has error + not-found boundaries; every mutation is audited.
+- Customer users can never reach `/admin/*`; platform admins can never see company data via customer paths.
+- 100+ modules supported: registry indexed, nav memoized, routes lazy.
+- All DB changes via migrations; RLS + audit maintained on every new table.
 
 ## 2. Architecture
 
 ```text
-┌─────────────────────── Browser (TanStack Start SPA + SSR) ─────────────────────┐
-│  Public routes                 Auth routes              _authenticated/*       │
-│  /  /pricing  /legal/*         /auth  /reset-password   /app/*  (gated)        │
-│                                                                                │
-│  Supabase JS client (publishable key, RLS as user)                             │
-│  Router context: { queryClient, session, activeCompanyId }                     │
-└──────────────┬──────────────────────────────────┬──────────────────────────────┘
-               │ createServerFn (RPC, bearer)     │ server routes /api/public/*
-               ▼                                  ▼
-┌─────────────────────── TanStack server runtime (Workers) ──────────────────────┐
-│  requireSupabaseAuth middleware  → context.supabase (RLS as user)              │
-│  requireCompanyMember middleware → asserts membership + loads role/perms       │
-│  Server-only helpers (*.server.ts): admin ops via supabaseAdmin (import inside │
-│  handlers only), audit writer, permission resolver, invite tokens              │
-└──────────────┬─────────────────────────────────────────────────────────────────┘
-               ▼
-┌────────────────── Lovable Cloud (Postgres + Auth + Storage) ───────────────────┐
-│  Schemas: public (app data) | private (helpers) | audit (logs)                 │
-│  RLS everywhere. SECURITY DEFINER helpers for perm checks (no recursion).      │
-│  Triggers: profile-on-signup, updated_at, audit capture.                       │
-└────────────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────── Browser ─────────────────────────────────┐
+│  Public: / /pricing /legal/*                                         │
+│  Auth:   /auth /reset-password                                       │
+│                                                                      │
+│  Customer Business Portal        Gevon Admin Portal                  │
+│  /_authenticated/app/*           /_platform/admin/*                  │
+│  gate: company member            gate: platform_admins row           │
+│                                                                      │
+│  Developer Portal (skeleton only)                                    │
+│  /_platform/developers/*                                             │
+└──────────────┬───────────────────────────┬───────────────────────────┘
+               │ createServerFn            │ createServerFn
+               ▼                           ▼
+┌──────── requireCompanyMember ────┐  ┌──── requirePlatformAdmin ─────┐
+│ context: supabase (RLS as user), │  │ context: supabase, userId,    │
+│ userId, activeCompanyId, perms   │  │ platformRole, perms           │
+└──────────────┬───────────────────┘  └───────────────┬───────────────┘
+               ▼                                       ▼
+┌──────────────────── Module Registry & Plugin Loader ─────────────────┐
+│  In-code manifests (src/modules/*/module.ts) → registered at build   │
+│  DB mirror (public.modules, module_versions) → source of truth for   │
+│  admin toggles, feature flags, licensing, company activations        │
+│  Loader: resolves deps → checks flags → checks license → mounts      │
+│  routes via lazy React.lazy + injects nav + registers AI caps        │
+└──────────────────────────────────────────────────────────────────────┘
 ```
-
-Principles: API-first (every UI action calls a typed server fn), modular (each domain in its own folder), configurable (countries/currencies/roles are rows, not code), least privilege (admin client only inside handlers after role check).
 
 ## 3. Folder Structure
 
 ```text
 src/
   routes/
-    __root.tsx
-    index.tsx                        # marketing landing
-    pricing.tsx
-    legal.tos.tsx  legal.privacy.tsx
-    auth.tsx                         # sign-in/up (combined, next-preserving)
-    reset-password.tsx
-    _authenticated/
-      route.tsx                      # integration-managed gate
-      app.tsx                        # app shell (sidebar + company switcher)
-      app.index.tsx                  # placeholder dashboard
-      app.settings.tsx               # company settings
-      app.settings.users.tsx
-      app.settings.roles.tsx
-      app.settings.branches.tsx
-      app.settings.audit.tsx
-      app.accept-invite.$token.tsx
-  components/
-    core/{AppShell, CompanySwitcher, PermissionGate, DataTable, PageHeader}
-    auth/{SignInForm, SignUpForm, ForgotPasswordForm, ResetPasswordForm}
-    settings/{UsersTable, InviteUserDialog, RolesEditor, BranchesTable, AuditLogTable}
-    ui/                              # shadcn primitives
+    _authenticated/            # existing customer gate
+      app.*                    # customer portal (unchanged surface)
+      app.$moduleSlug.$.tsx    # dynamic module catch-all
+    _platform/
+      route.tsx                # ssr:false, requires platform_admins row
+      admin.tsx                # admin shell
+      admin.index.tsx
+      admin.companies.tsx
+      admin.companies.$id.tsx
+      admin.users.tsx
+      admin.subscriptions.tsx
+      admin.modules.tsx
+      admin.feature-flags.tsx
+      admin.audit.tsx
+      admin.analytics.tsx
+      developers.tsx           # skeleton
+      developers.index.tsx
+  modules/                     # NEW — each module is a folder
+    _core/module.ts            # built-in "core" module (settings etc.)
+    _example/                  # reference module, disabled by default
+      module.ts                # ModuleManifest
+      routes/                  # route components
+      widgets/
+      ai/
+      permissions.ts
+  platform/
+    registry/
+      types.ts                 # ModuleManifest, FeatureFlag, License…
+      registry.ts              # in-memory registry (built from manifests)
+      loader.ts                # resolve deps, filter by flag/license/perm
+      nav.ts                   # buildNavigation(user, company)
+    flags/
+      flags.functions.ts       # evaluate + admin CRUD
+      evaluator.ts             # pure eval logic (testable)
+    licensing/
+      plans.ts                 # Starter/Pro/Enterprise/Custom definitions
+      licensing.functions.ts
+    modules/
+      modules.functions.ts     # company enable/disable, dep checks
+      admin.functions.ts       # platform-admin module CRUD
+    admin/
+      admins.functions.ts      # platform admin CRUD + role checks
+    ai/
+      capabilities.ts          # AI capability registry
   lib/
-    auth/{auth.functions.ts, invites.functions.ts}
-    companies/{companies.functions.ts, branches.functions.ts, members.functions.ts}
-    rbac/{roles.functions.ts, permissions.ts}
-    audit/{audit.functions.ts, audit.server.ts}
-    settings/{settings.functions.ts, lookups.functions.ts}
-    hooks/{useSession.ts, useActiveCompany.ts, usePermission.ts}
-  integrations/supabase/            # generated + auth-middleware (managed)
-supabase/migrations/                # all schema changes
+    core.functions.ts          # existing
+  components/
+    platform/{AdminShell, ModuleCard, FlagToggle, LicenseBadge}
+    core/{DynamicNav, PermissionGate}   # DynamicNav is NEW
+supabase/migrations/           # new migration for M2 tables
+tests/
+  unit/{flags,deps,registry,nav}.test.ts
+  integration/{portal-isolation,module-lifecycle}.test.ts
 ```
 
 ## 4. Database Design
 
-Naming: snake_case, plural tables, `id uuid pk default gen_random_uuid()`, `created_at`/`updated_at timestamptz`, FKs `on delete` chosen per relation.
+All new `public.*` tables: GRANT to `authenticated` + `service_role`, RLS enabled, policies via `private.*` helpers. Audit trigger where mutations matter.
 
-**Lookup tables (seeded, extensible)**
-- `countries(code pk, name, dial_code, default_currency)`
-- `currencies(code pk, name, symbol, decimals)`
-- `locales(code pk, name)`
-- `timezones(name pk)`
+**Platform identity (isolated from customer RBAC)**
+- `platform_role` enum: `super_admin, support, developer, operations, finance, compliance, security, billing`.
+- `platform_admins(id, user_id → auth.users unique, role platform_role, status enum[active,disabled], created_by, timestamps)`.
+- Helper: `private.is_platform_admin(_uid uuid) returns boolean`, `private.platform_has_role(_uid uuid, _role platform_role)`.
 
-**Identity & tenancy**
-- `profiles(id uuid pk → auth.users, full_name, avatar_url, default_company_id, locale)`
-- `companies(id, name, slug unique, country_code → countries, currency_code → currencies, timezone → timezones, locale → locales, fiscal_year_start_month int, status, created_by → auth.users)`
-- `branches(id, company_id → companies on delete cascade, name, code, country_code, currency_code, timezone, is_headquarters bool, status)`
-- `company_members(id, company_id, user_id → auth.users, status enum[active,invited,disabled], invited_by, joined_at, unique(company_id, user_id))`
-- `company_invites(id, company_id, email, role_id, token_hash, expires_at, accepted_at, invited_by)`
+**Module registry**
+- `modules(id text pk, name, description, category, icon, version text, subscription_tier text, is_core bool, status enum[active,deprecated,disabled_global], manifest_hash, timestamps)` — mirrors code manifest; seeded on deploy.
+- `module_dependencies(module_id, depends_on_id, pk composite)`.
+- `module_permissions(module_id, permission_key → permissions.key)` — permissions are auto-inserted from manifest.
+- `module_ai_capabilities(id, module_id, key, name, description, input_schema jsonb, output_schema jsonb)`.
 
-**RBAC**
-- `permissions(key pk text, module text, description)` — e.g. `settings.users.manage`, `branches.write`, `audit.read`.
-- `roles(id, company_id nullable, key text, name, description, is_system bool, unique(company_id, key))` — `company_id null` = system role template.
-- `role_permissions(role_id, permission_key, pk(role_id, permission_key))`
-- `member_roles(member_id → company_members, role_id → roles, pk(member_id, role_id))` — user has N roles per company.
+**Feature flags**
+- `feature_flag_status` enum: `development, internal, beta, premium, public, disabled`.
+- `feature_flags(key text pk, module_id nullable, name, description, default_status feature_flag_status, timestamps)`.
+- `feature_flag_overrides(id, flag_key → feature_flags, company_id nullable, status feature_flag_status, note, set_by, timestamps, unique(flag_key, company_id))` — `company_id null` = global override.
 
-Seeded system roles: `owner` (all perms, auto-assigned to creator, undeletable), `admin`, `manager`, `staff`, `viewer`.
+**Licensing**
+- `plans(key pk text, name, description, tier int, is_custom bool)`.
+- `plan_modules(plan_key, module_id, pk composite)`.
+- `subscriptions(id, company_id unique, plan_key → plans, status enum[trial,active,past_due,cancelled], trial_ends_at, current_period_end, created_by, timestamps)` — no payment fields.
 
-**Audit**
-- `audit.audit_logs(id, company_id, actor_user_id, action text, entity_type text, entity_id uuid, before jsonb, after jsonb, ip inet, user_agent text, created_at)` — append-only, no update/delete policies.
+**Company module activation**
+- `company_modules(id, company_id, module_id, enabled_at, enabled_by, settings jsonb default '{}', unique(company_id, module_id))`.
 
-**Security-definer helpers (avoid RLS recursion)**
-- `private.is_company_member(_company uuid) returns boolean`
-- `private.has_permission(_company uuid, _perm text) returns boolean`
-- `private.current_company_ids() returns setof uuid`
+**RLS summary**
+- `modules`, `plans`, `plan_modules`, `feature_flags`: SELECT to `authenticated` (read-only catalog); writes require `private.is_platform_admin`.
+- `feature_flag_overrides`, `subscriptions`, `company_modules`: SELECT via `private.is_company_member(company_id)`; writes require `has_permission(company_id, 'modules.manage')` OR platform admin.
+- `platform_admins`: SELECT only to platform admins; writes only to `super_admin`.
 
-**RLS pattern** (applied to every tenant table)
-```sql
-alter table public.branches enable row level security;
-create policy branches_select on public.branches for select to authenticated
-  using (private.is_company_member(company_id));
-create policy branches_write on public.branches for all to authenticated
-  using (private.has_permission(company_id, 'branches.write'))
-  with check (private.has_permission(company_id, 'branches.write'));
-```
-Every `CREATE TABLE public.*` migration includes `GRANT` to `authenticated` + `service_role` before `ENABLE RLS` (per platform rule).
-
-**Triggers**
-- `handle_new_user()` → creates `profiles` row on `auth.users` insert.
-- `handle_new_company()` → inserts creator into `company_members` + assigns `owner` role + creates default HQ branch.
-- `set_updated_at()` on every table with `updated_at`.
-- `audit_capture()` on privileged tables (branches, members, roles, settings) writes to `audit.audit_logs`.
+**Permissions seeded**
+- `modules.manage`, `modules.view`, `flags.override`, `subscription.view`, `subscription.manage`, `platform.admins.manage`, `platform.flags.manage`, `platform.modules.manage`, `platform.audit.read`, `platform.analytics.read`.
 
 ## 5. API Design (server functions)
 
-All app-internal calls go through `createServerFn` under `src/lib/**/*.functions.ts`. Every mutation validates input with Zod, checks permission via `requireCompanyMember({ perm })`, and audits on success.
+Customer-side (`_authenticated`, requireCompanyMember):
+- `modules.listAvailable({ companyId })` → registry filtered by plan + flags + perms.
+- `modules.listEnabled({ companyId })`.
+- `modules.enable({ companyId, moduleId })` / `modules.disable(...)` — dep-checked, audited.
+- `modules.getManifest({ moduleId })`.
+- `flags.evaluate({ companyId, keys[] })`.
+- `subscription.get({ companyId })`.
+- `nav.get({ companyId })` (SSR-safe; delegates to loader).
 
-```text
-auth.signUp / signIn / signOut / requestPasswordReset / updatePassword
-companies.create / list (mine) / get / update / archive
-companies.switchActive({ companyId })
-branches.list / create / update / archive
-members.list / invite / resendInvite / revokeInvite / updateRoles / disable / reactivate
-invites.accept({ token })
-roles.list / create / update / delete / setPermissions
-permissions.listCatalog
-settings.get / update
-audit.list({ filters, page })
-lookups.countries / currencies / timezones / locales
-```
+Platform-side (`_platform`, requirePlatformAdmin):
+- `admin.companies.list/search/get/suspend/reactivate`.
+- `admin.users.list` (platform admins only) `/ invite / updateRole / disable`.
+- `admin.modules.list/upsertFromManifest/setGlobalStatus`.
+- `admin.flags.list/create/update/setGlobalOverride/setCompanyOverride/delete`.
+- `admin.subscriptions.list/setPlan/extendTrial`.
+- `admin.audit.list({ filters })` — reads from existing `audit.audit_logs` across tenants.
+- `admin.analytics.summary` — counts only.
 
-Server routes (raw HTTP) — none in M1. Webhooks/public APIs deferred.
+All mutations: Zod input, permission middleware, audit write.
 
 ## 6. UI/UX
 
-**Design system (proposed default; adjustable next turn)** — no purple; distinctly African-fintech, confident and calm.
-
-- Palette (light + dark, all oklch tokens in `src/styles.css`):
-  - Primary: deep emerald `oklch(0.52 0.13 158)` (Gevon green)
-  - Accent: warm amber `oklch(0.78 0.14 75)`
-  - Surfaces: `#0B0F0D` dark / `#FBFAF7` light
-  - Semantic: success/warning/destructive/info as tokens
-- Type: **Space Grotesk** headings, **Inter** body (via `@fontsource`).
-- Radius scale, elevation, motion tokens all in `@theme`.
-- Component variants (hero, glass-card, data-table, permission-locked) defined on shadcn primitives — no ad-hoc `className` colors.
-
-**Screens**
-- Public: landing, pricing, legal — real Gevon copy, real metadata per route.
-- Auth: single `/auth` with tabs (sign in / create account), Google button, next-preserving, `/reset-password` public.
-- App shell: left sidebar (Dashboard, Settings), top bar with **company switcher**, user menu, breadcrumbs.
-- Dashboard: welcome placeholder + "modules coming" grid (populated in later milestones).
-- Settings → Users: invite by email + role, table with status/role chips, revoke/disable.
-- Settings → Roles: role list + permission matrix editor (grouped by module).
-- Settings → Branches: CRUD, mark HQ.
-- Settings → Company: name/country/currency/timezone/locale/fiscal year (all from lookups).
-- Settings → Audit: filterable, paginated, read-only.
-- `<PermissionGate perm="…">` hides controls the user can't use; server re-checks.
+- **Customer app shell** (`/app`): sidebar becomes fully dynamic via `<DynamicNav>` — items come from `nav.get`. Adds Settings → Modules screen (enable/disable per company with dep hints and plan lock badges) and Settings → Subscription (read-only plan + module inclusion).
+- **Admin shell** (`/admin`): distinct visual chrome (charcoal top bar + red "Gevon Admin" ribbon so it's never mistaken for a customer surface), sidebar: Companies, Platform Users, Subscriptions, Modules, Feature Flags, Audit, Analytics.
+- **Reusable primitives**: `<PermissionGate>` (already exists — reused), `<FlagGate flag="…">`, `<LicenseBadge tier="…">`, `<ModuleCard>`, `<DependencyChip>`, `<FlagStatusPill>`.
+- **Access denials**: platform-admin gate redirects non-admins to `/app`; customer paths hide admin links entirely.
+- No design-system change — reuses the Gevon emerald tokens shipped in M1.
 
 ## 7. Business Rules
 
-- A user signing up with no company sees a "Create your company" onboarding.
-- Company creator is auto-`owner`; `owner` role is undeletable and always retains all permissions.
-- A company must always have ≥1 active owner and ≥1 HQ branch.
-- Invites expire in 7 days; token stored hashed; email delivered via Lovable Email (deferred to when Email is enabled — until then, invite link is shown to the inviter).
-- Disabling a member revokes access immediately (RLS driven by `status='active'` check inside helpers).
-- Country change updates default currency suggestion but never silently overwrites existing currency.
-- All timestamps stored UTC; rendered in company timezone.
-- Deleting a company is soft (`status='archived'`); hard delete is a separate admin-only operation (post-M1).
+- A module cannot be enabled for a company unless: (a) it's in the company's plan, (b) all `module_dependencies` are enabled, (c) required feature flags resolve to non-`disabled` for that company.
+- A module cannot be disabled if any enabled module depends on it — surface the dependents.
+- `is_core=true` modules cannot be disabled per company (always on).
+- Global `flag.status = disabled` overrides everything; `feature_flag_overrides` layered as: company override > global override > flag default.
+- `development` flags visible only to platform admins acting as themselves.
+- `internal` flags visible only to companies whose plan_key = `custom` and are marked internal (a `companies.is_internal` bool — added).
+- `beta` requires opt-in via a per-company override.
+- `premium` requires plan tier ≥ `professional`.
+- Removing a `platform_admin` requires ≥1 remaining `super_admin` (mirrors owner rule).
+- Suspending a company disables all its `company_modules` reads via RLS (subscription.status check inside helpers).
 
 ## 8. Security Design
 
-- **AuthN**: Supabase Auth (email + Google). Passwords: HIBP check enabled via `configure_auth`.
-- **AuthZ**: RBAC via `member_roles` → `role_permissions` → `permissions`. Server-side `requireCompanyMember({ perm })` middleware is the single source of truth; UI gates are cosmetic.
-- **Tenant isolation**: RLS on every `public.*` table using SECURITY DEFINER helpers in `private` schema (prevents recursion). No cross-company read paths.
-- **Least-privilege server**: `supabaseAdmin` only inside `.handler()` bodies via `await import(...)`, only after role check; used solely for Auth Admin (invites), never as default data client.
-- **Secrets**: all server-only env; no `VITE_` service key. Managed by Lovable Cloud.
-- **Audit**: every privileged mutation writes `audit.audit_logs`; table is append-only (no update/delete policy).
-- **Rate limiting**: per-user + per-IP token bucket on invite/reset endpoints (in-memory KV via Workers cache; upgrade path noted).
-- **Transport**: HTTPS only (managed). CSRF N/A (same-origin RPC with bearer). XSS: React auto-escape + strict CSP link tags in `__root.tsx`.
-- **PII**: emails only in `auth.users` + invites; profiles hold display data.
-- **Sign-out hygiene**: cancel queries → clear cache → `signOut` → replace-navigate to `/auth`.
+- **Hard portal isolation**: `/admin/*` lives under a separate `_platform` layout with its own gate calling `private.is_platform_admin`. No shared middleware path with `_authenticated`. Customer `requireCompanyMember` middleware rejects if caller is only a platform admin without company membership (and vice versa).
+- **Privilege boundaries**: platform admins have zero implicit access to company data — they only see aggregates/metadata; to view a specific company's data an explicit `support_session` (deferred design, table stub only) would be required (audited). M2 exposes only counts + settings, never row data.
+- **RLS everywhere**, using `private.*` SECURITY DEFINER helpers (no recursion).
+- **Admin actions audited** to `audit.audit_logs` with `entity_type='platform.*'` and `company_id=null` for cross-tenant events.
+- **Feature-flag evaluator is server-authoritative**; the client receives only the resolved booleans, never the raw override chain for other companies.
+- **Manifest sync**: `admin.modules.upsertFromManifest` is the only path that inserts/updates `modules` rows; hashed to detect drift; runs behind `super_admin` only.
+- **Rate limits** carried over from M1 for invite/reset; add on `admin.flags.setCompanyOverride` and `modules.enable`.
 
 ## 9. Testing Strategy
 
-- **Unit**: permission resolver, role assignment invariants (owner cannot be removed if last), invite token hashing/expiry.
-- **Integration (Vitest + supabase-js against local schema)**: RLS matrix — for each (role × table × op), assert allow/deny; cross-tenant read attempts must return zero rows.
-- **E2E (Playwright, headless)**: sign-up → create company → invite second user → accept invite → switch companies → attempt forbidden action → observe audit entry.
-- **Migration tests**: forward + idempotent re-run.
-- **Manual QA checklist** shipped in `docs/qa/m1.md`.
+- **Unit** (Vitest): `evaluator.ts` (all layering combinations), dependency resolver (cycles, missing deps, dependents), `buildNavigation` (perm × flag × license filtering), plan→module mapping.
+- **Integration** (Vitest against DB): platform-admin cannot read `companies.*` rows via customer paths; customer owner cannot call `admin.*` server fns (401/403); module enable respects deps + plan + flags; disable blocked by dependents.
+- **Registry tests**: every manifest in `src/modules/*` matches the Zod `ModuleManifest` schema; every permission it declares exists in `permissions` after sync.
+- **Portal isolation E2E** (Playwright): sign in as customer → `/admin` → redirected; sign in as platform admin → `/app` unavailable unless also a member → visible admin shell.
+- **Regression**: M1 RLS matrix re-run.
 
-## 10. Delivery Plan (implementation order once approved)
+## 10. Delivery Plan (once approved)
 
-1. Design system + brand tokens + landing/pricing/legal shells.
-2. Migrations: lookups, profiles, companies, branches, members, roles, permissions, invites, audit; helpers; triggers; RLS; seeds.
-3. Auth pages + managed `_authenticated` layout + Google sign-in via `lovable.auth`.
-4. Server-fn layer + `requireCompanyMember` middleware + audit writer.
-5. App shell + company switcher + Settings screens (Company, Branches, Users, Roles, Audit).
-6. Tests (RLS matrix + one E2E happy path) + `configure_auth` (HIBP) + `configure_social_auth` (Google).
-7. Docs: `docs/architecture.md`, `docs/rbac.md`, `docs/qa/m1.md`.
+1. Migration: platform admins, module registry tables, feature flags, licensing, company_modules, seed plans + core module + baseline flags + permissions.
+2. `src/platform/registry` + `src/modules/_core/module.ts` + manifest sync server-fn.
+3. `requirePlatformAdmin` middleware; `_platform` route tree; admin shell chrome.
+4. Feature-flag evaluator + `flags.functions.ts` + admin CRUD screens.
+5. Licensing types + `subscription` fns + admin subscription screen.
+6. Company Module Manager (customer Settings → Modules) + dependency engine + `DynamicNav`.
+7. Admin: Companies list, Platform Users, Global Audit, Analytics stubs.
+8. Developer Portal skeleton route (`/developers` gated to `platform_role='developer'|'super_admin'`).
+9. Tests (unit + integration + one Playwright isolation flow).
+10. Docs: `docs/architecture-m2.md`, `docs/modules/authoring.md`, `docs/rbac-platform.md`.
+
+**Exit criteria**: a super_admin can define a plan, toggle a module globally and per company, flip a feature flag per company; a company owner can enable/disable an allowed module and see nav update; customer↔admin isolation proven by tests; zero business-module code shipped.
 
 ---
 
-**Awaiting approval.** On approval I'll execute steps 1–7 in order and stop at the M1 exit criteria: a signed-in user can create a company, invite a teammate, assign roles, edit settings, and every action appears in the audit log — with the RLS matrix green.
-
-If you want me to tweak the brand direction (colors/fonts/tone) or swap Milestone 1 for the larger "Identity + Module Loader + Feature Flags" slice, say so before I start.
+Approve and I'll execute steps 1–10 in order. If you want the Developer Portal to also get real functionality (API keys, sandbox, docs viewer) instead of just an architectural skeleton, say so before I start.
