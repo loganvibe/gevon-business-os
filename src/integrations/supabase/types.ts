@@ -85,6 +85,72 @@ export type Database = {
           },
         ]
       }
+      communication_logs: {
+        Row: {
+          attempts: number
+          channel: Database["public"]["Enums"]["communication_channel"]
+          company_id: string | null
+          created_at: string
+          error: string | null
+          id: string
+          module_id: string | null
+          provider_message_id: string | null
+          recipient_address: string | null
+          recipient_user_id: string | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["communication_status"]
+          subject: string | null
+          template_key: string | null
+        }
+        Insert: {
+          attempts?: number
+          channel: Database["public"]["Enums"]["communication_channel"]
+          company_id?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          module_id?: string | null
+          provider_message_id?: string | null
+          recipient_address?: string | null
+          recipient_user_id?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["communication_status"]
+          subject?: string | null
+          template_key?: string | null
+        }
+        Update: {
+          attempts?: number
+          channel?: Database["public"]["Enums"]["communication_channel"]
+          company_id?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          module_id?: string | null
+          provider_message_id?: string | null
+          recipient_address?: string | null
+          recipient_user_id?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["communication_status"]
+          subject?: string | null
+          template_key?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "communication_logs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "communication_logs_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       companies: {
         Row: {
           country_code: string
@@ -344,6 +410,110 @@ export type Database = {
         }
         Relationships: []
       }
+      event_log: {
+        Row: {
+          created_at: string
+          event_queue_id: string
+          id: string
+          level: Database["public"]["Enums"]["event_log_level"]
+          message: string
+          meta: Json
+        }
+        Insert: {
+          created_at?: string
+          event_queue_id: string
+          id?: string
+          level?: Database["public"]["Enums"]["event_log_level"]
+          message: string
+          meta?: Json
+        }
+        Update: {
+          created_at?: string
+          event_queue_id?: string
+          id?: string
+          level?: Database["public"]["Enums"]["event_log_level"]
+          message?: string
+          meta?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_log_event_queue_id_fkey"
+            columns: ["event_queue_id"]
+            isOneToOne: false
+            referencedRelation: "event_queue"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_queue: {
+        Row: {
+          attempts: number
+          company_id: string | null
+          created_at: string
+          event_key: string
+          id: string
+          last_error: string | null
+          locked_at: string | null
+          locked_by: string | null
+          max_attempts: number
+          next_run_at: string
+          payload: Json
+          published_by: string | null
+          status: Database["public"]["Enums"]["event_status"]
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          attempts?: number
+          company_id?: string | null
+          created_at?: string
+          event_key: string
+          id?: string
+          last_error?: string | null
+          locked_at?: string | null
+          locked_by?: string | null
+          max_attempts?: number
+          next_run_at?: string
+          payload?: Json
+          published_by?: string | null
+          status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          attempts?: number
+          company_id?: string | null
+          created_at?: string
+          event_key?: string
+          id?: string
+          last_error?: string | null
+          locked_at?: string | null
+          locked_by?: string | null
+          max_attempts?: number
+          next_run_at?: string
+          payload?: Json
+          published_by?: string | null
+          status?: Database["public"]["Enums"]["event_status"]
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_queue_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_queue_event_key_fkey"
+            columns: ["event_key"]
+            isOneToOne: false
+            referencedRelation: "platform_events"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
       feature_flag_overrides: {
         Row: {
           company_id: string | null
@@ -423,6 +593,119 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "feature_flags_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_runs: {
+        Row: {
+          attempt: number
+          error: string | null
+          finished_at: string | null
+          id: string
+          job_id: string
+          output: Json | null
+          started_at: string
+          status: Database["public"]["Enums"]["job_status"]
+        }
+        Insert: {
+          attempt: number
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          job_id: string
+          output?: Json | null
+          started_at?: string
+          status: Database["public"]["Enums"]["job_status"]
+        }
+        Update: {
+          attempt?: number
+          error?: string | null
+          finished_at?: string | null
+          id?: string
+          job_id?: string
+          output?: Json | null
+          started_at?: string
+          status?: Database["public"]["Enums"]["job_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_runs_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          attempts: number
+          company_id: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          job_type: string
+          last_error: string | null
+          locked_at: string | null
+          locked_by: string | null
+          max_attempts: number
+          module_id: string | null
+          payload: Json
+          priority: number
+          scheduled_for: string
+          status: Database["public"]["Enums"]["job_status"]
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number
+          company_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          job_type: string
+          last_error?: string | null
+          locked_at?: string | null
+          locked_by?: string | null
+          max_attempts?: number
+          module_id?: string | null
+          payload?: Json
+          priority?: number
+          scheduled_for?: string
+          status?: Database["public"]["Enums"]["job_status"]
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number
+          company_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          job_type?: string
+          last_error?: string | null
+          locked_at?: string | null
+          locked_by?: string | null
+          max_attempts?: number
+          module_id?: string | null
+          payload?: Json
+          priority?: number
+          scheduled_for?: string
+          status?: Database["public"]["Enums"]["job_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jobs_module_id_fkey"
             columns: ["module_id"]
             isOneToOne: false
             referencedRelation: "modules"
@@ -624,6 +907,164 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_preferences: {
+        Row: {
+          category: Database["public"]["Enums"]["notification_category"]
+          channel: Database["public"]["Enums"]["communication_channel"]
+          company_id: string | null
+          created_at: string
+          digest_frequency: Database["public"]["Enums"]["digest_frequency"]
+          enabled: boolean
+          id: string
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category: Database["public"]["Enums"]["notification_category"]
+          channel: Database["public"]["Enums"]["communication_channel"]
+          company_id?: string | null
+          created_at?: string
+          digest_frequency?: Database["public"]["Enums"]["digest_frequency"]
+          enabled?: boolean
+          id?: string
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["notification_category"]
+          channel?: Database["public"]["Enums"]["communication_channel"]
+          company_id?: string | null
+          created_at?: string
+          digest_frequency?: Database["public"]["Enums"]["digest_frequency"]
+          enabled?: boolean
+          id?: string
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_preferences_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_templates: {
+        Row: {
+          body_template: string
+          channel: Database["public"]["Enums"]["communication_channel"]
+          created_at: string
+          id: string
+          is_active: boolean
+          key: string
+          subject: string | null
+          updated_at: string
+          variables: Json
+        }
+        Insert: {
+          body_template: string
+          channel: Database["public"]["Enums"]["communication_channel"]
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          key: string
+          subject?: string | null
+          updated_at?: string
+          variables?: Json
+        }
+        Update: {
+          body_template?: string
+          channel?: Database["public"]["Enums"]["communication_channel"]
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          key?: string
+          subject?: string | null
+          updated_at?: string
+          variables?: Json
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          archived_at: string | null
+          category: Database["public"]["Enums"]["notification_category"]
+          company_id: string | null
+          created_at: string
+          deep_link: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          message: string
+          pinned: boolean
+          priority: Database["public"]["Enums"]["notification_priority"]
+          read_at: string | null
+          recipient_user_id: string
+          source_module_id: string | null
+          status: Database["public"]["Enums"]["notification_status"]
+          title: string
+        }
+        Insert: {
+          archived_at?: string | null
+          category?: Database["public"]["Enums"]["notification_category"]
+          company_id?: string | null
+          created_at?: string
+          deep_link?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          message: string
+          pinned?: boolean
+          priority?: Database["public"]["Enums"]["notification_priority"]
+          read_at?: string | null
+          recipient_user_id: string
+          source_module_id?: string | null
+          status?: Database["public"]["Enums"]["notification_status"]
+          title: string
+        }
+        Update: {
+          archived_at?: string | null
+          category?: Database["public"]["Enums"]["notification_category"]
+          company_id?: string | null
+          created_at?: string
+          deep_link?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          message?: string
+          pinned?: boolean
+          priority?: Database["public"]["Enums"]["notification_priority"]
+          read_at?: string | null
+          recipient_user_id?: string
+          source_module_id?: string | null
+          status?: Database["public"]["Enums"]["notification_status"]
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notifications_source_module_id_fkey"
+            columns: ["source_module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       permissions: {
         Row: {
           description: string
@@ -731,6 +1172,50 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      platform_events: {
+        Row: {
+          created_at: string
+          description: string
+          is_active: boolean
+          key: string
+          payload_schema: Json
+          publisher_module_id: string | null
+          subscribers: Json
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          is_active?: boolean
+          key: string
+          payload_schema?: Json
+          publisher_module_id?: string | null
+          subscribers?: Json
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          is_active?: boolean
+          key?: string
+          payload_schema?: Json
+          publisher_module_id?: string | null
+          subscribers?: Json
+          updated_at?: string
+          version?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_events_publisher_module_id_fkey"
+            columns: ["publisher_module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -919,6 +1404,16 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      communication_channel: "email" | "in_app" | "sms" | "whatsapp"
+      communication_status:
+        | "queued"
+        | "sent"
+        | "failed"
+        | "suppressed"
+        | "rate_limited"
+      digest_frequency: "none" | "daily" | "weekly"
+      event_log_level: "info" | "warn" | "error"
+      event_status: "queued" | "running" | "completed" | "failed" | "dead"
       feature_flag_status:
         | "development"
         | "internal"
@@ -926,7 +1421,17 @@ export type Database = {
         | "premium"
         | "public"
         | "disabled"
+      job_status: "queued" | "running" | "completed" | "failed" | "cancelled"
       module_status: "active" | "deprecated" | "disabled_global"
+      notification_category:
+        | "system"
+        | "business"
+        | "security"
+        | "ai"
+        | "billing"
+        | "modules"
+      notification_priority: "low" | "normal" | "high" | "critical"
+      notification_status: "unread" | "read" | "archived"
       platform_admin_status: "active" | "disabled"
       platform_role:
         | "super_admin"
@@ -1065,6 +1570,17 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      communication_channel: ["email", "in_app", "sms", "whatsapp"],
+      communication_status: [
+        "queued",
+        "sent",
+        "failed",
+        "suppressed",
+        "rate_limited",
+      ],
+      digest_frequency: ["none", "daily", "weekly"],
+      event_log_level: ["info", "warn", "error"],
+      event_status: ["queued", "running", "completed", "failed", "dead"],
       feature_flag_status: [
         "development",
         "internal",
@@ -1073,7 +1589,18 @@ export const Constants = {
         "public",
         "disabled",
       ],
+      job_status: ["queued", "running", "completed", "failed", "cancelled"],
       module_status: ["active", "deprecated", "disabled_global"],
+      notification_category: [
+        "system",
+        "business",
+        "security",
+        "ai",
+        "billing",
+        "modules",
+      ],
+      notification_priority: ["low", "normal", "high", "critical"],
+      notification_status: ["unread", "read", "archived"],
       platform_admin_status: ["active", "disabled"],
       platform_role: [
         "super_admin",
