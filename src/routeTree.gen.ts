@@ -26,15 +26,22 @@ import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticat
 import { Route as PlatformAdminUsersRouteImport } from './routes/_platform/admin.users'
 import { Route as PlatformAdminSubscriptionsRouteImport } from './routes/_platform/admin.subscriptions'
 import { Route as PlatformAdminModulesRouteImport } from './routes/_platform/admin.modules'
+import { Route as PlatformAdminJobsRouteImport } from './routes/_platform/admin.jobs'
 import { Route as PlatformAdminFeatureFlagsRouteImport } from './routes/_platform/admin.feature-flags'
+import { Route as PlatformAdminEventsRouteImport } from './routes/_platform/admin.events'
 import { Route as PlatformAdminCompaniesRouteImport } from './routes/_platform/admin.companies'
+import { Route as PlatformAdminCommunicationsRouteImport } from './routes/_platform/admin.communications'
 import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
 import { Route as PlatformAdminAnalyticsRouteImport } from './routes/_platform/admin.analytics'
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
+import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_authenticated/app.notifications'
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
+import { Route as ApiPublicHooksJobRunnerRouteImport } from './routes/api/public/hooks/job-runner'
+import { Route as ApiPublicHooksEventDispatcherRouteImport } from './routes/api/public/hooks/event-dispatcher'
 import { Route as AuthenticatedAppSettingsUsersRouteImport } from './routes/_authenticated/app.settings.users'
 import { Route as AuthenticatedAppSettingsSubscriptionRouteImport } from './routes/_authenticated/app.settings.subscription'
 import { Route as AuthenticatedAppSettingsRolesRouteImport } from './routes/_authenticated/app.settings.roles'
+import { Route as AuthenticatedAppSettingsNotificationsRouteImport } from './routes/_authenticated/app.settings.notifications'
 import { Route as AuthenticatedAppSettingsModulesRouteImport } from './routes/_authenticated/app.settings.modules'
 import { Route as AuthenticatedAppSettingsBranchesRouteImport } from './routes/_authenticated/app.settings.branches'
 import { Route as AuthenticatedAppSettingsAuditRouteImport } from './routes/_authenticated/app.settings.audit'
@@ -124,17 +131,33 @@ const PlatformAdminModulesRoute = PlatformAdminModulesRouteImport.update({
   path: '/modules',
   getParentRoute: () => PlatformAdminRoute,
 } as any)
+const PlatformAdminJobsRoute = PlatformAdminJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
 const PlatformAdminFeatureFlagsRoute =
   PlatformAdminFeatureFlagsRouteImport.update({
     id: '/feature-flags',
     path: '/feature-flags',
     getParentRoute: () => PlatformAdminRoute,
   } as any)
+const PlatformAdminEventsRoute = PlatformAdminEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
 const PlatformAdminCompaniesRoute = PlatformAdminCompaniesRouteImport.update({
   id: '/companies',
   path: '/companies',
   getParentRoute: () => PlatformAdminRoute,
 } as any)
+const PlatformAdminCommunicationsRoute =
+  PlatformAdminCommunicationsRouteImport.update({
+    id: '/communications',
+    path: '/communications',
+    getParentRoute: () => PlatformAdminRoute,
+  } as any)
 const PlatformAdminAuditRoute = PlatformAdminAuditRouteImport.update({
   id: '/audit',
   path: '/audit',
@@ -151,11 +174,28 @@ const AuthenticatedAppOnboardingRoute =
     path: '/onboarding',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppNotificationsRoute =
+  AuthenticatedAppNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppSettingsIndexRoute =
   AuthenticatedAppSettingsIndexRouteImport.update({
     id: '/settings/',
     path: '/settings/',
     getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const ApiPublicHooksJobRunnerRoute = ApiPublicHooksJobRunnerRouteImport.update({
+  id: '/api/public/hooks/job-runner',
+  path: '/api/public/hooks/job-runner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHooksEventDispatcherRoute =
+  ApiPublicHooksEventDispatcherRouteImport.update({
+    id: '/api/public/hooks/event-dispatcher',
+    path: '/api/public/hooks/event-dispatcher',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const AuthenticatedAppSettingsUsersRoute =
   AuthenticatedAppSettingsUsersRouteImport.update({
@@ -173,6 +213,12 @@ const AuthenticatedAppSettingsRolesRoute =
   AuthenticatedAppSettingsRolesRouteImport.update({
     id: '/settings/roles',
     path: '/settings/roles',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppSettingsNotificationsRoute =
+  AuthenticatedAppSettingsNotificationsRouteImport.update({
+    id: '/settings/notifications',
+    path: '/settings/notifications',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
 const AuthenticatedAppSettingsModulesRoute =
@@ -210,11 +256,15 @@ export interface FileRoutesByFullPath {
   '/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
+  '/admin/communications': typeof PlatformAdminCommunicationsRoute
   '/admin/companies': typeof PlatformAdminCompaniesRoute
+  '/admin/events': typeof PlatformAdminEventsRoute
   '/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/admin/jobs': typeof PlatformAdminJobsRoute
   '/admin/modules': typeof PlatformAdminModulesRoute
   '/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
   '/admin/users': typeof PlatformAdminUsersRoute
@@ -225,9 +275,12 @@ export interface FileRoutesByFullPath {
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
+  '/app/settings/notifications': typeof AuthenticatedAppSettingsNotificationsRoute
   '/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
   '/app/settings/subscription': typeof AuthenticatedAppSettingsSubscriptionRoute
   '/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
+  '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
+  '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -237,11 +290,15 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
+  '/admin/communications': typeof PlatformAdminCommunicationsRoute
   '/admin/companies': typeof PlatformAdminCompaniesRoute
+  '/admin/events': typeof PlatformAdminEventsRoute
   '/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/admin/jobs': typeof PlatformAdminJobsRoute
   '/admin/modules': typeof PlatformAdminModulesRoute
   '/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
   '/admin/users': typeof PlatformAdminUsersRoute
@@ -252,9 +309,12 @@ export interface FileRoutesByTo {
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
+  '/app/settings/notifications': typeof AuthenticatedAppSettingsNotificationsRoute
   '/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
   '/app/settings/subscription': typeof AuthenticatedAppSettingsSubscriptionRoute
   '/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
+  '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
+  '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/app/settings': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -270,11 +330,15 @@ export interface FileRoutesById {
   '/_platform/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/_platform/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/_platform/admin/audit': typeof PlatformAdminAuditRoute
+  '/_platform/admin/communications': typeof PlatformAdminCommunicationsRoute
   '/_platform/admin/companies': typeof PlatformAdminCompaniesRoute
+  '/_platform/admin/events': typeof PlatformAdminEventsRoute
   '/_platform/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/_platform/admin/jobs': typeof PlatformAdminJobsRoute
   '/_platform/admin/modules': typeof PlatformAdminModulesRoute
   '/_platform/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
   '/_platform/admin/users': typeof PlatformAdminUsersRoute
@@ -285,9 +349,12 @@ export interface FileRoutesById {
   '/_authenticated/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/_authenticated/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/_authenticated/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
+  '/_authenticated/app/settings/notifications': typeof AuthenticatedAppSettingsNotificationsRoute
   '/_authenticated/app/settings/roles': typeof AuthenticatedAppSettingsRolesRoute
   '/_authenticated/app/settings/subscription': typeof AuthenticatedAppSettingsSubscriptionRoute
   '/_authenticated/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
+  '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
+  '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/_authenticated/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -302,11 +369,15 @@ export interface FileRouteTypes {
     | '/developers'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/app/notifications'
     | '/app/onboarding'
     | '/admin/analytics'
     | '/admin/audit'
+    | '/admin/communications'
     | '/admin/companies'
+    | '/admin/events'
     | '/admin/feature-flags'
+    | '/admin/jobs'
     | '/admin/modules'
     | '/admin/subscriptions'
     | '/admin/users'
@@ -317,9 +388,12 @@ export interface FileRouteTypes {
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
+    | '/app/settings/notifications'
     | '/app/settings/roles'
     | '/app/settings/subscription'
     | '/app/settings/users'
+    | '/api/public/hooks/event-dispatcher'
+    | '/api/public/hooks/job-runner'
     | '/app/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -329,11 +403,15 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/app/notifications'
     | '/app/onboarding'
     | '/admin/analytics'
     | '/admin/audit'
+    | '/admin/communications'
     | '/admin/companies'
+    | '/admin/events'
     | '/admin/feature-flags'
+    | '/admin/jobs'
     | '/admin/modules'
     | '/admin/subscriptions'
     | '/admin/users'
@@ -344,9 +422,12 @@ export interface FileRouteTypes {
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
+    | '/app/settings/notifications'
     | '/app/settings/roles'
     | '/app/settings/subscription'
     | '/app/settings/users'
+    | '/api/public/hooks/event-dispatcher'
+    | '/api/public/hooks/job-runner'
     | '/app/settings'
   id:
     | '__root__'
@@ -361,11 +442,15 @@ export interface FileRouteTypes {
     | '/_platform/developers'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/_authenticated/app/notifications'
     | '/_authenticated/app/onboarding'
     | '/_platform/admin/analytics'
     | '/_platform/admin/audit'
+    | '/_platform/admin/communications'
     | '/_platform/admin/companies'
+    | '/_platform/admin/events'
     | '/_platform/admin/feature-flags'
+    | '/_platform/admin/jobs'
     | '/_platform/admin/modules'
     | '/_platform/admin/subscriptions'
     | '/_platform/admin/users'
@@ -376,9 +461,12 @@ export interface FileRouteTypes {
     | '/_authenticated/app/settings/audit'
     | '/_authenticated/app/settings/branches'
     | '/_authenticated/app/settings/modules'
+    | '/_authenticated/app/settings/notifications'
     | '/_authenticated/app/settings/roles'
     | '/_authenticated/app/settings/subscription'
     | '/_authenticated/app/settings/users'
+    | '/api/public/hooks/event-dispatcher'
+    | '/api/public/hooks/job-runner'
     | '/_authenticated/app/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -391,6 +479,8 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
+  ApiPublicHooksEventDispatcherRoute: typeof ApiPublicHooksEventDispatcherRoute
+  ApiPublicHooksJobRunnerRoute: typeof ApiPublicHooksJobRunnerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -514,6 +604,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlatformAdminModulesRouteImport
       parentRoute: typeof PlatformAdminRoute
     }
+    '/_platform/admin/jobs': {
+      id: '/_platform/admin/jobs'
+      path: '/jobs'
+      fullPath: '/admin/jobs'
+      preLoaderRoute: typeof PlatformAdminJobsRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
     '/_platform/admin/feature-flags': {
       id: '/_platform/admin/feature-flags'
       path: '/feature-flags'
@@ -521,11 +618,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlatformAdminFeatureFlagsRouteImport
       parentRoute: typeof PlatformAdminRoute
     }
+    '/_platform/admin/events': {
+      id: '/_platform/admin/events'
+      path: '/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof PlatformAdminEventsRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
     '/_platform/admin/companies': {
       id: '/_platform/admin/companies'
       path: '/companies'
       fullPath: '/admin/companies'
       preLoaderRoute: typeof PlatformAdminCompaniesRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/communications': {
+      id: '/_platform/admin/communications'
+      path: '/communications'
+      fullPath: '/admin/communications'
+      preLoaderRoute: typeof PlatformAdminCommunicationsRouteImport
       parentRoute: typeof PlatformAdminRoute
     }
     '/_platform/admin/audit': {
@@ -549,12 +660,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppOnboardingRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/notifications': {
+      id: '/_authenticated/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AuthenticatedAppNotificationsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/settings/': {
       id: '/_authenticated/app/settings/'
       path: '/settings'
       fullPath: '/app/settings/'
       preLoaderRoute: typeof AuthenticatedAppSettingsIndexRouteImport
       parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/api/public/hooks/job-runner': {
+      id: '/api/public/hooks/job-runner'
+      path: '/api/public/hooks/job-runner'
+      fullPath: '/api/public/hooks/job-runner'
+      preLoaderRoute: typeof ApiPublicHooksJobRunnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/event-dispatcher': {
+      id: '/api/public/hooks/event-dispatcher'
+      path: '/api/public/hooks/event-dispatcher'
+      fullPath: '/api/public/hooks/event-dispatcher'
+      preLoaderRoute: typeof ApiPublicHooksEventDispatcherRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_authenticated/app/settings/users': {
       id: '/_authenticated/app/settings/users'
@@ -575,6 +707,13 @@ declare module '@tanstack/react-router' {
       path: '/settings/roles'
       fullPath: '/app/settings/roles'
       preLoaderRoute: typeof AuthenticatedAppSettingsRolesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/settings/notifications': {
+      id: '/_authenticated/app/settings/notifications'
+      path: '/settings/notifications'
+      fullPath: '/app/settings/notifications'
+      preLoaderRoute: typeof AuthenticatedAppSettingsNotificationsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/settings/modules': {
@@ -609,12 +748,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppNotificationsRoute: typeof AuthenticatedAppNotificationsRoute
   AuthenticatedAppOnboardingRoute: typeof AuthenticatedAppOnboardingRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
   AuthenticatedAppAcceptInviteTokenRoute: typeof AuthenticatedAppAcceptInviteTokenRoute
   AuthenticatedAppSettingsAuditRoute: typeof AuthenticatedAppSettingsAuditRoute
   AuthenticatedAppSettingsBranchesRoute: typeof AuthenticatedAppSettingsBranchesRoute
   AuthenticatedAppSettingsModulesRoute: typeof AuthenticatedAppSettingsModulesRoute
+  AuthenticatedAppSettingsNotificationsRoute: typeof AuthenticatedAppSettingsNotificationsRoute
   AuthenticatedAppSettingsRolesRoute: typeof AuthenticatedAppSettingsRolesRoute
   AuthenticatedAppSettingsSubscriptionRoute: typeof AuthenticatedAppSettingsSubscriptionRoute
   AuthenticatedAppSettingsUsersRoute: typeof AuthenticatedAppSettingsUsersRoute
@@ -622,6 +763,7 @@ interface AuthenticatedAppRouteChildren {
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppNotificationsRoute: AuthenticatedAppNotificationsRoute,
   AuthenticatedAppOnboardingRoute: AuthenticatedAppOnboardingRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
   AuthenticatedAppAcceptInviteTokenRoute:
@@ -629,6 +771,8 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppSettingsAuditRoute: AuthenticatedAppSettingsAuditRoute,
   AuthenticatedAppSettingsBranchesRoute: AuthenticatedAppSettingsBranchesRoute,
   AuthenticatedAppSettingsModulesRoute: AuthenticatedAppSettingsModulesRoute,
+  AuthenticatedAppSettingsNotificationsRoute:
+    AuthenticatedAppSettingsNotificationsRoute,
   AuthenticatedAppSettingsRolesRoute: AuthenticatedAppSettingsRolesRoute,
   AuthenticatedAppSettingsSubscriptionRoute:
     AuthenticatedAppSettingsSubscriptionRoute,
@@ -653,8 +797,11 @@ const AuthenticatedRouteRouteWithChildren =
 interface PlatformAdminRouteChildren {
   PlatformAdminAnalyticsRoute: typeof PlatformAdminAnalyticsRoute
   PlatformAdminAuditRoute: typeof PlatformAdminAuditRoute
+  PlatformAdminCommunicationsRoute: typeof PlatformAdminCommunicationsRoute
   PlatformAdminCompaniesRoute: typeof PlatformAdminCompaniesRoute
+  PlatformAdminEventsRoute: typeof PlatformAdminEventsRoute
   PlatformAdminFeatureFlagsRoute: typeof PlatformAdminFeatureFlagsRoute
+  PlatformAdminJobsRoute: typeof PlatformAdminJobsRoute
   PlatformAdminModulesRoute: typeof PlatformAdminModulesRoute
   PlatformAdminSubscriptionsRoute: typeof PlatformAdminSubscriptionsRoute
   PlatformAdminUsersRoute: typeof PlatformAdminUsersRoute
@@ -664,8 +811,11 @@ interface PlatformAdminRouteChildren {
 const PlatformAdminRouteChildren: PlatformAdminRouteChildren = {
   PlatformAdminAnalyticsRoute: PlatformAdminAnalyticsRoute,
   PlatformAdminAuditRoute: PlatformAdminAuditRoute,
+  PlatformAdminCommunicationsRoute: PlatformAdminCommunicationsRoute,
   PlatformAdminCompaniesRoute: PlatformAdminCompaniesRoute,
+  PlatformAdminEventsRoute: PlatformAdminEventsRoute,
   PlatformAdminFeatureFlagsRoute: PlatformAdminFeatureFlagsRoute,
+  PlatformAdminJobsRoute: PlatformAdminJobsRoute,
   PlatformAdminModulesRoute: PlatformAdminModulesRoute,
   PlatformAdminSubscriptionsRoute: PlatformAdminSubscriptionsRoute,
   PlatformAdminUsersRoute: PlatformAdminUsersRoute,
@@ -710,6 +860,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
+  ApiPublicHooksEventDispatcherRoute: ApiPublicHooksEventDispatcherRoute,
+  ApiPublicHooksJobRunnerRoute: ApiPublicHooksJobRunnerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
