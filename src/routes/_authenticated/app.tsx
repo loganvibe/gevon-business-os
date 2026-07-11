@@ -4,8 +4,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   LayoutDashboard, Settings, Users, Building2, ShieldCheck, ScrollText, Blocks, Gem,
-  ChevronsUpDown, LogOut, Plus, Loader2,
+  ChevronsUpDown, LogOut, Plus, Loader2, Bell,
 } from "lucide-react";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { supabase } from "@/integrations/supabase/client";
 import { listMyCompanies, setDefaultCompany } from "@/lib/core.functions";
 import {
