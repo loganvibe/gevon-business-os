@@ -1,201 +1,181 @@
+# Milestone 4 — CRM Foundation
 
-# Milestone 3 — Communication & Event Platform
+Foundational customer-relationship platform. Not Sales, not Accounting. Every future business module (Sales, Marketing, Support, Invoicing, Reporting, AI) will reference these entities instead of duplicating them.
 
-Shared infrastructure every future module uses to publish events, notify users, send email, and run background work. No business modules are built here.
+Milestones 1–3 architecture (auth, tenancy, RBAC, RLS, audit, module registry, event bus, notifications, jobs, email) is reused untouched.
 
-## 1. Requirements
+## 1. Scope
 
 **In scope**
-- Event Bus: publish/subscribe with typed event registry, versioned payloads, per-module subscribers, async dispatch, retries, dead-letter.
-- Event Registry: in-code manifests (`src/platform/events/*`) + DB mirror (`platform_events`) with payload schema, version, publisher, subscribers, docs.
-- Notification Center: unified in-app notifications (unread/read/archived/pinned-ready, priority, category, source module, entity, deep link).
-- Email Service: single sender wrapping Lovable Emails; templates in `src/lib/email-templates/`; every module calls it, never Resend/SDKs directly.
-- Templates: email + in-app; SMS/WhatsApp table shape reserved (channel enum extendable, no adapter yet).
-- User Preferences: per-user per-category + per-channel toggles; quiet hours + digest columns present (evaluated in a later milestone).
-- Real-Time Delivery: Supabase Realtime on `notifications` table filtered by `recipient_user_id`.
-- Background Jobs: `jobs` table + `job_runs` history + pg_cron dispatcher hitting a public server route that leases and runs jobs; statuses queued/running/completed/failed/cancelled + retry with backoff.
-- Communication Logs: `communication_logs` for every send attempt (email, in-app, future channels) — sender, recipient, channel, status, retries, errors, company, module.
-- AI hook: AI capabilities may register as event subscribers via the same registry (no LLM calls executed here).
+- CRM module manifest registered via `src/platform/registry.ts` (category `customer`, tier `starter`, depends on `core`).
+- Entities: leads, contacts, organizations, deals (with pipelines + stages), activities, notes, tags, custom fields, attachments.
+- Contact ↔ Organization many-to-many with primary flag.
+- Configurable pipelines and stages per company; seeded default pipeline.
+- Central tags table + polymorphic taggables.
+- Custom fields registry + values table (typed by column-per-type, indexed via GIN on jsonb fallback).
+- Attachments via new Lovable Cloud storage bucket `crm-attachments` (private, RLS-scoped) with `crm_attachments` metadata table.
+- Global search: single `crm_search_index` materialized view + `search_crm({ q, types })` server fn using Postgres `websearch_to_tsquery`.
+- AI Registry hooks: register capabilities (`lead.score`, `deal.summary`, `followup.suggest`, `account.health`) via existing `module_ai_capabilities`. No LLM calls.
+- Event Bus integration: register CRM events in `src/platform/events/definitions/crm.ts` and publish through `events.publish`. Wire notification/email subscribers via existing registry.
+- CRM dashboard route + widgets registered in Dashboard Widget Registry (new lightweight registry — see Technical section).
+- Permissions: `crm.read`, `crm.write`, `crm.delete`, `crm.admin`, `crm.pipelines.manage`, `crm.custom_fields.manage`, `crm.tags.manage` — seeded and granted to owner/admin roles.
+- Soft deletes (`deleted_at`) on leads, contacts, organizations, deals, notes, activities. Views filter deleted rows.
+- Pagination (keyset), filtering, sorting, saved views (`crm_saved_views`).
 
 **Out of scope**
-- SMS/WhatsApp senders, real digest/quiet-hour scheduling, marketing campaigns, external webhooks out, any business module.
-
-**Non-functional**
-- Multi-tenant (company_id on every row), RLS on every table via `private.*` helpers, audit logging preserved.
-- Publish is O(1) enqueue; dispatch async so publisher latency is not coupled to subscriber count.
+- Automations/workflows, sequences, campaign sends, quotes/invoices, forecasting, real LLM implementations, mobile app, calendar sync.
 
 ## 2. Architecture
 
 ```text
-Module code
-  │  publishEvent('invoice.paid', payload)          notify(userId, {...})
-  ▼                                                 │
-┌─ src/platform/events/bus.functions.ts ─┐          ▼
-│ validate against registry (Zod)         │  ┌─ src/platform/notifications/notify.functions.ts ─┐
-│ insert into event_queue (status=queued) │  │ resolve prefs → insert notifications              │
-│ append event_log                        │  │ + communication_logs; realtime broadcasts         │
-└──────────────┬──────────────────────────┘  │ via Supabase postgres_changes                     │
-               │                             └───────────────────────────────────────────────────┘
-               ▼
-pg_cron (every minute) ─► POST /api/public/hooks/event-dispatcher (apikey)
-               │
-               ▼
-lease N queued events → for each: look up subscribers in registry
-               │
-               ├─► subscriber = "notification"  → notify.functions
-               ├─► subscriber = "email"         → email.functions → Lovable Emails
-               ├─► subscriber = "job"           → enqueue jobs row
-               └─► subscriber = "ai"            → record ai_dispatch (no-op executor)
-mark event completed/failed(+retry with backoff, max 5) → event_log
+src/modules/crm/
+  index.ts                       # manifest + registerModule(crmModule)
+  events.ts                      # CRM event definitions (re-exported by src/platform/events/definitions/crm.ts)
+  widgets/                       # dashboard widget components
+    TotalLeads.tsx  ActiveDeals.tsx  WonDeals.tsx  LostDeals.tsx
+    PipelineValue.tsx  RecentActivities.tsx  UpcomingTasks.tsx  AIInsights.tsx
+    _registry.ts                 # registers each with dashboard widget registry
+  server/
+    leads.functions.ts           # list/get/create/update/archive/convert/delete
+    contacts.functions.ts
+    organizations.functions.ts
+    deals.functions.ts           # includes pipeline/stage CRUD (perm-gated)
+    activities.functions.ts
+    notes.functions.ts
+    tags.functions.ts
+    custom-fields.functions.ts
+    attachments.functions.ts     # signed upload URL + metadata
+    search.functions.ts          # search_crm()
+    saved-views.functions.ts
+  components/
+    LeadsTable.tsx  ContactsTable.tsx  OrgsTable.tsx  DealsBoard.tsx
+    ActivityTimeline.tsx  NoteThread.tsx  TagPicker.tsx
+    CustomFieldEditor.tsx  AttachmentList.tsx  GlobalSearchBox.tsx
 
-pg_cron (every minute) ─► POST /api/public/hooks/job-runner (apikey)
-               │
-               ▼
-lease N queued jobs → run handler from src/platform/jobs/handlers/*
-               │
-               ▼
-update job status, append job_runs, on failure schedule retry
+src/platform/dashboard/
+  registry.ts                    # DashboardWidget type + registerWidget/allWidgets
+  functions.ts                   # listMyWidgets({ dashboardKey })
+
+src/platform/events/definitions/crm.ts   # thin re-export of module CRM events
+
+src/routes/_authenticated/
+  app.crm.tsx                    # layout (tabs: Dashboard, Leads, Contacts, Orgs, Deals, Activities)
+  app.crm.index.tsx              # CRM dashboard
+  app.crm.leads.tsx  app.crm.leads.$id.tsx
+  app.crm.contacts.tsx  app.crm.contacts.$id.tsx
+  app.crm.organizations.tsx  app.crm.organizations.$id.tsx
+  app.crm.deals.tsx  app.crm.deals.$id.tsx
+  app.crm.activities.tsx
+  app.crm.settings.tsx  (pipelines, stages, tags, custom fields, saved views)
+
+docs/
+  architecture-m4.md  crm/entities.md  crm/events.md  crm/custom-fields.md
+  crm/search.md  crm/dashboard-widgets.md
 ```
 
-Realtime: browser subscribes to `notifications` filtered `recipient_user_id=eq.<uid>` inside a `useEffect` in the app shell.
+## 3. Database (all `public.*`, RLS on, GRANTs, audit triggers)
 
-## 3. Folder Structure
+Enums: `lead_status` (new, contacted, qualified, proposal, negotiation, won, lost), `activity_type` (call, meeting, email, task, followup), `activity_status` (planned, in_progress, completed, cancelled), `custom_field_type` (text, number, date, boolean, select, multiselect, currency, url), `crm_entity_type` (lead, contact, organization, deal), `deal_status` (open, won, lost).
 
-```text
-src/platform/
-  events/
-    registry.ts              # EventDefinition type + in-code registry
-    definitions/             # one file per event group
-      identity.ts            # user.invited, role.changed, member.added
-      company.ts             # company.created, company.suspended
-      module.ts              # module.enabled, module.disabled
-      billing.ts             # subscription.*
-      security.ts            # security.alert
-    bus.functions.ts         # publishEvent, listEvents (admin)
-    dispatcher.ts            # pure lease/dispatch logic (tested)
-  notifications/
-    notify.functions.ts      # notify(), listMine, markRead, archive, prefs get/set
-    templates.ts             # in-app template rendering
-  email/
-    send.functions.ts        # sendEmail() — the only email entry point
-    templates registry lives under src/lib/email-templates/
-  jobs/
-    jobs.functions.ts        # enqueueJob, listMine (admin), cancel
-    runner.ts                # pure lease/run logic
-    handlers/                # jobType → async fn
-      email.send.ts
-      notification.digest.ts # stub for later
-      _index.ts              # export map
-  comms/
-    logs.functions.ts        # listCommunicationLogs (admin/company)
-src/routes/
-  api/public/hooks/
-    event-dispatcher.ts      # cron endpoint (apikey auth)
-    job-runner.ts            # cron endpoint (apikey auth)
-  _authenticated/
-    app.notifications.tsx    # user inbox
-    app.settings.notifications.tsx  # preferences
-  _platform/
-    admin.events.tsx         # event registry + queue viewer
-    admin.jobs.tsx           # job queue viewer
-    admin.communications.tsx # communication logs viewer
-src/components/notifications/
-  NotificationBell.tsx
-  NotificationList.tsx
-  PreferencesForm.tsx
-src/lib/email-templates/
-  invitation.tsx  password-reset.tsx  welcome.tsx  security-alert.tsx
-tests/
-  unit/{event-registry,dispatcher,job-runner,prefs-eval}.test.ts
-  integration/{publish-to-notify,email-send,rls-comms}.test.ts
-```
+Tables:
+- `crm_pipelines(id, company_id, name, is_default bool, timestamps, deleted_at)`
+- `crm_pipeline_stages(id, pipeline_id, name, position int, probability numeric, is_won bool, is_lost bool, timestamps)`
+- `crm_organizations(id, company_id, name, industry, tax_id, website, phone, email, address jsonb, notes text, assigned_to uuid, timestamps, deleted_at)`
+- `crm_contacts(id, company_id, first_name, last_name, job_title, department, birthday date, preferred_channel communication_channel, socials jsonb, notes, assigned_to, timestamps, deleted_at)`
+- `crm_contact_emails(id, contact_id, email, label, is_primary)` + unique(contact_id, email)
+- `crm_contact_phones(id, contact_id, phone, label, is_primary)`
+- `crm_contact_organizations(contact_id, organization_id, role, is_primary, primary key(contact_id, organization_id))`
+- `crm_leads(id, company_id, source, status lead_status, contact_id nullable, organization_id nullable, estimated_value numeric, currency_code, assigned_to, converted_at, converted_deal_id, timestamps, deleted_at)`
+- `crm_lead_status_history(id, lead_id, from_status, to_status, changed_by, changed_at)`
+- `crm_deals(id, company_id, pipeline_id, stage_id, name, value numeric, currency_code, probability numeric, expected_close_date date, status deal_status, contact_id nullable, organization_id nullable, assigned_to, closed_at, timestamps, deleted_at)`
+- `crm_deal_collaborators(deal_id, user_id, role, primary key(deal_id, user_id))`
+- `crm_activities(id, company_id, type activity_type, status activity_status, subject, body text, due_at, completed_at, assigned_to, related_type crm_entity_type, related_id uuid, timestamps, deleted_at)`
+- `crm_notes(id, company_id, author_id, body_html text, mentions uuid[], related_type crm_entity_type, related_id uuid, timestamps, deleted_at)`
+- `crm_tags(id, company_id, name, color, timestamps)` + unique(company_id, name)
+- `crm_taggables(tag_id, entity_type crm_entity_type, entity_id uuid, primary key(tag_id, entity_type, entity_id))`
+- `crm_custom_fields(id, company_id, entity_type crm_entity_type, key, label, type custom_field_type, options jsonb, is_required bool, position int, timestamps)` + unique(company_id, entity_type, key)
+- `crm_custom_field_values(field_id, entity_id, value_text, value_number, value_date, value_bool, value_json jsonb, primary key(field_id, entity_id))`
+- `crm_attachments(id, company_id, uploader_id, storage_path text, filename, mime_type, size_bytes, version int, related_type crm_entity_type, related_id uuid, timestamps, deleted_at)`
+- `crm_saved_views(id, company_id, user_id nullable (shared if null), entity_type crm_entity_type, name, filters jsonb, sort jsonb, is_shared bool, timestamps)`
+- `crm_search_index` — materialized view union of leads/contacts/orgs/deals with `tsvector`; GIN index; refreshed by background job on write (event subscriber → `crm.search.reindex` job).
 
-## 4. Database (all `public.*`, RLS on, GRANTs, audit triggers where mutating)
+RLS: every table restricted by `private.is_company_member(company_id)`; writes gated by permission via `private.has_permission(company_id, 'crm.write')` (or `crm.delete`/`crm.admin`). Storage bucket policies key on `company_id` prefix in the object path. Audit triggers via existing `public.audit_m2_change()` on all mutating tables.
 
-- `platform_events(key text pk, version int, publisher_module_id, description, payload_schema jsonb, subscribers jsonb, is_active bool, timestamps)` — mirror of code registry.
-- `event_queue(id, company_id nullable, event_key, version, payload jsonb, status enum[queued,running,completed,failed,dead], attempts int, next_run_at, last_error text, published_by uuid, timestamps)`.
-- `event_log(id, event_queue_id, level enum[info,warn,error], message, meta jsonb, created_at)` — append-only.
-- `notifications(id, company_id, recipient_user_id, source_module_id, category enum[system,business,security,ai,billing,modules], priority enum[low,normal,high,critical], title, message, entity_type, entity_id, deep_link, status enum[unread,read,archived], pinned bool default false, created_at, read_at, archived_at)`.
-- `notification_preferences(id, user_id, company_id nullable, channel enum[email,in_app,sms,whatsapp], category enum..., enabled bool, quiet_hours_start time null, quiet_hours_end time null, digest_frequency enum[none,daily,weekly] default 'none', unique(user_id, company_id, channel, category))`.
-- `communication_channel` enum: `email, in_app, sms, whatsapp`.
-- `communication_logs(id, company_id nullable, module_id, channel communication_channel, recipient_user_id nullable, recipient_address text, status enum[queued,sent,failed,suppressed,rate_limited], template_key, subject, provider_message_id, error text, attempts int, created_at, sent_at)`.
-- `notification_templates(id, key unique, channel communication_channel, subject, body_template text, variables jsonb, is_active bool, timestamps)` — in-app + future SMS. Email templates stay React Email files.
-- `jobs(id, company_id nullable, module_id, job_type text, payload jsonb, status enum[queued,running,completed,failed,cancelled], priority int default 100, attempts int default 0, max_attempts int default 3, scheduled_for timestamptz default now(), locked_at, locked_by text, last_error, created_by, timestamps)`.
-- `job_runs(id, job_id, attempt int, status enum[running,completed,failed,cancelled], started_at, finished_at, error text, output jsonb)`.
+Seeds: default pipeline `Sales Pipeline` with stages New/Contacted/Qualified/Proposal/Negotiation/Won/Lost per company (created by trigger on `companies` insert AFTER core seed).
 
-**RLS**
-- `notifications`: SELECT/UPDATE where `recipient_user_id = auth.uid()`; INSERT via service role only.
-- `notification_preferences`: user manages own rows.
-- `communication_logs`, `jobs`, `job_runs`, `event_queue`, `event_log`: SELECT where `private.is_company_member(company_id)` AND `private.has_permission(company_id,'comms.read')`; writes service role only.
-- `platform_events`, `notification_templates`: SELECT to `authenticated` (catalog); writes require `private.is_platform_admin`.
+## 4. CRM Events (registered in `src/modules/crm/events.ts`)
 
-**Permissions seeded**: `comms.read`, `comms.manage`, `notifications.read.self`, `platform.events.manage`, `platform.jobs.manage`, `platform.comms.read`.
+`crm.lead.created`, `crm.lead.updated`, `crm.lead.converted`, `crm.deal.created`, `crm.deal.stage_changed`, `crm.deal.won`, `crm.deal.lost`, `crm.contact.created`, `crm.contact.updated`, `crm.organization.created`, `crm.organization.updated`, `crm.activity.completed`, `crm.task.due_soon`.
 
-## 5. API Design (server functions unless noted)
+Each defines Zod payload, publisher `crm`, subscribers wired to in-app notifications (assignee) and (for won/lost/converted) email templates. Search-index refresh is subscribed via a `job` subscriber (`crm.search.reindex`).
 
-Modules use these only.
+## 5. API Design (server functions)
 
-- `events.publish({ key, version?, companyId?, payload })` — validates against registry, inserts `event_queue`, returns `{ id }`.
-- `events.listQueue({ companyId?, status? })` — admin/company (perm-gated).
-- `notifications.notify({ recipientUserId, category, priority, title, message, sourceModuleId, entityType?, entityId?, deepLink? })` — checks prefs, inserts row, logs.
-- `notifications.listMine({ status?, cursor? })`, `markRead({ id })`, `markAllRead()`, `archive({ id })`.
-- `notifications.prefs.get()`, `prefs.set({ channel, category, enabled, ...quietHours, digestFrequency })`.
-- `email.send({ templateKey, to, templateData, companyId?, moduleId, idempotencyKey })` — wraps `sendTemplateEmail`, writes `communication_logs`.
-- `jobs.enqueue({ jobType, payload, companyId?, moduleId, scheduledFor?, maxAttempts? })`, `jobs.cancel({ id })`, `jobs.listMine`.
-- `comms.logs.list({ companyId?, filters })`.
+All under `src/modules/crm/server/*.functions.ts`, all `.middleware([requireSupabaseAuth])`, permission checks via `has_permission`. Standard shape:
 
-Cron routes (`/api/public/hooks/*`, `apikey` header verified against `SUPABASE_ANON_KEY`):
-- `event-dispatcher` — lease up to 50 queued events, fan out to subscribers, retry with exponential backoff.
-- `job-runner` — lease up to 25 queued jobs, invoke handler map, record `job_runs`.
+- `list*({ companyId, filters, sort, cursor, limit })` — keyset pagination, returns `{ items, nextCursor }`.
+- `get*({ id })`, `create*(data)`, `update*({ id, patch })`, `archive*({ id })` (soft delete), `restore*({ id })`, `delete*({ id })` (hard delete; `crm.delete` only).
+- `convertLead({ id, dealOverrides })` — atomic: creates deal from lead, links contact/org, sets status=won path optional, publishes `crm.lead.converted`.
+- `deals.moveStage({ id, stageId })` — publishes `crm.deal.stage_changed`; if stage.is_won/is_lost → `crm.deal.won|lost`.
+- `pipelines.upsertStage`, `pipelines.reorderStages`, `pipelines.create/delete` (perm `crm.pipelines.manage`).
+- `tags.create/delete/apply/remove`.
+- `customFields.list/create/update/delete` + `customFieldValues.set({ entityId, values })`.
+- `attachments.getUploadUrl({ relatedType, relatedId, filename, mime })` → returns signed URL; `attachments.confirm({ path, metadata })` inserts row; `attachments.delete({ id })` soft-delete + storage remove.
+- `search_crm({ q, types?, limit? })` — Postgres FTS.
+- `savedViews.list/upsert/delete`.
+- `dashboard.summary({ companyId })` — returns totals for widgets in one call.
 
 ## 6. UI/UX
 
-- **App shell**: `<NotificationBell>` in the top bar shows unread count via realtime; opens dropdown; "See all" → `/app/notifications` inbox with filter (Unread/All/Archived) + priority chips.
-- **Preferences**: `/app/settings/notifications` grid (rows: categories, cols: channels) with toggles + quiet-hours pickers + digest select (digest disabled with tooltip "coming soon").
-- **Admin**:
-  - `/admin/events` — registry cards (key, publisher, subscribers, version) + queue table (status, attempts, last error, retry action).
-  - `/admin/jobs` — queue table, filter by status/type, cancel/requeue actions.
-  - `/admin/communications` — cross-tenant communication logs with company + module filters.
+- `/app/crm` layout with left rail: Dashboard, Leads, Contacts, Organizations, Deals, Activities, Settings.
+- Dashboard uses widget registry (`listMyWidgets({ dashboardKey: 'crm' })`) — order/visibility controllable later.
+- Tables: shadcn Table + column chooser + saved-view dropdown + filter drawer.
+- Deals: Kanban board (`DealsBoard`) grouped by stage; drag to change stage (calls `moveStage`).
+- Activity Timeline: unified feed component reused on lead/contact/org/deal detail pages.
+- Global Search: `Cmd/Ctrl+K` opens `GlobalSearchBox` mounted in `src/routes/_authenticated/app.tsx` top bar (only when CRM module enabled).
+- All create/edit uses shadcn Dialog + react-hook-form + zod.
 - Reuse existing tokens; no design-system change.
 
 ## 7. Business Rules
 
-- Publishing an unknown or inactive event key throws.
-- Payload rejected if it fails Zod validation from the registry.
-- Notifications suppressed when user has `in_app` for that category disabled — still logged in `communication_logs` with `status='suppressed'`.
-- Email suppressed similarly for `email` channel; `sendTemplateEmail`'s own `recipient_suppressed` is also logged as `suppressed`.
-- Retry: attempts < max_attempts → `next_run_at = now() + interval '30 seconds' * 2^attempts`; on final failure → `dead`/`failed`, emits `event.dead_letter` (subscribed by security notification).
-- `security` and `critical` notifications ignore user in-app preference (still respect email preference).
-- `is_core` module events cannot be marked inactive by a company; only platform admins can toggle `platform_events.is_active`.
-- Cancelling a running job marks it `cancelled` but lets the current attempt finish (best effort).
+- Only companies with `company_modules.enabled` for `crm` see routes / widgets / nav. `_authenticated/app.crm.*` loaders throw `notFound()` otherwise.
+- Converting a lead: contact and organization created if missing, deal created in default pipeline (or provided pipeline), lead marked `won` + `converted_deal_id`, history row appended. Idempotent by `lead.id`.
+- Deal `status` derived from stage flags (`is_won`/`is_lost`); direct writes to `status` rejected by trigger.
+- Custom fields marked `is_required` are validated in server fns before insert/update.
+- Attachments: max 25 MB (validated in `getUploadUrl`), MIME allowlist, virus-scan hook stubbed.
+- Global search returns only rows the caller's RLS allows (view is defined `security invoker`).
+- Search reindex runs asynchronously; UI does not block writes.
 
 ## 8. Security
 
-- Cron routes require `apikey` header matching `SUPABASE_ANON_KEY`; internally use `supabaseAdmin` only after header check.
-- No module accepts arbitrary HTML into notifications — messages are plain text; deep links validated as same-origin paths.
-- Event payloads never contain secrets — enforced by convention + code review; payload schemas exclude token-shaped fields.
-- All admin viewers surface metadata only (no message bodies for other tenants unless caller has `platform.comms.read`).
-- RLS as above; every mutation via server fn writes to `audit.audit_logs`.
+- All new tables RLS as above; `service_role` bypass only for admin/maintenance.
+- Storage bucket `crm-attachments` created private via `supabase--storage_create_bucket`; RLS policies on `storage.objects` restrict path prefix `${company_id}/...` to members with `crm.read`; delete requires `crm.delete` or uploader.
+- No secrets in payloads; sanitize note HTML server-side (allowlist).
+- Rate limits via existing job queue (search reindex debounced).
+- Permissions enforced at server-fn boundary AND RLS; UI only hides controls.
 
 ## 9. Testing
 
-- **Unit**: event registry Zod round-trip; dispatcher (lease/backoff/dead-letter); job runner (retry semantics); preferences evaluator (category × channel × critical override).
-- **Integration**: publish `user.invited` → email sent + in-app notification + comm log rows; RLS matrix on new tables; suppressed prefs produce `suppressed` log without notification row.
-- **E2E** (Playwright): notification bell increments in realtime when a second session publishes an event; preferences toggle hides subsequent notifications.
+- Unit: convert-lead atomicity, deal stage → status derivation, custom-field validation, tag apply/remove, keyset pagination, search query builder.
+- Integration: RLS matrix (cross-company denial), permission gates (viewer vs editor vs admin), attachment signed-URL flow, saved-views sharing.
+- Event tests: creating a lead publishes `crm.lead.created`; assignee receives notification; won deal triggers email subscriber.
+- Dashboard widget registry test: widgets registered for `crm` return in `listMyWidgets`.
+- Search test: FTS returns leads/contacts/orgs/deals for a token; respects RLS.
+- Playwright: create lead → convert → verify deal appears on board and event fires (bell increments).
 
-## 10. Delivery
+## 10. Delivery Order
 
-1. Migration: enums, tables, RLS + GRANTs + audit triggers, seed permissions and baseline templates.
-2. `src/platform/events/registry.ts` + baseline event definitions + `bus.functions.ts`.
-3. `notifications/notify.functions.ts` + preferences fns + templates seed.
-4. `email/send.functions.ts` wrapping `sendTemplateEmail`; migrate existing invite/reset call sites through it.
-5. `jobs` fns + runner + handler map (email.send handler backs `email.send`).
-6. Cron routes `event-dispatcher` and `job-runner` + pg_cron schedules (SQL via insert tool after migration).
-7. UI: NotificationBell, inbox route, preferences route.
-8. Admin UI: `/admin/events`, `/admin/jobs`, `/admin/communications`.
-9. Tests (unit + integration + one Playwright realtime flow).
-10. Docs: `docs/architecture-m3.md`, `docs/events/authoring.md`, `docs/notifications.md`, `docs/jobs.md`.
+1. Migration A — enums, pipelines/stages, orgs, contacts (+ emails/phones/orgs join), leads (+ history), deals (+ collaborators), activities, notes, tags (+ taggables), custom fields (+ values), attachments, saved views, permissions seed, audit triggers, default-pipeline trigger.
+2. Migration B — `crm_search_index` matview + GIN index + refresh function.
+3. Storage bucket `crm-attachments` + RLS policies.
+4. `src/modules/crm/index.ts` manifest + `events.ts`; register in `src/platform/registry.ts` and `src/platform/events/definitions/crm.ts`.
+5. Dashboard Widget Registry (`src/platform/dashboard/*`) + widget components + `_registry.ts`.
+6. Server functions per entity (list/get/CRUD/convert/search/attachments/saved-views/custom-fields/tags/pipelines).
+7. UI routes + components (layout, dashboard, tables, kanban, timeline, settings).
+8. Global search box mounted in authenticated top bar.
+9. Tests (unit + integration + one Playwright flow).
+10. Docs: `docs/architecture-m4.md`, `docs/crm/*.md`.
 
-**Exit criteria**: any module can `events.publish(...)`; subscribers receive notifications/emails via the bus with retries and full comm logs; users manage per-channel preferences; realtime bell works; admin sees registry, queues, and logs. No business-module code introduced.
+**Exit criteria**: CRM module can be enabled per company; users with `crm.*` perms can manage leads/contacts/orgs/deals/activities/notes/tags/custom fields/attachments; dashboard widgets render; global search returns CRM entities; CRM events flow through the bus to notifications/email; permissions + RLS enforced end-to-end; no business-module logic beyond CRM introduced.
 
 Approve and I'll execute steps 1–10 in order.
