@@ -18,6 +18,7 @@ import { companyEvents } from "./definitions/company";
 import { moduleEvents } from "./definitions/module";
 import { billingEvents } from "./definitions/billing";
 import { securityEvents } from "./definitions/security";
+import { inventoryEvents } from "./definitions/inventory";
 
 export type EventSubscriberKind = "notification" | "email" | "job" | "ai";
 
