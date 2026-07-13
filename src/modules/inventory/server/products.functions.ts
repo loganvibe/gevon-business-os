@@ -67,7 +67,6 @@ export const createProduct = createServerFn({ method: "POST" })
       .single();
     if (error) throw new Error(error.message);
 
-    await (context.supabase as any).rpc("publish_event_stub").catch(() => {});
     return row;
   });
 

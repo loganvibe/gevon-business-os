@@ -78,6 +78,7 @@ const EVENTS: EventDefinition[] = [
   ...moduleEvents,
   ...billingEvents,
   ...securityEvents,
+  ...inventoryEvents,
 ];
 
 const BY_KEY = new Map<string, EventDefinition>(EVENTS.map((e) => [e.key, e]));
