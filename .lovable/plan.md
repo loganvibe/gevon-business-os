@@ -1,181 +1,197 @@
-# Milestone 4 — CRM Foundation
+# Milestone 5 — Inventory & Product Management Foundation
 
-Foundational customer-relationship platform. Not Sales, not Accounting. Every future business module (Sales, Marketing, Support, Invoicing, Reporting, AI) will reference these entities instead of duplicating them.
+Universal inventory engine that plugs into the Gevon module system. Reuses M1–M4 (auth, tenancy, RBAC, RLS, audit, module registry, event bus, notifications). Not a POS, not industry-specific — a foundation for Retail, Supermarket, Restaurant, Pharmacy, Distribution, Manufacturing.
 
-Milestones 1–3 architecture (auth, tenancy, RBAC, RLS, audit, module registry, event bus, notifications, jobs, email) is reused untouched.
+Core rule: do not modify Gevon Core unless required for stability. CRM (M4) untouched.
 
 ## 1. Scope
 
 **In scope**
-- CRM module manifest registered via `src/platform/registry.ts` (category `customer`, tier `starter`, depends on `core`).
-- Entities: leads, contacts, organizations, deals (with pipelines + stages), activities, notes, tags, custom fields, attachments.
-- Contact ↔ Organization many-to-many with primary flag.
-- Configurable pipelines and stages per company; seeded default pipeline.
-- Central tags table + polymorphic taggables.
-- Custom fields registry + values table (typed by column-per-type, indexed via GIN on jsonb fallback).
-- Attachments via new Lovable Cloud storage bucket `crm-attachments` (private, RLS-scoped) with `crm_attachments` metadata table.
-- Global search: single `crm_search_index` materialized view + `search_crm({ q, types })` server fn using Postgres `websearch_to_tsquery`.
-- AI Registry hooks: register capabilities (`lead.score`, `deal.summary`, `followup.suggest`, `account.health`) via existing `module_ai_capabilities`. No LLM calls.
-- Event Bus integration: register CRM events in `src/platform/events/definitions/crm.ts` and publish through `events.publish`. Wire notification/email subscribers via existing registry.
-- CRM dashboard route + widgets registered in Dashboard Widget Registry (new lightweight registry — see Technical section).
-- Permissions: `crm.read`, `crm.write`, `crm.delete`, `crm.admin`, `crm.pipelines.manage`, `crm.custom_fields.manage`, `crm.tags.manage` — seeded and granted to owner/admin roles.
-- Soft deletes (`deleted_at`) on leads, contacts, organizations, deals, notes, activities. Views filter deleted rows.
-- Pagination (keyset), filtering, sorting, saved views (`crm_saved_views`).
+- Inventory module manifest (`id: inventory`, category `operations`, tier `starter`, depends on `core`), registered via `src/platform/registry.ts`.
+- Entities: products, product_categories, inventory_items (per branch), stock_movements (immutable log), suppliers, supplier_products, purchase_records + purchase_record_items.
+- Multi-branch stock: one `inventory_items` row per (product, branch).
+- Stock movement types: purchase, sale, adjustment, damaged, expired, transfer_in, transfer_out.
+- Server functions for products / stock / suppliers / purchases with permission + Zod validation + audit.
+- Event Bus: `inventory.*` events wired through existing dispatcher; low-stock detection triggers notifications.
+- Dashboard widgets (Total products, Stock value, Low stock alerts, Recent activity, Top products) registered with dashboard widget registry created in M4.
+- Feature flag `inventory.enabled` (default: beta). Module gated by both flag + `company_modules.enabled`.
+- Permissions: `inventory.view/create/update/delete/adjust`, `supplier.view/manage`, `purchase.manage`.
+- AI capabilities registered in manifest only (no LLM calls): `inventory_prediction`, `low_stock_analysis`, `product_profit_analysis`, `supplier_analysis`.
+- UI routes under `/app/inventory`, `/app/products`, `/app/suppliers`, `/app/stock-history`.
 
 **Out of scope**
-- Automations/workflows, sequences, campaign sends, quotes/invoices, forecasting, real LLM implementations, mobile app, calendar sync.
+- Real POS integration, real AI models, batch/lot/serial tracking, expiry management UI (schema-ready only), barcode scanning hardware, manufacturing BOM, purchase order approvals workflow.
 
 ## 2. Architecture
 
 ```text
-src/modules/crm/
-  index.ts                       # manifest + registerModule(crmModule)
-  events.ts                      # CRM event definitions (re-exported by src/platform/events/definitions/crm.ts)
-  widgets/                       # dashboard widget components
-    TotalLeads.tsx  ActiveDeals.tsx  WonDeals.tsx  LostDeals.tsx
-    PipelineValue.tsx  RecentActivities.tsx  UpcomingTasks.tsx  AIInsights.tsx
-    _registry.ts                 # registers each with dashboard widget registry
+src/modules/inventory/
+  index.ts                       # manifest + registerModule(inventoryModule)
+  events.ts                      # inventory event definitions
+  widgets/
+    TotalProducts.tsx  StockValue.tsx  LowStockAlerts.tsx
+    RecentActivity.tsx  TopProducts.tsx  _registry.ts
   server/
-    leads.functions.ts           # list/get/create/update/archive/convert/delete
-    contacts.functions.ts
-    organizations.functions.ts
-    deals.functions.ts           # includes pipeline/stage CRUD (perm-gated)
-    activities.functions.ts
-    notes.functions.ts
-    tags.functions.ts
-    custom-fields.functions.ts
-    attachments.functions.ts     # signed upload URL + metadata
-    search.functions.ts          # search_crm()
-    saved-views.functions.ts
+    products.functions.ts
+    categories.functions.ts
+    inventory.functions.ts       # receiveStock / adjustStock / transferStock / getInventory / getLowStockItems
+    suppliers.functions.ts
+    purchases.functions.ts
+    movements.functions.ts       # list/query stock movements
   components/
-    LeadsTable.tsx  ContactsTable.tsx  OrgsTable.tsx  DealsBoard.tsx
-    ActivityTimeline.tsx  NoteThread.tsx  TagPicker.tsx
-    CustomFieldEditor.tsx  AttachmentList.tsx  GlobalSearchBox.tsx
+    ProductsTable.tsx  ProductForm.tsx
+    InventoryTable.tsx  StockAdjustDialog.tsx  ReceiveStockDialog.tsx
+    SuppliersTable.tsx  SupplierForm.tsx
+    StockMovementList.tsx  LowStockList.tsx
 
-src/platform/dashboard/
-  registry.ts                    # DashboardWidget type + registerWidget/allWidgets
-  functions.ts                   # listMyWidgets({ dashboardKey })
-
-src/platform/events/definitions/crm.ts   # thin re-export of module CRM events
+src/platform/events/definitions/inventory.ts   # re-exports module events
 
 src/routes/_authenticated/
-  app.crm.tsx                    # layout (tabs: Dashboard, Leads, Contacts, Orgs, Deals, Activities)
-  app.crm.index.tsx              # CRM dashboard
-  app.crm.leads.tsx  app.crm.leads.$id.tsx
-  app.crm.contacts.tsx  app.crm.contacts.$id.tsx
-  app.crm.organizations.tsx  app.crm.organizations.$id.tsx
-  app.crm.deals.tsx  app.crm.deals.$id.tsx
-  app.crm.activities.tsx
-  app.crm.settings.tsx  (pipelines, stages, tags, custom fields, saved views)
+  app.inventory.tsx              # layout: Overview | Products | Stock | Suppliers | History
+  app.inventory.index.tsx        # inventory dashboard
+  app.products.tsx  app.products.$id.tsx
+  app.suppliers.tsx  app.suppliers.$id.tsx
+  app.stock-history.tsx
 
 docs/
-  architecture-m4.md  crm/entities.md  crm/events.md  crm/custom-fields.md
-  crm/search.md  crm/dashboard-widgets.md
+  architecture-m5.md
+  inventory/entities.md  inventory/events.md  inventory/permissions.md
 ```
 
-## 3. Database (all `public.*`, RLS on, GRANTs, audit triggers)
+## 3. Database
 
-Enums: `lead_status` (new, contacted, qualified, proposal, negotiation, won, lost), `activity_type` (call, meeting, email, task, followup), `activity_status` (planned, in_progress, completed, cancelled), `custom_field_type` (text, number, date, boolean, select, multiselect, currency, url), `crm_entity_type` (lead, contact, organization, deal), `deal_status` (open, won, lost).
+Enums:
+- `stock_movement_type` (purchase, sale, adjustment, damaged, expired, transfer_in, transfer_out, opening_balance, return)
+- `product_status` (active, archived, draft)
+- `product_unit` (piece, kg, g, l, ml, box, pack, carton, dozen, other)
 
-Tables:
-- `crm_pipelines(id, company_id, name, is_default bool, timestamps, deleted_at)`
-- `crm_pipeline_stages(id, pipeline_id, name, position int, probability numeric, is_won bool, is_lost bool, timestamps)`
-- `crm_organizations(id, company_id, name, industry, tax_id, website, phone, email, address jsonb, notes text, assigned_to uuid, timestamps, deleted_at)`
-- `crm_contacts(id, company_id, first_name, last_name, job_title, department, birthday date, preferred_channel communication_channel, socials jsonb, notes, assigned_to, timestamps, deleted_at)`
-- `crm_contact_emails(id, contact_id, email, label, is_primary)` + unique(contact_id, email)
-- `crm_contact_phones(id, contact_id, phone, label, is_primary)`
-- `crm_contact_organizations(contact_id, organization_id, role, is_primary, primary key(contact_id, organization_id))`
-- `crm_leads(id, company_id, source, status lead_status, contact_id nullable, organization_id nullable, estimated_value numeric, currency_code, assigned_to, converted_at, converted_deal_id, timestamps, deleted_at)`
-- `crm_lead_status_history(id, lead_id, from_status, to_status, changed_by, changed_at)`
-- `crm_deals(id, company_id, pipeline_id, stage_id, name, value numeric, currency_code, probability numeric, expected_close_date date, status deal_status, contact_id nullable, organization_id nullable, assigned_to, closed_at, timestamps, deleted_at)`
-- `crm_deal_collaborators(deal_id, user_id, role, primary key(deal_id, user_id))`
-- `crm_activities(id, company_id, type activity_type, status activity_status, subject, body text, due_at, completed_at, assigned_to, related_type crm_entity_type, related_id uuid, timestamps, deleted_at)`
-- `crm_notes(id, company_id, author_id, body_html text, mentions uuid[], related_type crm_entity_type, related_id uuid, timestamps, deleted_at)`
-- `crm_tags(id, company_id, name, color, timestamps)` + unique(company_id, name)
-- `crm_taggables(tag_id, entity_type crm_entity_type, entity_id uuid, primary key(tag_id, entity_type, entity_id))`
-- `crm_custom_fields(id, company_id, entity_type crm_entity_type, key, label, type custom_field_type, options jsonb, is_required bool, position int, timestamps)` + unique(company_id, entity_type, key)
-- `crm_custom_field_values(field_id, entity_id, value_text, value_number, value_date, value_bool, value_json jsonb, primary key(field_id, entity_id))`
-- `crm_attachments(id, company_id, uploader_id, storage_path text, filename, mime_type, size_bytes, version int, related_type crm_entity_type, related_id uuid, timestamps, deleted_at)`
-- `crm_saved_views(id, company_id, user_id nullable (shared if null), entity_type crm_entity_type, name, filters jsonb, sort jsonb, is_shared bool, timestamps)`
-- `crm_search_index` — materialized view union of leads/contacts/orgs/deals with `tsvector`; GIN index; refreshed by background job on write (event subscriber → `crm.search.reindex` job).
+Tables (all `public`, RLS on, GRANT to authenticated + service_role, audit trigger, `updated_at` trigger):
 
-RLS: every table restricted by `private.is_company_member(company_id)`; writes gated by permission via `private.has_permission(company_id, 'crm.write')` (or `crm.delete`/`crm.admin`). Storage bucket policies key on `company_id` prefix in the object path. Audit triggers via existing `public.audit_m2_change()` on all mutating tables.
+- `product_categories(id, company_id, parent_id nullable, name, description, timestamps, deleted_at)` — unique(company_id, name, parent_id).
+- `products(id, company_id, name, description, sku, barcode, category_id nullable, unit product_unit, cost_price numeric, selling_price numeric, currency_code, image_url, status product_status, metadata jsonb, created_by, timestamps, deleted_at)` — unique(company_id, sku) where sku not null; unique(company_id, barcode) where barcode not null.
+- `inventory_items(id, company_id, product_id, branch_id, quantity numeric, reserved_quantity numeric, minimum_stock_level numeric, maximum_stock_level numeric, reorder_point numeric, last_movement_at, timestamps)` — unique(product_id, branch_id).
+- `stock_movements(id, company_id, product_id, branch_id, movement_type, quantity numeric, previous_quantity numeric, new_quantity numeric, unit_cost numeric nullable, reference_type text nullable, reference_id uuid nullable, notes, created_by, created_at)` — append-only (no update trigger; RLS blocks update/delete except service_role).
+- `suppliers(id, company_id, name, phone, email, address jsonb, tax_id, notes, status, timestamps, deleted_at)`.
+- `supplier_products(supplier_id, product_id, supplier_sku, cost_price numeric, lead_time_days int, primary key(supplier_id, product_id))`.
+- `purchase_records(id, company_id, supplier_id nullable, branch_id, reference, purchase_date, total_amount numeric, currency_code, status text, notes, created_by, timestamps, deleted_at)`.
+- `purchase_record_items(id, purchase_id, product_id, quantity numeric, unit_cost numeric, total numeric)`.
 
-Seeds: default pipeline `Sales Pipeline` with stages New/Contacted/Qualified/Proposal/Negotiation/Won/Lost per company (created by trigger on `companies` insert AFTER core seed).
+Triggers:
+- `apply_stock_movement()` — BEFORE INSERT on `stock_movements`: locks matching `inventory_items` row (create if missing), sets `previous_quantity`, computes `new_quantity` from movement type sign, updates `inventory_items.quantity` + `last_movement_at`. Rejects negative resulting stock unless movement_type in (adjustment, damaged, expired).
+- Low-stock detector — AFTER INSERT on `stock_movements`: if `new_quantity <= minimum_stock_level` and previous_quantity was above, insert into `event_queue` a `inventory.stock.low_detected` event.
+- Deal status–style derivation NOT needed here.
+- Audit + `updated_at` triggers on mutable tables.
 
-## 4. CRM Events (registered in `src/modules/crm/events.ts`)
+RLS: all tables scoped via `private.is_company_member(company_id)`; writes gated by `private.has_permission(company_id, '<perm>')`. Stock movements: INSERT requires `inventory.adjust` OR `inventory.create`; UPDATE/DELETE denied for `authenticated`.
 
-`crm.lead.created`, `crm.lead.updated`, `crm.lead.converted`, `crm.deal.created`, `crm.deal.stage_changed`, `crm.deal.won`, `crm.deal.lost`, `crm.contact.created`, `crm.contact.updated`, `crm.organization.created`, `crm.organization.updated`, `crm.activity.completed`, `crm.task.due_soon`.
+Seeds (per company, via trigger on `company_modules` insert where module_id='inventory'):
+- Default categories: Uncategorized.
+- Nothing else — data comes from user.
 
-Each defines Zod payload, publisher `crm`, subscribers wired to in-app notifications (assignee) and (for won/lost/converted) email templates. Search-index refresh is subscribed via a `job` subscriber (`crm.search.reindex`).
+Permissions seed (inserted into `public.permissions`, granted to owner + admin roles): `inventory.view`, `inventory.create`, `inventory.update`, `inventory.delete`, `inventory.adjust`, `supplier.view`, `supplier.manage`, `purchase.manage`.
 
-## 5. API Design (server functions)
+## 4. Events
 
-All under `src/modules/crm/server/*.functions.ts`, all `.middleware([requireSupabaseAuth])`, permission checks via `has_permission`. Standard shape:
+Registered in `src/modules/inventory/events.ts`, re-exported by `src/platform/events/definitions/inventory.ts`, added to `src/platform/events/registry.ts` imports.
 
-- `list*({ companyId, filters, sort, cursor, limit })` — keyset pagination, returns `{ items, nextCursor }`.
-- `get*({ id })`, `create*(data)`, `update*({ id, patch })`, `archive*({ id })` (soft delete), `restore*({ id })`, `delete*({ id })` (hard delete; `crm.delete` only).
-- `convertLead({ id, dealOverrides })` — atomic: creates deal from lead, links contact/org, sets status=won path optional, publishes `crm.lead.converted`.
-- `deals.moveStage({ id, stageId })` — publishes `crm.deal.stage_changed`; if stage.is_won/is_lost → `crm.deal.won|lost`.
-- `pipelines.upsertStage`, `pipelines.reorderStages`, `pipelines.create/delete` (perm `crm.pipelines.manage`).
-- `tags.create/delete/apply/remove`.
-- `customFields.list/create/update/delete` + `customFieldValues.set({ entityId, values })`.
-- `attachments.getUploadUrl({ relatedType, relatedId, filename, mime })` → returns signed URL; `attachments.confirm({ path, metadata })` inserts row; `attachments.delete({ id })` soft-delete + storage remove.
-- `search_crm({ q, types?, limit? })` — Postgres FTS.
-- `savedViews.list/upsert/delete`.
-- `dashboard.summary({ companyId })` — returns totals for widgets in one call.
+- `inventory.product.created` v1 — notification to creator (low priority).
+- `inventory.product.updated` v1.
+- `inventory.product.archived` v1.
+- `inventory.stock.received` v1 — publishes on purchase-type movement; notification category `business`.
+- `inventory.stock.adjusted` v1 — adjustment/damaged/expired.
+- `inventory.stock.transferred` v1 — pair of transfer_out+transfer_in.
+- `inventory.stock.low_detected` v1 — notification to owners with deep link `/app/inventory?filter=low-stock`; job `inventory.low_stock.digest` (daily rollup).
+- `inventory.supplier.created` v1.
+- `inventory.purchase.recorded` v1 — notification + audit; downstream Accounting can subscribe later.
 
-## 6. UI/UX
+## 5. Server Functions
 
-- `/app/crm` layout with left rail: Dashboard, Leads, Contacts, Organizations, Deals, Activities, Settings.
-- Dashboard uses widget registry (`listMyWidgets({ dashboardKey: 'crm' })`) — order/visibility controllable later.
-- Tables: shadcn Table + column chooser + saved-view dropdown + filter drawer.
-- Deals: Kanban board (`DealsBoard`) grouped by stage; drag to change stage (calls `moveStage`).
-- Activity Timeline: unified feed component reused on lead/contact/org/deal detail pages.
-- Global Search: `Cmd/Ctrl+K` opens `GlobalSearchBox` mounted in `src/routes/_authenticated/app.tsx` top bar (only when CRM module enabled).
-- All create/edit uses shadcn Dialog + react-hook-form + zod.
-- Reuse existing tokens; no design-system change.
+All under `src/modules/inventory/server/*.functions.ts`, `.middleware([requireSupabaseAuth])`, permission check via `private.has_permission`, Zod-validated input, publishing events through `events.publish` (M3 bus).
 
-## 7. Business Rules
+**Products**
+- `listProducts({ companyId, filters, cursor, limit })` — keyset paginated, joins inventory totals across branches.
+- `getProduct({ id })`.
+- `createProduct(input)` — `inventory.create`.
+- `updateProduct({ id, patch })` — `inventory.update`.
+- `archiveProduct({ id })` / `deleteProduct({ id })` — `inventory.delete`.
 
-- Only companies with `company_modules.enabled` for `crm` see routes / widgets / nav. `_authenticated/app.crm.*` loaders throw `notFound()` otherwise.
-- Converting a lead: contact and organization created if missing, deal created in default pipeline (or provided pipeline), lead marked `won` + `converted_deal_id`, history row appended. Idempotent by `lead.id`.
-- Deal `status` derived from stage flags (`is_won`/`is_lost`); direct writes to `status` rejected by trigger.
-- Custom fields marked `is_required` are validated in server fns before insert/update.
-- Attachments: max 25 MB (validated in `getUploadUrl`), MIME allowlist, virus-scan hook stubbed.
-- Global search returns only rows the caller's RLS allows (view is defined `security invoker`).
-- Search reindex runs asynchronously; UI does not block writes.
+**Categories**
+- `listCategories`, `createCategory`, `updateCategory`, `deleteCategory` — `inventory.update` (management is admin-lite).
 
-## 8. Security
+**Inventory / Stock**
+- `getInventory({ companyId, branchId?, filters, cursor, limit })`.
+- `receiveStock({ productId, branchId, quantity, unitCost?, supplierId?, notes? })` — inserts stock_movement type=purchase; publishes `inventory.stock.received`; `inventory.adjust` OR `purchase.manage`.
+- `adjustStock({ productId, branchId, delta, reason, notes? })` — movement type=adjustment/damaged/expired; publishes `inventory.stock.adjusted`; `inventory.adjust`.
+- `transferStock({ productId, fromBranchId, toBranchId, quantity, notes? })` — inserts paired movements atomically; publishes `inventory.stock.transferred`.
+- `getLowStockItems({ companyId, branchId? })` — where quantity <= minimum_stock_level.
+- `listStockMovements({ companyId, filters, cursor, limit })`.
 
-- All new tables RLS as above; `service_role` bypass only for admin/maintenance.
-- Storage bucket `crm-attachments` created private via `supabase--storage_create_bucket`; RLS policies on `storage.objects` restrict path prefix `${company_id}/...` to members with `crm.read`; delete requires `crm.delete` or uploader.
-- No secrets in payloads; sanitize note HTML server-side (allowlist).
-- Rate limits via existing job queue (search reindex debounced).
-- Permissions enforced at server-fn boundary AND RLS; UI only hides controls.
+**Suppliers**
+- `listSuppliers`, `getSupplier`, `createSupplier` (`supplier.manage`), `updateSupplier`, `archiveSupplier`.
+- `linkSupplierProduct({ supplierId, productId, supplierSku?, costPrice?, leadTimeDays? })`.
 
-## 9. Testing
+**Purchases**
+- `recordPurchase({ supplierId?, branchId, items:[{productId,quantity,unitCost}], purchaseDate, notes? })` — atomic: creates purchase_records + items + one stock_movement per item (type=purchase). Publishes `inventory.purchase.recorded`.
+- `listPurchases`, `getPurchase`.
 
-- Unit: convert-lead atomicity, deal stage → status derivation, custom-field validation, tag apply/remove, keyset pagination, search query builder.
-- Integration: RLS matrix (cross-company denial), permission gates (viewer vs editor vs admin), attachment signed-URL flow, saved-views sharing.
-- Event tests: creating a lead publishes `crm.lead.created`; assignee receives notification; won deal triggers email subscriber.
-- Dashboard widget registry test: widgets registered for `crm` return in `listMyWidgets`.
-- Search test: FTS returns leads/contacts/orgs/deals for a token; respects RLS.
-- Playwright: create lead → convert → verify deal appears on board and event fires (bell increments).
+**Dashboard**
+- `inventorySummary({ companyId, branchId? })` — { totalProducts, stockValue, lowStockCount, recentMovements, topProducts }.
 
-## 10. Delivery Order
+## 6. UI
 
-1. Migration A — enums, pipelines/stages, orgs, contacts (+ emails/phones/orgs join), leads (+ history), deals (+ collaborators), activities, notes, tags (+ taggables), custom fields (+ values), attachments, saved views, permissions seed, audit triggers, default-pipeline trigger.
-2. Migration B — `crm_search_index` matview + GIN index + refresh function.
-3. Storage bucket `crm-attachments` + RLS policies.
-4. `src/modules/crm/index.ts` manifest + `events.ts`; register in `src/platform/registry.ts` and `src/platform/events/definitions/crm.ts`.
-5. Dashboard Widget Registry (`src/platform/dashboard/*`) + widget components + `_registry.ts`.
-6. Server functions per entity (list/get/CRUD/convert/search/attachments/saved-views/custom-fields/tags/pipelines).
-7. UI routes + components (layout, dashboard, tables, kanban, timeline, settings).
-8. Global search box mounted in authenticated top bar.
+- `/app/inventory` layout: tabs Overview | Products | Stock | Suppliers | History (sub-routes).
+- Overview: widget grid via `listMyWidgets({ dashboardKey: 'inventory' })`.
+- Products: table (search/filter by category/status), create/edit dialog with shadcn form + zod, image URL, cost/selling prices, unit, category picker.
+- Stock: inventory table per branch, actions Receive / Adjust / Transfer opening shadcn Dialog forms.
+- Suppliers: table + form.
+- Stock History: filterable movement log (product, branch, type, date range).
+- Low-stock badge in `/app/inventory` nav (from `getLowStockItems.count`).
+- All gated by module enabled + feature flag `inventory.enabled` + `inventory.view` perm; loaders `throw notFound()` otherwise.
+
+## 7. Module Registration
+
+- `src/modules/inventory/index.ts` exports `inventoryModule` manifest (nav items, permissions, widgets, AI capabilities, feature flag `inventory.enabled` default `beta`).
+- `src/platform/registry.ts` imports and pushes it to `MODULES`.
+- `src/platform/events/registry.ts` imports `inventoryEvents`.
+- `admin.syncManifests()` and `admin.syncEvents()` will mirror to DB on next admin run.
+- Dashboard widget registry (introduced in M4 planning) gets the 5 widgets in `_registry.ts`.
+
+## 8. Business Rules
+
+- Company must have `company_modules` row for `inventory` with `enabled = true` AND feature flag evaluated true → module surfaces.
+- Cost/selling prices in company currency; stored numeric(18,4).
+- `sku` and `barcode` unique per company when set.
+- Stock cannot go negative except for adjustment/damaged/expired movement types.
+- Deleting a product with existing movements = archive (soft delete). Hard delete only when no movements.
+- Purchases are atomic (all items apply, or none) — transaction inside server fn using `supabase.rpc('record_purchase_atomic', ...)` DB function.
+
+## 9. Security
+
+- RLS on every new table via `private.is_company_member` + permission functions.
+- `stock_movements` append-only for `authenticated` (INSERT with permission check; UPDATE/DELETE denied).
+- `supabaseAdmin` only for maintenance/webhooks (not used by module server fns).
+- Zod validation on all inputs; numeric bounds enforced (quantity > 0 where relevant).
+- Audit triggers on all mutable tables via `public.audit_m2_change()`.
+
+## 10. Testing
+
+- Unit: stock movement math (previous → new), transfer atomicity, low-stock trigger fires exactly once on crossing threshold, purchase-record atomicity.
+- Integration: RLS cross-company denial; permission gates (viewer cannot adjust); event publish (`inventory.stock.received`) → notification insert.
+- Dashboard widget registry test: 5 inventory widgets returned for `dashboardKey='inventory'`.
+- Playwright: enable inventory module for a company → create product → receive stock → adjust below minimum → notification bell increments.
+
+## 11. Delivery Order
+
+1. Migration A — enums, tables (categories, products, inventory_items, stock_movements, suppliers, supplier_products, purchase_records, purchase_record_items), GRANTs, RLS, permissions seed, audit + updated_at triggers.
+2. Migration B — `apply_stock_movement()` trigger + low-stock detector trigger + `record_purchase_atomic()` RPC + `seed_inventory_defaults()` trigger on `company_modules`.
+3. `src/modules/inventory/events.ts` + `src/platform/events/definitions/inventory.ts` + registry wiring.
+4. `src/modules/inventory/index.ts` manifest + `src/platform/registry.ts` wiring.
+5. Server functions (products, categories, inventory, suppliers, purchases, movements).
+6. Widgets + `_registry.ts`.
+7. UI routes and components.
+8. Docs `docs/architecture-m5.md`, `docs/inventory/*.md`.
 9. Tests (unit + integration + one Playwright flow).
-10. Docs: `docs/architecture-m4.md`, `docs/crm/*.md`.
 
-**Exit criteria**: CRM module can be enabled per company; users with `crm.*` perms can manage leads/contacts/orgs/deals/activities/notes/tags/custom fields/attachments; dashboard widgets render; global search returns CRM entities; CRM events flow through the bus to notifications/email; permissions + RLS enforced end-to-end; no business-module logic beyond CRM introduced.
+**Exit criteria**: inventory module can be enabled per company; users with proper perms can manage products/stock/suppliers/purchases; low-stock alerts fire through the bus and bell; dashboard widgets render; RLS + permissions + audit enforced end-to-end; CRM/Core untouched.
 
-Approve and I'll execute steps 1–10 in order.
+Approve and I'll execute steps 1–9 in order.
