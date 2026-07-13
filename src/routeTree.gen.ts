@@ -33,9 +33,14 @@ import { Route as PlatformAdminCompaniesRouteImport } from './routes/_platform/a
 import { Route as PlatformAdminCommunicationsRouteImport } from './routes/_platform/admin.communications'
 import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
 import { Route as PlatformAdminAnalyticsRouteImport } from './routes/_platform/admin.analytics'
+import { Route as AuthenticatedAppSuppliersRouteImport } from './routes/_authenticated/app.suppliers'
+import { Route as AuthenticatedAppStockHistoryRouteImport } from './routes/_authenticated/app.stock-history'
+import { Route as AuthenticatedAppProductsRouteImport } from './routes/_authenticated/app.products'
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
 import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_authenticated/app.notifications'
+import { Route as AuthenticatedAppInventoryRouteImport } from './routes/_authenticated/app.inventory'
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
+import { Route as AuthenticatedAppInventoryIndexRouteImport } from './routes/_authenticated/app.inventory.index'
 import { Route as ApiPublicHooksJobRunnerRouteImport } from './routes/api/public/hooks/job-runner'
 import { Route as ApiPublicHooksEventDispatcherRouteImport } from './routes/api/public/hooks/event-dispatcher'
 import { Route as AuthenticatedAppSettingsUsersRouteImport } from './routes/_authenticated/app.settings.users'
@@ -168,6 +173,24 @@ const PlatformAdminAnalyticsRoute = PlatformAdminAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => PlatformAdminRoute,
 } as any)
+const AuthenticatedAppSuppliersRoute =
+  AuthenticatedAppSuppliersRouteImport.update({
+    id: '/suppliers',
+    path: '/suppliers',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppStockHistoryRoute =
+  AuthenticatedAppStockHistoryRouteImport.update({
+    id: '/stock-history',
+    path: '/stock-history',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppProductsRoute =
+  AuthenticatedAppProductsRouteImport.update({
+    id: '/products',
+    path: '/products',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppOnboardingRoute =
   AuthenticatedAppOnboardingRouteImport.update({
     id: '/onboarding',
@@ -180,11 +203,23 @@ const AuthenticatedAppNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppInventoryRoute =
+  AuthenticatedAppInventoryRouteImport.update({
+    id: '/inventory',
+    path: '/inventory',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppSettingsIndexRoute =
   AuthenticatedAppSettingsIndexRouteImport.update({
     id: '/settings/',
     path: '/settings/',
     getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppInventoryIndexRoute =
+  AuthenticatedAppInventoryIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppInventoryRoute,
   } as any)
 const ApiPublicHooksJobRunnerRoute = ApiPublicHooksJobRunnerRouteImport.update({
   id: '/api/public/hooks/job-runner',
@@ -256,8 +291,12 @@ export interface FileRoutesByFullPath {
   '/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
+  '/app/products': typeof AuthenticatedAppProductsRoute
+  '/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
+  '/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
   '/admin/communications': typeof PlatformAdminCommunicationsRoute
@@ -281,6 +320,7 @@ export interface FileRoutesByFullPath {
   '/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
+  '/app/inventory/': typeof AuthenticatedAppInventoryIndexRoute
   '/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -292,6 +332,9 @@ export interface FileRoutesByTo {
   '/legal/terms': typeof LegalTermsRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
+  '/app/products': typeof AuthenticatedAppProductsRoute
+  '/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
+  '/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
   '/admin/communications': typeof PlatformAdminCommunicationsRoute
@@ -315,6 +358,7 @@ export interface FileRoutesByTo {
   '/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
+  '/app/inventory': typeof AuthenticatedAppInventoryIndexRoute
   '/app/settings': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRoutesById {
@@ -330,8 +374,12 @@ export interface FileRoutesById {
   '/_platform/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/_authenticated/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
   '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
+  '/_authenticated/app/products': typeof AuthenticatedAppProductsRoute
+  '/_authenticated/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
+  '/_authenticated/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/_platform/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/_platform/admin/audit': typeof PlatformAdminAuditRoute
   '/_platform/admin/communications': typeof PlatformAdminCommunicationsRoute
@@ -355,6 +403,7 @@ export interface FileRoutesById {
   '/_authenticated/app/settings/users': typeof AuthenticatedAppSettingsUsersRoute
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
+  '/_authenticated/app/inventory/': typeof AuthenticatedAppInventoryIndexRoute
   '/_authenticated/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
 export interface FileRouteTypes {
@@ -369,8 +418,12 @@ export interface FileRouteTypes {
     | '/developers'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/app/inventory'
     | '/app/notifications'
     | '/app/onboarding'
+    | '/app/products'
+    | '/app/stock-history'
+    | '/app/suppliers'
     | '/admin/analytics'
     | '/admin/audit'
     | '/admin/communications'
@@ -394,6 +447,7 @@ export interface FileRouteTypes {
     | '/app/settings/users'
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
+    | '/app/inventory/'
     | '/app/settings/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -405,6 +459,9 @@ export interface FileRouteTypes {
     | '/legal/terms'
     | '/app/notifications'
     | '/app/onboarding'
+    | '/app/products'
+    | '/app/stock-history'
+    | '/app/suppliers'
     | '/admin/analytics'
     | '/admin/audit'
     | '/admin/communications'
@@ -428,6 +485,7 @@ export interface FileRouteTypes {
     | '/app/settings/users'
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
+    | '/app/inventory'
     | '/app/settings'
   id:
     | '__root__'
@@ -442,8 +500,12 @@ export interface FileRouteTypes {
     | '/_platform/developers'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/_authenticated/app/inventory'
     | '/_authenticated/app/notifications'
     | '/_authenticated/app/onboarding'
+    | '/_authenticated/app/products'
+    | '/_authenticated/app/stock-history'
+    | '/_authenticated/app/suppliers'
     | '/_platform/admin/analytics'
     | '/_platform/admin/audit'
     | '/_platform/admin/communications'
@@ -467,6 +529,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/settings/users'
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
+    | '/_authenticated/app/inventory/'
     | '/_authenticated/app/settings/'
   fileRoutesById: FileRoutesById
 }
@@ -653,6 +716,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlatformAdminAnalyticsRouteImport
       parentRoute: typeof PlatformAdminRoute
     }
+    '/_authenticated/app/suppliers': {
+      id: '/_authenticated/app/suppliers'
+      path: '/suppliers'
+      fullPath: '/app/suppliers'
+      preLoaderRoute: typeof AuthenticatedAppSuppliersRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/stock-history': {
+      id: '/_authenticated/app/stock-history'
+      path: '/stock-history'
+      fullPath: '/app/stock-history'
+      preLoaderRoute: typeof AuthenticatedAppStockHistoryRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/products': {
+      id: '/_authenticated/app/products'
+      path: '/products'
+      fullPath: '/app/products'
+      preLoaderRoute: typeof AuthenticatedAppProductsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/onboarding': {
       id: '/_authenticated/app/onboarding'
       path: '/onboarding'
@@ -667,12 +751,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppNotificationsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/inventory': {
+      id: '/_authenticated/app/inventory'
+      path: '/inventory'
+      fullPath: '/app/inventory'
+      preLoaderRoute: typeof AuthenticatedAppInventoryRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/settings/': {
       id: '/_authenticated/app/settings/'
       path: '/settings'
       fullPath: '/app/settings/'
       preLoaderRoute: typeof AuthenticatedAppSettingsIndexRouteImport
       parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/inventory/': {
+      id: '/_authenticated/app/inventory/'
+      path: '/'
+      fullPath: '/app/inventory/'
+      preLoaderRoute: typeof AuthenticatedAppInventoryIndexRouteImport
+      parentRoute: typeof AuthenticatedAppInventoryRoute
     }
     '/api/public/hooks/job-runner': {
       id: '/api/public/hooks/job-runner'
@@ -747,9 +845,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedAppInventoryRouteChildren {
+  AuthenticatedAppInventoryIndexRoute: typeof AuthenticatedAppInventoryIndexRoute
+}
+
+const AuthenticatedAppInventoryRouteChildren: AuthenticatedAppInventoryRouteChildren =
+  {
+    AuthenticatedAppInventoryIndexRoute: AuthenticatedAppInventoryIndexRoute,
+  }
+
+const AuthenticatedAppInventoryRouteWithChildren =
+  AuthenticatedAppInventoryRoute._addFileChildren(
+    AuthenticatedAppInventoryRouteChildren,
+  )
+
 interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppInventoryRoute: typeof AuthenticatedAppInventoryRouteWithChildren
   AuthenticatedAppNotificationsRoute: typeof AuthenticatedAppNotificationsRoute
   AuthenticatedAppOnboardingRoute: typeof AuthenticatedAppOnboardingRoute
+  AuthenticatedAppProductsRoute: typeof AuthenticatedAppProductsRoute
+  AuthenticatedAppStockHistoryRoute: typeof AuthenticatedAppStockHistoryRoute
+  AuthenticatedAppSuppliersRoute: typeof AuthenticatedAppSuppliersRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
   AuthenticatedAppAcceptInviteTokenRoute: typeof AuthenticatedAppAcceptInviteTokenRoute
   AuthenticatedAppSettingsAuditRoute: typeof AuthenticatedAppSettingsAuditRoute
@@ -763,8 +879,12 @@ interface AuthenticatedAppRouteChildren {
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppInventoryRoute: AuthenticatedAppInventoryRouteWithChildren,
   AuthenticatedAppNotificationsRoute: AuthenticatedAppNotificationsRoute,
   AuthenticatedAppOnboardingRoute: AuthenticatedAppOnboardingRoute,
+  AuthenticatedAppProductsRoute: AuthenticatedAppProductsRoute,
+  AuthenticatedAppStockHistoryRoute: AuthenticatedAppStockHistoryRoute,
+  AuthenticatedAppSuppliersRoute: AuthenticatedAppSuppliersRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
   AuthenticatedAppAcceptInviteTokenRoute:
     AuthenticatedAppAcceptInviteTokenRoute,
