@@ -12,6 +12,7 @@
 
 import { z } from "zod";
 import { coreModule } from "@/modules/core";
+import { inventoryModule } from "@/modules/inventory";
 
 // ------------------------------ Types ---------------------------------
 export type SubscriptionTier = "starter" | "professional" | "enterprise" | "custom";
