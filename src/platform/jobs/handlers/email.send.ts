@@ -34,8 +34,8 @@ export async function handleEmailSend(
   // Try Lovable Emails scaffold (present iff domain configured).
   try {
     // Dynamic import so missing scaffold does not break the build.
-    // @ts-expect-error - optional module
-    const mod = await import("@/lib/email-templates/send-email").catch(() => null);
+    const mod: any = await import("@/lib/email-templates/send-email").catch(() => null);
+
     if (mod && typeof mod.sendTemplateEmail === "function") {
       const result = await mod.sendTemplateEmail(templateKey, to, {
         templateData: payload.templateData ?? {},
