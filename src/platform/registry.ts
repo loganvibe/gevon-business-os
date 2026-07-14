@@ -13,6 +13,7 @@
 import { z } from "zod";
 import { coreModule } from "@/modules/core";
 import { inventoryModule } from "@/modules/inventory";
+import { salesModule } from "@/modules/sales";
 
 // ------------------------------ Types ---------------------------------
 export type SubscriptionTier = "starter" | "professional" | "enterprise" | "custom";
@@ -101,7 +102,7 @@ export const ModuleManifestSchema = z.object({
 });
 
 // ---------------------------- Registry --------------------------------
-const MODULES: ModuleManifest[] = [coreModule, inventoryModule];
+const MODULES: ModuleManifest[] = [coreModule, inventoryModule, salesModule];
 
 export function registerModule(m: ModuleManifest) {
   ModuleManifestSchema.parse(m);
