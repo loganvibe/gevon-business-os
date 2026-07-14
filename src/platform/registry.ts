@@ -102,7 +102,7 @@ export const ModuleManifestSchema = z.object({
 });
 
 // ---------------------------- Registry --------------------------------
-const MODULES: ModuleManifest[] = [coreModule, inventoryModule];
+const MODULES: ModuleManifest[] = [coreModule, inventoryModule, salesModule];
 
 export function registerModule(m: ModuleManifest) {
   ModuleManifestSchema.parse(m);
