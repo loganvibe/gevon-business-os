@@ -58,6 +58,7 @@ import { Route as AuthenticatedAppSettingsNotificationsRouteImport } from './rou
 import { Route as AuthenticatedAppSettingsModulesRouteImport } from './routes/_authenticated/app.settings.modules'
 import { Route as AuthenticatedAppSettingsBranchesRouteImport } from './routes/_authenticated/app.settings.branches'
 import { Route as AuthenticatedAppSettingsAuditRouteImport } from './routes/_authenticated/app.settings.audit'
+import { Route as AuthenticatedAppExpensesCategoriesRouteImport } from './routes/_authenticated/app.expenses.categories'
 import { Route as AuthenticatedAppAcceptInviteTokenRouteImport } from './routes/_authenticated/app.accept-invite.$token'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -327,6 +328,12 @@ const AuthenticatedAppSettingsAuditRoute =
     path: '/settings/audit',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppExpensesCategoriesRoute =
+  AuthenticatedAppExpensesCategoriesRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => AuthenticatedAppExpensesRoute,
+  } as any)
 const AuthenticatedAppAcceptInviteTokenRoute =
   AuthenticatedAppAcceptInviteTokenRouteImport.update({
     id: '/accept-invite/$token',
@@ -369,6 +376,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof PlatformAdminIndexRoute
   '/developers/': typeof PlatformDevelopersIndexRoute
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -413,6 +421,7 @@ export interface FileRoutesByTo {
   '/admin': typeof PlatformAdminIndexRoute
   '/developers': typeof PlatformDevelopersIndexRoute
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -466,6 +475,7 @@ export interface FileRoutesById {
   '/_platform/admin/': typeof PlatformAdminIndexRoute
   '/_platform/developers/': typeof PlatformDevelopersIndexRoute
   '/_authenticated/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/_authenticated/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
   '/_authenticated/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/_authenticated/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/_authenticated/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -518,6 +528,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/developers/'
     | '/app/accept-invite/$token'
+    | '/app/expenses/categories'
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
@@ -562,6 +573,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/developers'
     | '/app/accept-invite/$token'
+    | '/app/expenses/categories'
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
@@ -614,6 +626,7 @@ export interface FileRouteTypes {
     | '/_platform/admin/'
     | '/_platform/developers/'
     | '/_authenticated/app/accept-invite/$token'
+    | '/_authenticated/app/expenses/categories'
     | '/_authenticated/app/settings/audit'
     | '/_authenticated/app/settings/branches'
     | '/_authenticated/app/settings/modules'
@@ -989,6 +1002,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSettingsAuditRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/expenses/categories': {
+      id: '/_authenticated/app/expenses/categories'
+      path: '/categories'
+      fullPath: '/app/expenses/categories'
+      preLoaderRoute: typeof AuthenticatedAppExpensesCategoriesRouteImport
+      parentRoute: typeof AuthenticatedAppExpensesRoute
+    }
     '/_authenticated/app/accept-invite/$token': {
       id: '/_authenticated/app/accept-invite/$token'
       path: '/accept-invite/$token'
@@ -1000,11 +1020,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAppExpensesRouteChildren {
+  AuthenticatedAppExpensesCategoriesRoute: typeof AuthenticatedAppExpensesCategoriesRoute
   AuthenticatedAppExpensesIndexRoute: typeof AuthenticatedAppExpensesIndexRoute
 }
 
 const AuthenticatedAppExpensesRouteChildren: AuthenticatedAppExpensesRouteChildren =
   {
+    AuthenticatedAppExpensesCategoriesRoute:
+      AuthenticatedAppExpensesCategoriesRoute,
     AuthenticatedAppExpensesIndexRoute: AuthenticatedAppExpensesIndexRoute,
   }
 
