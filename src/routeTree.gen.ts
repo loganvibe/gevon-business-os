@@ -47,6 +47,7 @@ import { Route as AuthenticatedAppExpensesRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
 import { Route as AuthenticatedAppSalesIndexRouteImport } from './routes/_authenticated/app.sales.index'
 import { Route as AuthenticatedAppInventoryIndexRouteImport } from './routes/_authenticated/app.inventory.index'
+import { Route as AuthenticatedAppExpensesIndexRouteImport } from './routes/_authenticated/app.expenses.index'
 import { Route as ApiPublicHooksSalesIngestRouteImport } from './routes/api/public/hooks/sales-ingest'
 import { Route as ApiPublicHooksJobRunnerRouteImport } from './routes/api/public/hooks/job-runner'
 import { Route as ApiPublicHooksEventDispatcherRouteImport } from './routes/api/public/hooks/event-dispatcher'
@@ -261,6 +262,12 @@ const AuthenticatedAppInventoryIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedAppInventoryRoute,
   } as any)
+const AuthenticatedAppExpensesIndexRoute =
+  AuthenticatedAppExpensesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppExpensesRoute,
+  } as any)
 const ApiPublicHooksSalesIngestRoute =
   ApiPublicHooksSalesIngestRouteImport.update({
     id: '/api/public/hooks/sales-ingest',
@@ -337,7 +344,7 @@ export interface FileRoutesByFullPath {
   '/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/app/expenses': typeof AuthenticatedAppExpensesRoute
+  '/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
   '/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
@@ -372,6 +379,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
+  '/app/expenses/': typeof AuthenticatedAppExpensesIndexRoute
   '/app/inventory/': typeof AuthenticatedAppInventoryIndexRoute
   '/app/sales/': typeof AuthenticatedAppSalesIndexRoute
   '/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
@@ -383,7 +391,6 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/app/expenses': typeof AuthenticatedAppExpensesRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app/orders': typeof AuthenticatedAppOrdersRoute
@@ -416,6 +423,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
+  '/app/expenses': typeof AuthenticatedAppExpensesIndexRoute
   '/app/inventory': typeof AuthenticatedAppInventoryIndexRoute
   '/app/sales': typeof AuthenticatedAppSalesIndexRoute
   '/app/settings': typeof AuthenticatedAppSettingsIndexRoute
@@ -433,7 +441,7 @@ export interface FileRoutesById {
   '/_platform/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
-  '/_authenticated/app/expenses': typeof AuthenticatedAppExpensesRoute
+  '/_authenticated/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
   '/_authenticated/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
   '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
@@ -468,6 +476,7 @@ export interface FileRoutesById {
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
+  '/_authenticated/app/expenses/': typeof AuthenticatedAppExpensesIndexRoute
   '/_authenticated/app/inventory/': typeof AuthenticatedAppInventoryIndexRoute
   '/_authenticated/app/sales/': typeof AuthenticatedAppSalesIndexRoute
   '/_authenticated/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
@@ -519,6 +528,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
+    | '/app/expenses/'
     | '/app/inventory/'
     | '/app/sales/'
     | '/app/settings/'
@@ -530,7 +540,6 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/legal/privacy'
     | '/legal/terms'
-    | '/app/expenses'
     | '/app/notifications'
     | '/app/onboarding'
     | '/app/orders'
@@ -563,6 +572,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
+    | '/app/expenses'
     | '/app/inventory'
     | '/app/sales'
     | '/app/settings'
@@ -614,6 +624,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
+    | '/_authenticated/app/expenses/'
     | '/_authenticated/app/inventory/'
     | '/_authenticated/app/sales/'
     | '/_authenticated/app/settings/'
@@ -901,6 +912,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppInventoryIndexRouteImport
       parentRoute: typeof AuthenticatedAppInventoryRoute
     }
+    '/_authenticated/app/expenses/': {
+      id: '/_authenticated/app/expenses/'
+      path: '/'
+      fullPath: '/app/expenses/'
+      preLoaderRoute: typeof AuthenticatedAppExpensesIndexRouteImport
+      parentRoute: typeof AuthenticatedAppExpensesRoute
+    }
     '/api/public/hooks/sales-ingest': {
       id: '/api/public/hooks/sales-ingest'
       path: '/api/public/hooks/sales-ingest'
@@ -981,6 +999,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedAppExpensesRouteChildren {
+  AuthenticatedAppExpensesIndexRoute: typeof AuthenticatedAppExpensesIndexRoute
+}
+
+const AuthenticatedAppExpensesRouteChildren: AuthenticatedAppExpensesRouteChildren =
+  {
+    AuthenticatedAppExpensesIndexRoute: AuthenticatedAppExpensesIndexRoute,
+  }
+
+const AuthenticatedAppExpensesRouteWithChildren =
+  AuthenticatedAppExpensesRoute._addFileChildren(
+    AuthenticatedAppExpensesRouteChildren,
+  )
+
 interface AuthenticatedAppInventoryRouteChildren {
   AuthenticatedAppInventoryIndexRoute: typeof AuthenticatedAppInventoryIndexRoute
 }
@@ -1009,7 +1041,7 @@ const AuthenticatedAppSalesRouteWithChildren =
   )
 
 interface AuthenticatedAppRouteChildren {
-  AuthenticatedAppExpensesRoute: typeof AuthenticatedAppExpensesRoute
+  AuthenticatedAppExpensesRoute: typeof AuthenticatedAppExpensesRouteWithChildren
   AuthenticatedAppInventoryRoute: typeof AuthenticatedAppInventoryRouteWithChildren
   AuthenticatedAppNotificationsRoute: typeof AuthenticatedAppNotificationsRoute
   AuthenticatedAppOnboardingRoute: typeof AuthenticatedAppOnboardingRoute
@@ -1033,7 +1065,7 @@ interface AuthenticatedAppRouteChildren {
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
-  AuthenticatedAppExpensesRoute: AuthenticatedAppExpensesRoute,
+  AuthenticatedAppExpensesRoute: AuthenticatedAppExpensesRouteWithChildren,
   AuthenticatedAppInventoryRoute: AuthenticatedAppInventoryRouteWithChildren,
   AuthenticatedAppNotificationsRoute: AuthenticatedAppNotificationsRoute,
   AuthenticatedAppOnboardingRoute: AuthenticatedAppOnboardingRoute,
