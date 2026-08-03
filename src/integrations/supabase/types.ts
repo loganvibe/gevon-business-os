@@ -602,6 +602,329 @@ export type Database = {
           },
         ]
       }
+      expense_attachments: {
+        Row: {
+          company_id: string
+          content_type: string | null
+          created_at: string
+          expense_id: string
+          file_name: string
+          file_path: string
+          id: string
+          size_bytes: number | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          company_id: string
+          content_type?: string | null
+          created_at?: string
+          expense_id: string
+          file_name: string
+          file_path: string
+          id?: string
+          size_bytes?: number | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          content_type?: string | null
+          created_at?: string
+          expense_id?: string
+          file_name?: string
+          file_path?: string
+          id?: string
+          size_bytes?: number | null
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expense_attachments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expense_attachments_expense_id_fkey"
+            columns: ["expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expense_categories: {
+        Row: {
+          color: string | null
+          company_id: string
+          created_at: string
+          deleted_at: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean
+          is_system: boolean
+          name: string
+          parent_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          company_id: string
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          is_system?: boolean
+          name: string
+          parent_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          company_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          is_system?: boolean
+          name?: string
+          parent_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expense_categories_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expense_categories_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "expense_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expense_payments: {
+        Row: {
+          amount: number
+          company_id: string
+          created_at: string
+          created_by: string
+          currency_code: string
+          expense_id: string
+          id: string
+          method: Database["public"]["Enums"]["payment_method"]
+          notes: string | null
+          paid_at: string
+          reference: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          company_id: string
+          created_at?: string
+          created_by: string
+          currency_code?: string
+          expense_id: string
+          id?: string
+          method?: Database["public"]["Enums"]["payment_method"]
+          notes?: string | null
+          paid_at?: string
+          reference?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          currency_code?: string
+          expense_id?: string
+          id?: string
+          method?: Database["public"]["Enums"]["payment_method"]
+          notes?: string | null
+          paid_at?: string
+          reference?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expense_payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expense_payments_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "expense_payments_expense_id_fkey"
+            columns: ["expense_id"]
+            isOneToOne: false
+            referencedRelation: "expenses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      expenses: {
+        Row: {
+          amount: number
+          amount_paid: number
+          approved_at: string | null
+          approved_by: string | null
+          branch_id: string
+          category_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string
+          currency_code: string
+          deleted_at: string | null
+          description: string | null
+          expense_date: string
+          expense_number: string
+          id: string
+          is_recurring: boolean
+          metadata: Json
+          notes: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"] | null
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          purchase_id: string | null
+          recurrence: string | null
+          reference: string | null
+          rejected_reason: string | null
+          status: Database["public"]["Enums"]["expense_status"]
+          supplier_id: string | null
+          tax_amount: number
+          title: string
+          total: number
+          updated_at: string
+          vendor_name: string | null
+        }
+        Insert: {
+          amount: number
+          amount_paid?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          branch_id: string
+          category_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by: string
+          currency_code?: string
+          deleted_at?: string | null
+          description?: string | null
+          expense_date?: string
+          expense_number: string
+          id?: string
+          is_recurring?: boolean
+          metadata?: Json
+          notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          purchase_id?: string | null
+          recurrence?: string | null
+          reference?: string | null
+          rejected_reason?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          supplier_id?: string | null
+          tax_amount?: number
+          title: string
+          total?: number
+          updated_at?: string
+          vendor_name?: string | null
+        }
+        Update: {
+          amount?: number
+          amount_paid?: number
+          approved_at?: string | null
+          approved_by?: string | null
+          branch_id?: string
+          category_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          currency_code?: string
+          deleted_at?: string | null
+          description?: string | null
+          expense_date?: string
+          expense_number?: string
+          id?: string
+          is_recurring?: boolean
+          metadata?: Json
+          notes?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          purchase_id?: string | null
+          recurrence?: string | null
+          reference?: string | null
+          rejected_reason?: string | null
+          status?: Database["public"]["Enums"]["expense_status"]
+          supplier_id?: string | null
+          tax_amount?: number
+          title?: string
+          total?: number
+          updated_at?: string
+          vendor_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expenses_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "expense_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "expenses_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "purchase_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "expenses_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       feature_flag_overrides: {
         Row: {
           company_id: string | null
@@ -2520,6 +2843,7 @@ export type Database = {
       discount_type: "percentage" | "fixed"
       event_log_level: "info" | "warn" | "error"
       event_status: "queued" | "running" | "completed" | "failed" | "dead"
+      expense_status: "draft" | "pending" | "approved" | "rejected" | "paid"
       feature_flag_status:
         | "development"
         | "internal"
@@ -2724,6 +3048,7 @@ export const Constants = {
       discount_type: ["percentage", "fixed"],
       event_log_level: ["info", "warn", "error"],
       event_status: ["queued", "running", "completed", "failed", "dead"],
+      expense_status: ["draft", "pending", "approved", "rejected", "paid"],
       feature_flag_status: [
         "development",
         "internal",
