@@ -43,9 +43,12 @@ import { Route as AuthenticatedAppOrdersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
 import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_authenticated/app.notifications'
 import { Route as AuthenticatedAppInventoryRouteImport } from './routes/_authenticated/app.inventory'
+import { Route as AuthenticatedAppFinanceRouteImport } from './routes/_authenticated/app.finance'
+import { Route as AuthenticatedAppExpensesRouteImport } from './routes/_authenticated/app.expenses'
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
 import { Route as AuthenticatedAppSalesIndexRouteImport } from './routes/_authenticated/app.sales.index'
 import { Route as AuthenticatedAppInventoryIndexRouteImport } from './routes/_authenticated/app.inventory.index'
+import { Route as AuthenticatedAppExpensesIndexRouteImport } from './routes/_authenticated/app.expenses.index'
 import { Route as ApiPublicHooksSalesIngestRouteImport } from './routes/api/public/hooks/sales-ingest'
 import { Route as ApiPublicHooksJobRunnerRouteImport } from './routes/api/public/hooks/job-runner'
 import { Route as ApiPublicHooksEventDispatcherRouteImport } from './routes/api/public/hooks/event-dispatcher'
@@ -56,6 +59,7 @@ import { Route as AuthenticatedAppSettingsNotificationsRouteImport } from './rou
 import { Route as AuthenticatedAppSettingsModulesRouteImport } from './routes/_authenticated/app.settings.modules'
 import { Route as AuthenticatedAppSettingsBranchesRouteImport } from './routes/_authenticated/app.settings.branches'
 import { Route as AuthenticatedAppSettingsAuditRouteImport } from './routes/_authenticated/app.settings.audit'
+import { Route as AuthenticatedAppExpensesCategoriesRouteImport } from './routes/_authenticated/app.expenses.categories'
 import { Route as AuthenticatedAppAcceptInviteTokenRouteImport } from './routes/_authenticated/app.accept-invite.$token'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -236,6 +240,17 @@ const AuthenticatedAppInventoryRoute =
     path: '/inventory',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppFinanceRoute = AuthenticatedAppFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
+const AuthenticatedAppExpensesRoute =
+  AuthenticatedAppExpensesRouteImport.update({
+    id: '/expenses',
+    path: '/expenses',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppSettingsIndexRoute =
   AuthenticatedAppSettingsIndexRouteImport.update({
     id: '/settings/',
@@ -253,6 +268,12 @@ const AuthenticatedAppInventoryIndexRoute =
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedAppInventoryRoute,
+  } as any)
+const AuthenticatedAppExpensesIndexRoute =
+  AuthenticatedAppExpensesIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppExpensesRoute,
   } as any)
 const ApiPublicHooksSalesIngestRoute =
   ApiPublicHooksSalesIngestRouteImport.update({
@@ -313,6 +334,12 @@ const AuthenticatedAppSettingsAuditRoute =
     path: '/settings/audit',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppExpensesCategoriesRoute =
+  AuthenticatedAppExpensesCategoriesRouteImport.update({
+    id: '/categories',
+    path: '/categories',
+    getParentRoute: () => AuthenticatedAppExpensesRoute,
+  } as any)
 const AuthenticatedAppAcceptInviteTokenRoute =
   AuthenticatedAppAcceptInviteTokenRouteImport.update({
     id: '/accept-invite/$token',
@@ -330,6 +357,8 @@ export interface FileRoutesByFullPath {
   '/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
+  '/app/finance': typeof AuthenticatedAppFinanceRoute
   '/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
@@ -354,6 +383,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof PlatformAdminIndexRoute
   '/developers/': typeof PlatformDevelopersIndexRoute
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -364,6 +394,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
+  '/app/expenses/': typeof AuthenticatedAppExpensesIndexRoute
   '/app/inventory/': typeof AuthenticatedAppInventoryIndexRoute
   '/app/sales/': typeof AuthenticatedAppSalesIndexRoute
   '/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
@@ -375,6 +406,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/app/finance': typeof AuthenticatedAppFinanceRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app/orders': typeof AuthenticatedAppOrdersRoute
@@ -397,6 +429,7 @@ export interface FileRoutesByTo {
   '/admin': typeof PlatformAdminIndexRoute
   '/developers': typeof PlatformDevelopersIndexRoute
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -407,6 +440,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
+  '/app/expenses': typeof AuthenticatedAppExpensesIndexRoute
   '/app/inventory': typeof AuthenticatedAppInventoryIndexRoute
   '/app/sales': typeof AuthenticatedAppSalesIndexRoute
   '/app/settings': typeof AuthenticatedAppSettingsIndexRoute
@@ -424,6 +458,8 @@ export interface FileRoutesById {
   '/_platform/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/_authenticated/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
+  '/_authenticated/app/finance': typeof AuthenticatedAppFinanceRoute
   '/_authenticated/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
   '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
@@ -448,6 +484,7 @@ export interface FileRoutesById {
   '/_platform/admin/': typeof PlatformAdminIndexRoute
   '/_platform/developers/': typeof PlatformDevelopersIndexRoute
   '/_authenticated/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
+  '/_authenticated/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
   '/_authenticated/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/_authenticated/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/_authenticated/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -458,6 +495,7 @@ export interface FileRoutesById {
   '/api/public/hooks/event-dispatcher': typeof ApiPublicHooksEventDispatcherRoute
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
+  '/_authenticated/app/expenses/': typeof AuthenticatedAppExpensesIndexRoute
   '/_authenticated/app/inventory/': typeof AuthenticatedAppInventoryIndexRoute
   '/_authenticated/app/sales/': typeof AuthenticatedAppSalesIndexRoute
   '/_authenticated/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
@@ -474,6 +512,8 @@ export interface FileRouteTypes {
     | '/developers'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/app/expenses'
+    | '/app/finance'
     | '/app/inventory'
     | '/app/notifications'
     | '/app/onboarding'
@@ -498,6 +538,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/developers/'
     | '/app/accept-invite/$token'
+    | '/app/expenses/categories'
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
@@ -508,6 +549,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
+    | '/app/expenses/'
     | '/app/inventory/'
     | '/app/sales/'
     | '/app/settings/'
@@ -519,6 +561,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/app/finance'
     | '/app/notifications'
     | '/app/onboarding'
     | '/app/orders'
@@ -541,6 +584,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/developers'
     | '/app/accept-invite/$token'
+    | '/app/expenses/categories'
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
@@ -551,6 +595,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
+    | '/app/expenses'
     | '/app/inventory'
     | '/app/sales'
     | '/app/settings'
@@ -567,6 +612,8 @@ export interface FileRouteTypes {
     | '/_platform/developers'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/_authenticated/app/expenses'
+    | '/_authenticated/app/finance'
     | '/_authenticated/app/inventory'
     | '/_authenticated/app/notifications'
     | '/_authenticated/app/onboarding'
@@ -591,6 +638,7 @@ export interface FileRouteTypes {
     | '/_platform/admin/'
     | '/_platform/developers/'
     | '/_authenticated/app/accept-invite/$token'
+    | '/_authenticated/app/expenses/categories'
     | '/_authenticated/app/settings/audit'
     | '/_authenticated/app/settings/branches'
     | '/_authenticated/app/settings/modules'
@@ -601,6 +649,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/event-dispatcher'
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
+    | '/_authenticated/app/expenses/'
     | '/_authenticated/app/inventory/'
     | '/_authenticated/app/sales/'
     | '/_authenticated/app/settings/'
@@ -860,6 +909,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppInventoryRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/finance': {
+      id: '/_authenticated/app/finance'
+      path: '/finance'
+      fullPath: '/app/finance'
+      preLoaderRoute: typeof AuthenticatedAppFinanceRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/expenses': {
+      id: '/_authenticated/app/expenses'
+      path: '/expenses'
+      fullPath: '/app/expenses'
+      preLoaderRoute: typeof AuthenticatedAppExpensesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/settings/': {
       id: '/_authenticated/app/settings/'
       path: '/settings'
@@ -880,6 +943,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/inventory/'
       preLoaderRoute: typeof AuthenticatedAppInventoryIndexRouteImport
       parentRoute: typeof AuthenticatedAppInventoryRoute
+    }
+    '/_authenticated/app/expenses/': {
+      id: '/_authenticated/app/expenses/'
+      path: '/'
+      fullPath: '/app/expenses/'
+      preLoaderRoute: typeof AuthenticatedAppExpensesIndexRouteImport
+      parentRoute: typeof AuthenticatedAppExpensesRoute
     }
     '/api/public/hooks/sales-ingest': {
       id: '/api/public/hooks/sales-ingest'
@@ -951,6 +1021,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSettingsAuditRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/expenses/categories': {
+      id: '/_authenticated/app/expenses/categories'
+      path: '/categories'
+      fullPath: '/app/expenses/categories'
+      preLoaderRoute: typeof AuthenticatedAppExpensesCategoriesRouteImport
+      parentRoute: typeof AuthenticatedAppExpensesRoute
+    }
     '/_authenticated/app/accept-invite/$token': {
       id: '/_authenticated/app/accept-invite/$token'
       path: '/accept-invite/$token'
@@ -960,6 +1037,23 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedAppExpensesRouteChildren {
+  AuthenticatedAppExpensesCategoriesRoute: typeof AuthenticatedAppExpensesCategoriesRoute
+  AuthenticatedAppExpensesIndexRoute: typeof AuthenticatedAppExpensesIndexRoute
+}
+
+const AuthenticatedAppExpensesRouteChildren: AuthenticatedAppExpensesRouteChildren =
+  {
+    AuthenticatedAppExpensesCategoriesRoute:
+      AuthenticatedAppExpensesCategoriesRoute,
+    AuthenticatedAppExpensesIndexRoute: AuthenticatedAppExpensesIndexRoute,
+  }
+
+const AuthenticatedAppExpensesRouteWithChildren =
+  AuthenticatedAppExpensesRoute._addFileChildren(
+    AuthenticatedAppExpensesRouteChildren,
+  )
 
 interface AuthenticatedAppInventoryRouteChildren {
   AuthenticatedAppInventoryIndexRoute: typeof AuthenticatedAppInventoryIndexRoute
@@ -989,6 +1083,8 @@ const AuthenticatedAppSalesRouteWithChildren =
   )
 
 interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppExpensesRoute: typeof AuthenticatedAppExpensesRouteWithChildren
+  AuthenticatedAppFinanceRoute: typeof AuthenticatedAppFinanceRoute
   AuthenticatedAppInventoryRoute: typeof AuthenticatedAppInventoryRouteWithChildren
   AuthenticatedAppNotificationsRoute: typeof AuthenticatedAppNotificationsRoute
   AuthenticatedAppOnboardingRoute: typeof AuthenticatedAppOnboardingRoute
@@ -1012,6 +1108,8 @@ interface AuthenticatedAppRouteChildren {
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppExpensesRoute: AuthenticatedAppExpensesRouteWithChildren,
+  AuthenticatedAppFinanceRoute: AuthenticatedAppFinanceRoute,
   AuthenticatedAppInventoryRoute: AuthenticatedAppInventoryRouteWithChildren,
   AuthenticatedAppNotificationsRoute: AuthenticatedAppNotificationsRoute,
   AuthenticatedAppOnboardingRoute: AuthenticatedAppOnboardingRoute,
