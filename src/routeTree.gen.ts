@@ -43,6 +43,7 @@ import { Route as AuthenticatedAppOrdersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
 import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_authenticated/app.notifications'
 import { Route as AuthenticatedAppInventoryRouteImport } from './routes/_authenticated/app.inventory'
+import { Route as AuthenticatedAppFinanceRouteImport } from './routes/_authenticated/app.finance'
 import { Route as AuthenticatedAppExpensesRouteImport } from './routes/_authenticated/app.expenses'
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
 import { Route as AuthenticatedAppSalesIndexRouteImport } from './routes/_authenticated/app.sales.index'
@@ -239,6 +240,11 @@ const AuthenticatedAppInventoryRoute =
     path: '/inventory',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppFinanceRoute = AuthenticatedAppFinanceRouteImport.update({
+  id: '/finance',
+  path: '/finance',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 const AuthenticatedAppExpensesRoute =
   AuthenticatedAppExpensesRouteImport.update({
     id: '/expenses',
@@ -352,6 +358,7 @@ export interface FileRoutesByFullPath {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
+  '/app/finance': typeof AuthenticatedAppFinanceRoute
   '/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
@@ -399,6 +406,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/app/finance': typeof AuthenticatedAppFinanceRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app/orders': typeof AuthenticatedAppOrdersRoute
@@ -451,6 +459,7 @@ export interface FileRoutesById {
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/_authenticated/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
+  '/_authenticated/app/finance': typeof AuthenticatedAppFinanceRoute
   '/_authenticated/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
   '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
@@ -504,6 +513,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/app/expenses'
+    | '/app/finance'
     | '/app/inventory'
     | '/app/notifications'
     | '/app/onboarding'
@@ -551,6 +561,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/app/finance'
     | '/app/notifications'
     | '/app/onboarding'
     | '/app/orders'
@@ -602,6 +613,7 @@ export interface FileRouteTypes {
     | '/legal/privacy'
     | '/legal/terms'
     | '/_authenticated/app/expenses'
+    | '/_authenticated/app/finance'
     | '/_authenticated/app/inventory'
     | '/_authenticated/app/notifications'
     | '/_authenticated/app/onboarding'
@@ -897,6 +909,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppInventoryRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/finance': {
+      id: '/_authenticated/app/finance'
+      path: '/finance'
+      fullPath: '/app/finance'
+      preLoaderRoute: typeof AuthenticatedAppFinanceRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/expenses': {
       id: '/_authenticated/app/expenses'
       path: '/expenses'
@@ -1065,6 +1084,7 @@ const AuthenticatedAppSalesRouteWithChildren =
 
 interface AuthenticatedAppRouteChildren {
   AuthenticatedAppExpensesRoute: typeof AuthenticatedAppExpensesRouteWithChildren
+  AuthenticatedAppFinanceRoute: typeof AuthenticatedAppFinanceRoute
   AuthenticatedAppInventoryRoute: typeof AuthenticatedAppInventoryRouteWithChildren
   AuthenticatedAppNotificationsRoute: typeof AuthenticatedAppNotificationsRoute
   AuthenticatedAppOnboardingRoute: typeof AuthenticatedAppOnboardingRoute
@@ -1089,6 +1109,7 @@ interface AuthenticatedAppRouteChildren {
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppExpensesRoute: AuthenticatedAppExpensesRouteWithChildren,
+  AuthenticatedAppFinanceRoute: AuthenticatedAppFinanceRoute,
   AuthenticatedAppInventoryRoute: AuthenticatedAppInventoryRouteWithChildren,
   AuthenticatedAppNotificationsRoute: AuthenticatedAppNotificationsRoute,
   AuthenticatedAppOnboardingRoute: AuthenticatedAppOnboardingRoute,
