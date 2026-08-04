@@ -14,6 +14,98 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance_records: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          branch_id: string
+          break_minutes: number
+          clock_in: string | null
+          clock_out: string | null
+          company_id: string
+          correction_of: string | null
+          created_at: string
+          created_by: string | null
+          employee_id: string
+          id: string
+          notes: string | null
+          source: Database["public"]["Enums"]["attendance_source"]
+          status: Database["public"]["Enums"]["attendance_status"]
+          updated_at: string
+          work_date: string
+          worked_minutes: number
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          branch_id: string
+          break_minutes?: number
+          clock_in?: string | null
+          clock_out?: string | null
+          company_id: string
+          correction_of?: string | null
+          created_at?: string
+          created_by?: string | null
+          employee_id: string
+          id?: string
+          notes?: string | null
+          source?: Database["public"]["Enums"]["attendance_source"]
+          status?: Database["public"]["Enums"]["attendance_status"]
+          updated_at?: string
+          work_date?: string
+          worked_minutes?: number
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          branch_id?: string
+          break_minutes?: number
+          clock_in?: string | null
+          clock_out?: string | null
+          company_id?: string
+          correction_of?: string | null
+          created_at?: string
+          created_by?: string | null
+          employee_id?: string
+          id?: string
+          notes?: string | null
+          source?: Database["public"]["Enums"]["attendance_source"]
+          status?: Database["public"]["Enums"]["attendance_status"]
+          updated_at?: string
+          work_date?: string
+          worked_minutes?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_records_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_correction_of_fkey"
+            columns: ["correction_of"]
+            isOneToOne: false
+            referencedRelation: "attendance_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       branches: {
         Row: {
           code: string | null
@@ -410,6 +502,80 @@ export type Database = {
         }
         Relationships: []
       }
+      departments: {
+        Row: {
+          branch_id: string | null
+          code: string | null
+          company_id: string
+          created_at: string
+          deleted_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean
+          manager_id: string | null
+          name: string
+          parent_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          code?: string | null
+          company_id: string
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          manager_id?: string | null
+          name: string
+          parent_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          code?: string | null
+          company_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          manager_id?: string | null
+          name?: string
+          parent_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "departments_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "departments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "departments_manager_fk"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "departments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discounts: {
         Row: {
           code: string | null
@@ -494,6 +660,223 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      employee_documents: {
+        Row: {
+          company_id: string
+          content_type: string | null
+          created_at: string
+          document_type: Database["public"]["Enums"]["employee_document_type"]
+          employee_id: string
+          expires_at: string | null
+          file_name: string
+          file_path: string
+          id: string
+          issued_at: string | null
+          notes: string | null
+          size_bytes: number | null
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          company_id: string
+          content_type?: string | null
+          created_at?: string
+          document_type?: Database["public"]["Enums"]["employee_document_type"]
+          employee_id: string
+          expires_at?: string | null
+          file_name: string
+          file_path: string
+          id?: string
+          issued_at?: string | null
+          notes?: string | null
+          size_bytes?: number | null
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          content_type?: string | null
+          created_at?: string
+          document_type?: Database["public"]["Enums"]["employee_document_type"]
+          employee_id?: string
+          expires_at?: string | null
+          file_name?: string
+          file_path?: string
+          id?: string
+          issued_at?: string | null
+          notes?: string | null
+          size_bytes?: number | null
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employee_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employee_documents_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      employees: {
+        Row: {
+          address: Json | null
+          bank_details: Json | null
+          base_salary: number
+          branch_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency_code: string
+          date_of_birth: string | null
+          deleted_at: string | null
+          department_id: string | null
+          email: string | null
+          emergency_contact: Json | null
+          employee_number: string
+          employment_type: Database["public"]["Enums"]["employment_type"]
+          first_name: string
+          gender: string | null
+          hired_at: string
+          id: string
+          job_title: string | null
+          last_name: string
+          manager_id: string | null
+          metadata: Json
+          middle_name: string | null
+          pay_frequency: string
+          phone: string | null
+          position_id: string | null
+          probation_ends_at: string | null
+          status: Database["public"]["Enums"]["employment_status"]
+          terminated_at: string | null
+          termination_reason: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          address?: Json | null
+          bank_details?: Json | null
+          base_salary?: number
+          branch_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          date_of_birth?: string | null
+          deleted_at?: string | null
+          department_id?: string | null
+          email?: string | null
+          emergency_contact?: Json | null
+          employee_number: string
+          employment_type?: Database["public"]["Enums"]["employment_type"]
+          first_name: string
+          gender?: string | null
+          hired_at?: string
+          id?: string
+          job_title?: string | null
+          last_name: string
+          manager_id?: string | null
+          metadata?: Json
+          middle_name?: string | null
+          pay_frequency?: string
+          phone?: string | null
+          position_id?: string | null
+          probation_ends_at?: string | null
+          status?: Database["public"]["Enums"]["employment_status"]
+          terminated_at?: string | null
+          termination_reason?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          address?: Json | null
+          bank_details?: Json | null
+          base_salary?: number
+          branch_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          date_of_birth?: string | null
+          deleted_at?: string | null
+          department_id?: string | null
+          email?: string | null
+          emergency_contact?: Json | null
+          employee_number?: string
+          employment_type?: Database["public"]["Enums"]["employment_type"]
+          first_name?: string
+          gender?: string | null
+          hired_at?: string
+          id?: string
+          job_title?: string | null
+          last_name?: string
+          manager_id?: string | null
+          metadata?: Json
+          middle_name?: string | null
+          pay_frequency?: string
+          phone?: string | null
+          position_id?: string | null
+          probation_ends_at?: string | null
+          status?: Database["public"]["Enums"]["employment_status"]
+          terminated_at?: string | null
+          termination_reason?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employees_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "employees_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_manager_id_fkey"
+            columns: ["manager_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "employees_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "job_positions"
             referencedColumns: ["id"]
           },
         ]
@@ -1078,6 +1461,104 @@ export type Database = {
           },
         ]
       }
+      job_positions: {
+        Row: {
+          branch_id: string | null
+          closed_at: string | null
+          code: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency_code: string
+          deleted_at: string | null
+          department_id: string | null
+          description: string | null
+          employment_type: Database["public"]["Enums"]["employment_type"]
+          id: string
+          max_salary: number | null
+          min_salary: number | null
+          opened_at: string | null
+          openings: number
+          requirements: string | null
+          status: Database["public"]["Enums"]["position_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          closed_at?: string | null
+          code?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          deleted_at?: string | null
+          department_id?: string | null
+          description?: string | null
+          employment_type?: Database["public"]["Enums"]["employment_type"]
+          id?: string
+          max_salary?: number | null
+          min_salary?: number | null
+          opened_at?: string | null
+          openings?: number
+          requirements?: string | null
+          status?: Database["public"]["Enums"]["position_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          closed_at?: string | null
+          code?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          deleted_at?: string | null
+          department_id?: string | null
+          description?: string | null
+          employment_type?: Database["public"]["Enums"]["employment_type"]
+          id?: string
+          max_salary?: number | null
+          min_salary?: number | null
+          opened_at?: string | null
+          openings?: number
+          requirements?: string | null
+          status?: Database["public"]["Enums"]["position_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_positions_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_positions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_positions_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "job_positions_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_runs: {
         Row: {
           attempt: number
@@ -1187,6 +1668,85 @@ export type Database = {
             columns: ["module_id"]
             isOneToOne: false
             referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leave_requests: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          days: number
+          decision_notes: string | null
+          employee_id: string
+          end_date: string
+          id: string
+          leave_type: Database["public"]["Enums"]["leave_type"]
+          reason: string | null
+          start_date: string
+          status: Database["public"]["Enums"]["leave_status"]
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          days?: number
+          decision_notes?: string | null
+          employee_id: string
+          end_date: string
+          id?: string
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          reason?: string | null
+          start_date: string
+          status?: Database["public"]["Enums"]["leave_status"]
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          days?: number
+          decision_notes?: string | null
+          employee_id?: string
+          end_date?: string
+          id?: string
+          leave_type?: Database["public"]["Enums"]["leave_type"]
+          reason?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["leave_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leave_requests_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leave_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "leave_requests_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
             referencedColumns: ["id"]
           },
         ]
@@ -1764,6 +2324,266 @@ export type Database = {
           },
         ]
       }
+      payroll_cycles: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency_code: string
+          id: string
+          name: string
+          notes: string | null
+          pay_date: string | null
+          period_end: string
+          period_start: string
+          status: Database["public"]["Enums"]["payroll_status"]
+          total_deductions: number
+          total_gross: number
+          total_net: number
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          id?: string
+          name: string
+          notes?: string | null
+          pay_date?: string | null
+          period_end: string
+          period_start: string
+          status?: Database["public"]["Enums"]["payroll_status"]
+          total_deductions?: number
+          total_gross?: number
+          total_net?: number
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          pay_date?: string | null
+          period_end?: string
+          period_start?: string
+          status?: Database["public"]["Enums"]["payroll_status"]
+          total_deductions?: number
+          total_gross?: number
+          total_net?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_cycles_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_cycles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_cycles_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+        ]
+      }
+      payroll_items: {
+        Row: {
+          allowance_total: number
+          allowances: Json
+          base_salary: number
+          company_id: string
+          created_at: string
+          currency_code: string
+          cycle_id: string
+          deduction_total: number
+          deductions: Json
+          employee_id: string
+          gross_pay: number
+          id: string
+          net_pay: number
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          allowance_total?: number
+          allowances?: Json
+          base_salary?: number
+          company_id: string
+          created_at?: string
+          currency_code?: string
+          cycle_id: string
+          deduction_total?: number
+          deductions?: Json
+          employee_id: string
+          gross_pay?: number
+          id?: string
+          net_pay?: number
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          allowance_total?: number
+          allowances?: Json
+          base_salary?: number
+          company_id?: string
+          created_at?: string
+          currency_code?: string
+          cycle_id?: string
+          deduction_total?: number
+          deductions?: Json
+          employee_id?: string
+          gross_pay?: number
+          id?: string
+          net_pay?: number
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payroll_items_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_items_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "payroll_items_cycle_id_fkey"
+            columns: ["cycle_id"]
+            isOneToOne: false
+            referencedRelation: "payroll_cycles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payroll_items_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      performance_reviews: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          employee_comments: string | null
+          employee_id: string
+          goals: Json
+          id: string
+          manager_comments: string | null
+          overall_rating: number | null
+          period_end: string
+          period_start: string
+          ratings: Json
+          reviewer_id: string | null
+          status: Database["public"]["Enums"]["review_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          employee_comments?: string | null
+          employee_id: string
+          goals?: Json
+          id?: string
+          manager_comments?: string | null
+          overall_rating?: number | null
+          period_end: string
+          period_start: string
+          ratings?: Json
+          reviewer_id?: string | null
+          status?: Database["public"]["Enums"]["review_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          employee_comments?: string | null
+          employee_id?: string
+          goals?: Json
+          id?: string
+          manager_comments?: string | null
+          overall_rating?: number | null
+          period_end?: string
+          period_start?: string
+          ratings?: Json
+          reviewer_id?: string | null
+          status?: Database["public"]["Enums"]["review_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_reviews_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "performance_reviews_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "performance_reviews_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "performance_reviews_reviewer_id_fkey"
+            columns: ["reviewer_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       permissions: {
         Row: {
           description: string
@@ -2202,6 +3022,111 @@ export type Database = {
           },
         ]
       }
+      recruitment_candidates: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency_code: string
+          email: string | null
+          expected_salary: number | null
+          full_name: string
+          hired_employee_id: string | null
+          id: string
+          interview_at: string | null
+          interview_notes: string | null
+          notes: string | null
+          phone: string | null
+          position_id: string | null
+          rating: number | null
+          resume_path: string | null
+          source: string | null
+          status: Database["public"]["Enums"]["candidate_status"]
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          email?: string | null
+          expected_salary?: number | null
+          full_name: string
+          hired_employee_id?: string | null
+          id?: string
+          interview_at?: string | null
+          interview_notes?: string | null
+          notes?: string | null
+          phone?: string | null
+          position_id?: string | null
+          rating?: number | null
+          resume_path?: string | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["candidate_status"]
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          email?: string | null
+          expected_salary?: number | null
+          full_name?: string
+          hired_employee_id?: string | null
+          id?: string
+          interview_at?: string | null
+          interview_notes?: string | null
+          notes?: string | null
+          phone?: string | null
+          position_id?: string | null
+          rating?: number | null
+          resume_path?: string | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["candidate_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recruitment_candidates_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recruitment_candidates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recruitment_candidates_currency_code_fkey"
+            columns: ["currency_code"]
+            isOneToOne: false
+            referencedRelation: "currencies"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "recruitment_candidates_hired_employee_id_fkey"
+            columns: ["hired_employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recruitment_candidates_position_id_fkey"
+            columns: ["position_id"]
+            isOneToOne: false
+            referencedRelation: "job_positions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       return_items: {
         Row: {
           condition: string | null
@@ -2570,6 +3495,89 @@ export type Database = {
           },
         ]
       }
+      shift_schedules: {
+        Row: {
+          branch_id: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          department_id: string | null
+          employee_id: string | null
+          ends_at: string
+          id: string
+          is_published: boolean
+          name: string | null
+          notes: string | null
+          shift_date: string
+          shift_type: Database["public"]["Enums"]["shift_type"]
+          starts_at: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          department_id?: string | null
+          employee_id?: string | null
+          ends_at: string
+          id?: string
+          is_published?: boolean
+          name?: string | null
+          notes?: string | null
+          shift_date: string
+          shift_type?: Database["public"]["Enums"]["shift_type"]
+          starts_at: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          department_id?: string | null
+          employee_id?: string | null
+          ends_at?: string
+          id?: string
+          is_published?: boolean
+          name?: string | null
+          notes?: string | null
+          shift_date?: string
+          shift_type?: Database["public"]["Enums"]["shift_type"]
+          starts_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shift_schedules_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shift_schedules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shift_schedules_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shift_schedules_employee_id_fkey"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stock_movements: {
         Row: {
           branch_id: string
@@ -2832,6 +3840,22 @@ export type Database = {
       record_return_atomic: { Args: { _return_id: string }; Returns: string }
     }
     Enums: {
+      attendance_source: "clock" | "manual" | "import" | "correction"
+      attendance_status:
+        | "present"
+        | "absent"
+        | "late"
+        | "half_day"
+        | "on_leave"
+        | "holiday"
+      candidate_status:
+        | "applied"
+        | "screening"
+        | "interview"
+        | "offer"
+        | "hired"
+        | "rejected"
+        | "withdrawn"
       communication_channel: "email" | "in_app" | "sms" | "whatsapp"
       communication_status:
         | "queued"
@@ -2841,6 +3865,28 @@ export type Database = {
         | "rate_limited"
       digest_frequency: "none" | "daily" | "weekly"
       discount_type: "percentage" | "fixed"
+      employee_document_type:
+        | "contract"
+        | "id_card"
+        | "certificate"
+        | "resume"
+        | "offer_letter"
+        | "appraisal"
+        | "other"
+      employment_status:
+        | "active"
+        | "probation"
+        | "suspended"
+        | "on_leave"
+        | "terminated"
+        | "resigned"
+      employment_type:
+        | "full_time"
+        | "part_time"
+        | "contract"
+        | "intern"
+        | "casual"
+        | "volunteer"
       event_log_level: "info" | "warn" | "error"
       event_status: "queued" | "running" | "completed" | "failed" | "dead"
       expense_status: "draft" | "pending" | "approved" | "rejected" | "paid"
@@ -2852,6 +3898,16 @@ export type Database = {
         | "public"
         | "disabled"
       job_status: "queued" | "running" | "completed" | "failed" | "cancelled"
+      leave_status: "draft" | "pending" | "approved" | "rejected" | "cancelled"
+      leave_type:
+        | "annual"
+        | "sick"
+        | "unpaid"
+        | "maternity"
+        | "paternity"
+        | "compassionate"
+        | "study"
+        | "other"
       module_status: "active" | "deprecated" | "disabled_global"
       notification_category:
         | "system"
@@ -2870,6 +3926,13 @@ export type Database = {
         | "cancelled"
       payment_method: "cash" | "transfer" | "card" | "split" | "other"
       payment_status: "pending" | "partial" | "paid" | "refunded" | "failed"
+      payroll_status:
+        | "draft"
+        | "processing"
+        | "pending_approval"
+        | "approved"
+        | "paid"
+        | "cancelled"
       platform_admin_status: "active" | "disabled"
       platform_role:
         | "super_admin"
@@ -2880,6 +3943,7 @@ export type Database = {
         | "compliance"
         | "security"
         | "billing"
+      position_status: "draft" | "open" | "on_hold" | "closed" | "filled"
       product_status: "active" | "archived" | "draft"
       product_unit:
         | "piece"
@@ -2895,8 +3959,15 @@ export type Database = {
       purchase_status: "draft" | "recorded" | "cancelled"
       return_status: "draft" | "approved" | "completed" | "rejected"
       return_type: "full" | "partial" | "damaged"
+      review_status:
+        | "draft"
+        | "in_progress"
+        | "submitted"
+        | "completed"
+        | "cancelled"
       sale_channel: "walk_in" | "online" | "whatsapp" | "phone" | "external_pos"
       sale_status: "draft" | "completed" | "cancelled"
+      shift_type: "morning" | "afternoon" | "night" | "custom"
       stock_movement_type:
         | "purchase"
         | "sale"
@@ -3036,6 +4107,24 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      attendance_source: ["clock", "manual", "import", "correction"],
+      attendance_status: [
+        "present",
+        "absent",
+        "late",
+        "half_day",
+        "on_leave",
+        "holiday",
+      ],
+      candidate_status: [
+        "applied",
+        "screening",
+        "interview",
+        "offer",
+        "hired",
+        "rejected",
+        "withdrawn",
+      ],
       communication_channel: ["email", "in_app", "sms", "whatsapp"],
       communication_status: [
         "queued",
@@ -3046,6 +4135,31 @@ export const Constants = {
       ],
       digest_frequency: ["none", "daily", "weekly"],
       discount_type: ["percentage", "fixed"],
+      employee_document_type: [
+        "contract",
+        "id_card",
+        "certificate",
+        "resume",
+        "offer_letter",
+        "appraisal",
+        "other",
+      ],
+      employment_status: [
+        "active",
+        "probation",
+        "suspended",
+        "on_leave",
+        "terminated",
+        "resigned",
+      ],
+      employment_type: [
+        "full_time",
+        "part_time",
+        "contract",
+        "intern",
+        "casual",
+        "volunteer",
+      ],
       event_log_level: ["info", "warn", "error"],
       event_status: ["queued", "running", "completed", "failed", "dead"],
       expense_status: ["draft", "pending", "approved", "rejected", "paid"],
@@ -3058,6 +4172,17 @@ export const Constants = {
         "disabled",
       ],
       job_status: ["queued", "running", "completed", "failed", "cancelled"],
+      leave_status: ["draft", "pending", "approved", "rejected", "cancelled"],
+      leave_type: [
+        "annual",
+        "sick",
+        "unpaid",
+        "maternity",
+        "paternity",
+        "compassionate",
+        "study",
+        "other",
+      ],
       module_status: ["active", "deprecated", "disabled_global"],
       notification_category: [
         "system",
@@ -3072,6 +4197,14 @@ export const Constants = {
       order_status: ["draft", "pending", "confirmed", "completed", "cancelled"],
       payment_method: ["cash", "transfer", "card", "split", "other"],
       payment_status: ["pending", "partial", "paid", "refunded", "failed"],
+      payroll_status: [
+        "draft",
+        "processing",
+        "pending_approval",
+        "approved",
+        "paid",
+        "cancelled",
+      ],
       platform_admin_status: ["active", "disabled"],
       platform_role: [
         "super_admin",
@@ -3083,6 +4216,7 @@ export const Constants = {
         "security",
         "billing",
       ],
+      position_status: ["draft", "open", "on_hold", "closed", "filled"],
       product_status: ["active", "archived", "draft"],
       product_unit: [
         "piece",
@@ -3099,8 +4233,16 @@ export const Constants = {
       purchase_status: ["draft", "recorded", "cancelled"],
       return_status: ["draft", "approved", "completed", "rejected"],
       return_type: ["full", "partial", "damaged"],
+      review_status: [
+        "draft",
+        "in_progress",
+        "submitted",
+        "completed",
+        "cancelled",
+      ],
       sale_channel: ["walk_in", "online", "whatsapp", "phone", "external_pos"],
       sale_status: ["draft", "completed", "cancelled"],
+      shift_type: ["morning", "afternoon", "night", "custom"],
       stock_movement_type: [
         "purchase",
         "sale",
