@@ -69,7 +69,7 @@ export const updateDepartment = createServerFn({ method: "POST" })
     if (data.parentId !== undefined) patch["parent_id"] = data.parentId;
     if (data.managerId !== undefined) patch["manager_id"] = data.managerId;
     if (data.branchId !== undefined) patch["branch_id"] = data.branchId;
-    const { error } = await context.supabase.from("departments").update(patch).eq("id", data.id);
+    const { error } = await context.supabase.from("departments").update(patch as never).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -261,7 +261,7 @@ export const updateEmployee = createServerFn({ method: "POST" })
 
     const { error } = await context.supabase
       .from("employees")
-      .update(patch)
+      .update(patch as never)
       .eq("id", data.id)
       .eq("company_id", data.companyId);
     if (error) throw new Error(error.message);

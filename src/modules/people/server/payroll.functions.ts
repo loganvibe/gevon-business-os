@@ -125,7 +125,7 @@ export const updatePayrollItem = createServerFn({ method: "POST" })
     if (data.allowanceTotal !== undefined) patch["allowance_total"] = data.allowanceTotal;
     if (data.deductionTotal !== undefined) patch["deduction_total"] = data.deductionTotal;
     if (data.notes !== undefined) patch["notes"] = data.notes;
-    const { error } = await context.supabase.from("payroll_items").update(patch).eq("id", data.id);
+    const { error } = await context.supabase.from("payroll_items").update(patch as never).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -149,7 +149,7 @@ export const setPayrollCycleStatus = createServerFn({ method: "POST" })
     }
     const { data: row, error } = await context.supabase
       .from("payroll_cycles")
-      .update(patch)
+      .update(patch as never)
       .eq("id", data.id)
       .eq("company_id", data.companyId)
       .select("id, total_net")

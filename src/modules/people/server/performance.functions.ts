@@ -89,7 +89,7 @@ export const updateReview = createServerFn({ method: "POST" })
 
     const { data: row, error } = await context.supabase
       .from("performance_reviews")
-      .update(patch)
+      .update(patch as never)
       .eq("id", data.id)
       .eq("company_id", data.companyId)
       .select("id, employee_id, overall_rating")
