@@ -1,0 +1,148 @@
+import { z } from "zod";
+import type { EventDefinition } from "../registry";
+
+/** Workforce events published by the People & Organization module. */
+export const peopleEvents: EventDefinition[] = [
+  {
+    key: "employee.created",
+    version: 1,
+    publisherModuleId: "people",
+    description: "A new employee record was created.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      employeeId: z.string().uuid(),
+      employeeNumber: z.string(),
+      fullName: z.string(),
+      createdBy: z.string().uuid(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "employee.updated",
+    version: 1,
+    publisherModuleId: "people",
+    description: "An employee record was updated.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      employeeId: z.string().uuid(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "employee.terminated",
+    version: 1,
+    publisherModuleId: "people",
+    description: "An employee left or was terminated.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      employeeId: z.string().uuid(),
+      reason: z.string().nullable().optional(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "attendance.recorded",
+    version: 1,
+    publisherModuleId: "people",
+    description: "An attendance record was created or clocked out.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      employeeId: z.string().uuid(),
+      attendanceId: z.string().uuid(),
+      workDate: z.string(),
+      status: z.string(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "leave.requested",
+    version: 1,
+    publisherModuleId: "people",
+    description: "An employee requested leave.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      employeeId: z.string().uuid(),
+      leaveId: z.string().uuid(),
+      leaveType: z.string(),
+      startDate: z.string(),
+      endDate: z.string(),
+      days: z.number(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "leave.approved",
+    version: 1,
+    publisherModuleId: "people",
+    description: "A leave request was approved.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      employeeId: z.string().uuid(),
+      leaveId: z.string().uuid(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "leave.rejected",
+    version: 1,
+    publisherModuleId: "people",
+    description: "A leave request was rejected.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      employeeId: z.string().uuid(),
+      leaveId: z.string().uuid(),
+      reason: z.string().nullable().optional(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "payroll.cycle.created",
+    version: 1,
+    publisherModuleId: "people",
+    description: "A payroll cycle was created.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      cycleId: z.string().uuid(),
+      periodStart: z.string(),
+      periodEnd: z.string(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "payroll.cycle.approved",
+    version: 1,
+    publisherModuleId: "people",
+    description: "A payroll cycle was approved for payment.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      cycleId: z.string().uuid(),
+      totalNet: z.number(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "performance.review.completed",
+    version: 1,
+    publisherModuleId: "people",
+    description: "A performance review was completed.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      reviewId: z.string().uuid(),
+      employeeId: z.string().uuid(),
+      overallRating: z.number().nullable().optional(),
+    }),
+    subscribers: [],
+  },
+  {
+    key: "candidate.hired",
+    version: 1,
+    publisherModuleId: "people",
+    description: "A recruitment candidate was hired.",
+    payloadSchema: z.object({
+      companyId: z.string().uuid(),
+      candidateId: z.string().uuid(),
+      positionId: z.string().uuid().nullable().optional(),
+    }),
+    subscribers: [],
+  },
+];
