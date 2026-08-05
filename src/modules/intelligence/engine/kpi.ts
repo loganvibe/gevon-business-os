@@ -23,7 +23,7 @@ function kpi(
   value: number,
   previousValue: number | null,
   higherIsBetter = true,
-  meta: Record<string, unknown> = {},
+  meta: Record<string, any> = {},
 ): KpiValue {
   const changePercent = previousValue === null ? null : pctChange(value, previousValue);
   return {
