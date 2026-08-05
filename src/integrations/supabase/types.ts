@@ -14,6 +14,156 @@ export type Database = {
   }
   public: {
     Tables: {
+      advisor_recommendations: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          confidence: number
+          created_at: string
+          data: Json
+          dedupe_key: string | null
+          finding: string
+          generated_at: string
+          id: string
+          impact: string
+          module_id: string | null
+          recommendation: string
+          rule_key: string
+          severity: Database["public"]["Enums"]["alert_severity"]
+          status: Database["public"]["Enums"]["recommendation_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          confidence?: number
+          created_at?: string
+          data?: Json
+          dedupe_key?: string | null
+          finding: string
+          generated_at?: string
+          id?: string
+          impact?: string
+          module_id?: string | null
+          recommendation: string
+          rule_key: string
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          status?: Database["public"]["Enums"]["recommendation_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          confidence?: number
+          created_at?: string
+          data?: Json
+          dedupe_key?: string | null
+          finding?: string
+          generated_at?: string
+          id?: string
+          impact?: string
+          module_id?: string | null
+          recommendation?: string
+          rule_key?: string
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          status?: Database["public"]["Enums"]["recommendation_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "advisor_recommendations_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "advisor_recommendations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_key: string
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          data: Json
+          dedupe_key: string | null
+          deep_link: string | null
+          id: string
+          message: string
+          module_id: string | null
+          resolved_at: string | null
+          severity: Database["public"]["Enums"]["alert_severity"]
+          status: Database["public"]["Enums"]["alert_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_key: string
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          data?: Json
+          dedupe_key?: string | null
+          deep_link?: string | null
+          id?: string
+          message: string
+          module_id?: string | null
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          status?: Database["public"]["Enums"]["alert_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_key?: string
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          data?: Json
+          dedupe_key?: string | null
+          deep_link?: string | null
+          id?: string
+          message?: string
+          module_id?: string | null
+          resolved_at?: string | null
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          status?: Database["public"]["Enums"]["alert_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alerts_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alerts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attendance_records: {
         Row: {
           approved_at: string | null
@@ -174,6 +324,63 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "timezones"
             referencedColumns: ["name"]
+          },
+        ]
+      }
+      business_health_scores: {
+        Row: {
+          areas: Json
+          branch_id: string | null
+          captured_at: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          factors: Json
+          grade: string
+          id: string
+          overall_score: number
+          updated_at: string
+        }
+        Insert: {
+          areas?: Json
+          branch_id?: string | null
+          captured_at?: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          factors?: Json
+          grade?: string
+          id?: string
+          overall_score?: number
+          updated_at?: string
+        }
+        Update: {
+          areas?: Json
+          branch_id?: string | null
+          captured_at?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          factors?: Json
+          grade?: string
+          id?: string
+          overall_score?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_health_scores_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_health_scores_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -501,6 +708,59 @@ export type Database = {
           symbol?: string | null
         }
         Relationships: []
+      }
+      dashboard_widgets: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          is_visible: boolean
+          module_id: string | null
+          position: number
+          settings: Json
+          size: string
+          title: string | null
+          updated_at: string
+          user_id: string | null
+          widget_key: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          is_visible?: boolean
+          module_id?: string | null
+          position?: number
+          settings?: Json
+          size?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+          widget_key: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          is_visible?: boolean
+          module_id?: string | null
+          position?: number
+          settings?: Json
+          size?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string | null
+          widget_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dashboard_widgets_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       departments: {
         Row: {
@@ -1394,6 +1654,207 @@ export type Database = {
           },
         ]
       }
+      forecast_snapshots: {
+        Row: {
+          basis_end: string
+          basis_start: string
+          branch_id: string | null
+          company_id: string
+          confidence: number
+          created_at: string
+          generated_by: string | null
+          horizon_days: number
+          id: string
+          kind: Database["public"]["Enums"]["forecast_kind"]
+          meta: Json
+          method: string
+          points: Json
+          projected_total: number
+          updated_at: string
+        }
+        Insert: {
+          basis_end: string
+          basis_start: string
+          branch_id?: string | null
+          company_id: string
+          confidence?: number
+          created_at?: string
+          generated_by?: string | null
+          horizon_days?: number
+          id?: string
+          kind: Database["public"]["Enums"]["forecast_kind"]
+          meta?: Json
+          method?: string
+          points?: Json
+          projected_total?: number
+          updated_at?: string
+        }
+        Update: {
+          basis_end?: string
+          basis_start?: string
+          branch_id?: string | null
+          company_id?: string
+          confidence?: number
+          created_at?: string
+          generated_by?: string | null
+          horizon_days?: number
+          id?: string
+          kind?: Database["public"]["Enums"]["forecast_kind"]
+          meta?: Json
+          method?: string
+          points?: Json
+          projected_total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forecast_snapshots_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forecast_snapshots_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      goal_progress: {
+        Row: {
+          company_id: string
+          created_at: string
+          goal_id: string
+          id: string
+          note: string | null
+          progress_percent: number
+          recorded_at: string
+          value: number
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          goal_id: string
+          id?: string
+          note?: string | null
+          progress_percent?: number
+          recorded_at?: string
+          value?: number
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          goal_id?: string
+          id?: string
+          note?: string | null
+          progress_percent?: number
+          recorded_at?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_progress_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goal_progress_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "goals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      goals: {
+        Row: {
+          achieved_at: string | null
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          current_value: number
+          deleted_at: string | null
+          description: string | null
+          direction: string
+          ends_on: string
+          goal_type: Database["public"]["Enums"]["goal_type"]
+          id: string
+          metric_key: string
+          name: string
+          period: Database["public"]["Enums"]["report_period"]
+          progress_percent: number
+          starts_on: string
+          status: Database["public"]["Enums"]["goal_status"]
+          target_value: number
+          updated_at: string
+        }
+        Insert: {
+          achieved_at?: string | null
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          current_value?: number
+          deleted_at?: string | null
+          description?: string | null
+          direction?: string
+          ends_on: string
+          goal_type?: Database["public"]["Enums"]["goal_type"]
+          id?: string
+          metric_key?: string
+          name: string
+          period?: Database["public"]["Enums"]["report_period"]
+          progress_percent?: number
+          starts_on: string
+          status?: Database["public"]["Enums"]["goal_status"]
+          target_value: number
+          updated_at?: string
+        }
+        Update: {
+          achieved_at?: string | null
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          current_value?: number
+          deleted_at?: string | null
+          description?: string | null
+          direction?: string
+          ends_on?: string
+          goal_type?: Database["public"]["Enums"]["goal_type"]
+          id?: string
+          metric_key?: string
+          name?: string
+          period?: Database["public"]["Enums"]["report_period"]
+          progress_percent?: number
+          starts_on?: string
+          status?: Database["public"]["Enums"]["goal_status"]
+          target_value?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goals_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "goals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inventory_items: {
         Row: {
           branch_id: string
@@ -1668,6 +2129,81 @@ export type Database = {
             columns: ["module_id"]
             isOneToOne: false
             referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      kpis: {
+        Row: {
+          branch_id: string | null
+          change_percent: number | null
+          company_id: string
+          computed_at: string
+          created_at: string
+          id: string
+          kpi_key: string
+          label: string
+          meta: Json
+          period: Database["public"]["Enums"]["report_period"]
+          period_end: string
+          period_start: string
+          previous_value: number | null
+          trend: string
+          unit: string
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          branch_id?: string | null
+          change_percent?: number | null
+          company_id: string
+          computed_at?: string
+          created_at?: string
+          id?: string
+          kpi_key: string
+          label: string
+          meta?: Json
+          period?: Database["public"]["Enums"]["report_period"]
+          period_end: string
+          period_start: string
+          previous_value?: number | null
+          trend?: string
+          unit?: string
+          updated_at?: string
+          value?: number
+        }
+        Update: {
+          branch_id?: string | null
+          change_percent?: number | null
+          company_id?: string
+          computed_at?: string
+          created_at?: string
+          id?: string
+          kpi_key?: string
+          label?: string
+          meta?: Json
+          period?: Database["public"]["Enums"]["report_period"]
+          period_end?: string
+          period_start?: string
+          previous_value?: number | null
+          trend?: string
+          unit?: string
+          updated_at?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kpis_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "kpis_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
             referencedColumns: ["id"]
           },
         ]
@@ -3127,6 +3663,78 @@ export type Database = {
           },
         ]
       }
+      reports: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          error: string | null
+          filters: Json
+          generated_by: string | null
+          id: string
+          period: Database["public"]["Enums"]["report_period"]
+          period_end: string
+          period_start: string
+          report_type: Database["public"]["Enums"]["report_type"]
+          result: Json
+          row_count: number
+          status: Database["public"]["Enums"]["report_status"]
+          summary: string | null
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          error?: string | null
+          filters?: Json
+          generated_by?: string | null
+          id?: string
+          period?: Database["public"]["Enums"]["report_period"]
+          period_end: string
+          period_start: string
+          report_type: Database["public"]["Enums"]["report_type"]
+          result?: Json
+          row_count?: number
+          status?: Database["public"]["Enums"]["report_status"]
+          summary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          error?: string | null
+          filters?: Json
+          generated_by?: string | null
+          id?: string
+          period?: Database["public"]["Enums"]["report_period"]
+          period_end?: string
+          period_start?: string
+          report_type?: Database["public"]["Enums"]["report_type"]
+          result?: Json
+          row_count?: number
+          status?: Database["public"]["Enums"]["report_status"]
+          summary?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reports_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       return_items: {
         Row: {
           condition: string | null
@@ -3495,6 +4103,65 @@ export type Database = {
           },
         ]
       }
+      saved_reports: {
+        Row: {
+          company_id: string
+          created_at: string
+          deleted_at: string | null
+          description: string | null
+          filters: Json
+          id: string
+          is_shared: boolean
+          last_run_at: string | null
+          name: string
+          owner_user_id: string | null
+          period: Database["public"]["Enums"]["report_period"]
+          report_type: Database["public"]["Enums"]["report_type"]
+          schedule_cron: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          filters?: Json
+          id?: string
+          is_shared?: boolean
+          last_run_at?: string | null
+          name: string
+          owner_user_id?: string | null
+          period?: Database["public"]["Enums"]["report_period"]
+          report_type: Database["public"]["Enums"]["report_type"]
+          schedule_cron?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          description?: string | null
+          filters?: Json
+          id?: string
+          is_shared?: boolean
+          last_run_at?: string | null
+          name?: string
+          owner_user_id?: string | null
+          period?: Database["public"]["Enums"]["report_period"]
+          report_type?: Database["public"]["Enums"]["report_type"]
+          schedule_cron?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_reports_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shift_schedules: {
         Row: {
           branch_id: string
@@ -3840,6 +4507,8 @@ export type Database = {
       record_return_atomic: { Args: { _return_id: string }; Returns: string }
     }
     Enums: {
+      alert_severity: "info" | "warning" | "critical"
+      alert_status: "open" | "acknowledged" | "resolved" | "dismissed"
       attendance_source: "clock" | "manual" | "import" | "correction"
       attendance_status:
         | "present"
@@ -3897,6 +4566,24 @@ export type Database = {
         | "premium"
         | "public"
         | "disabled"
+      forecast_kind: "sales" | "inventory" | "expense" | "cashflow" | "demand"
+      goal_status: "active" | "achieved" | "missed" | "cancelled"
+      goal_type:
+        | "revenue"
+        | "expense_limit"
+        | "sales_count"
+        | "inventory"
+        | "branch"
+        | "custom"
+      health_area:
+        | "overall"
+        | "sales"
+        | "inventory"
+        | "expenses"
+        | "cashflow"
+        | "staff"
+        | "customers"
+        | "growth"
       job_status: "queued" | "running" | "completed" | "failed" | "cancelled"
       leave_status: "draft" | "pending" | "approved" | "rejected" | "cancelled"
       leave_type:
@@ -3957,6 +4644,24 @@ export type Database = {
         | "dozen"
         | "other"
       purchase_status: "draft" | "recorded" | "cancelled"
+      recommendation_status:
+        | "new"
+        | "viewed"
+        | "accepted"
+        | "dismissed"
+        | "done"
+      report_period: "daily" | "weekly" | "monthly" | "yearly" | "custom"
+      report_status: "queued" | "running" | "completed" | "failed"
+      report_type:
+        | "sales"
+        | "inventory"
+        | "expenses"
+        | "employees"
+        | "customers"
+        | "purchases"
+        | "suppliers"
+        | "branches"
+        | "finance"
       return_status: "draft" | "approved" | "completed" | "rejected"
       return_type: "full" | "partial" | "damaged"
       review_status:
@@ -4107,6 +4812,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      alert_severity: ["info", "warning", "critical"],
+      alert_status: ["open", "acknowledged", "resolved", "dismissed"],
       attendance_source: ["clock", "manual", "import", "correction"],
       attendance_status: [
         "present",
@@ -4171,6 +4878,26 @@ export const Constants = {
         "public",
         "disabled",
       ],
+      forecast_kind: ["sales", "inventory", "expense", "cashflow", "demand"],
+      goal_status: ["active", "achieved", "missed", "cancelled"],
+      goal_type: [
+        "revenue",
+        "expense_limit",
+        "sales_count",
+        "inventory",
+        "branch",
+        "custom",
+      ],
+      health_area: [
+        "overall",
+        "sales",
+        "inventory",
+        "expenses",
+        "cashflow",
+        "staff",
+        "customers",
+        "growth",
+      ],
       job_status: ["queued", "running", "completed", "failed", "cancelled"],
       leave_status: ["draft", "pending", "approved", "rejected", "cancelled"],
       leave_type: [
@@ -4231,6 +4958,20 @@ export const Constants = {
         "other",
       ],
       purchase_status: ["draft", "recorded", "cancelled"],
+      recommendation_status: ["new", "viewed", "accepted", "dismissed", "done"],
+      report_period: ["daily", "weekly", "monthly", "yearly", "custom"],
+      report_status: ["queued", "running", "completed", "failed"],
+      report_type: [
+        "sales",
+        "inventory",
+        "expenses",
+        "employees",
+        "customers",
+        "purchases",
+        "suppliers",
+        "branches",
+        "finance",
+      ],
       return_status: ["draft", "approved", "completed", "rejected"],
       return_type: ["full", "partial", "damaged"],
       review_status: [
