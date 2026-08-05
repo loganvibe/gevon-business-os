@@ -22,7 +22,7 @@ export interface KpiValue {
   trend: Trend;
   /** True when a higher number is better (revenue) vs worse (expenses). */
   higherIsBetter: boolean;
-  meta?: Record<string, unknown>;
+  meta?: Record<string, any>;
 }
 
 export type HealthArea =
@@ -72,7 +72,7 @@ export interface ForecastResult {
   points: ForecastPoint[];
   projectedTotal: number;
   confidence: number; // 0..100
-  meta: Record<string, unknown>;
+  meta: Record<string, any>;
 }
 
 /** A reusable prediction interface — swap implementations without callers changing. */
@@ -93,7 +93,7 @@ export interface Recommendation {
   impact: ImpactLevel;
   confidence: number;
   severity: Severity;
-  data: Record<string, unknown>;
+  data: Record<string, any>;
   dedupeKey: string;
 }
 
@@ -104,7 +104,7 @@ export interface SmartAlert {
   title: string;
   message: string;
   deepLink?: string;
-  data: Record<string, unknown>;
+  data: Record<string, any>;
   dedupeKey: string;
 }
 

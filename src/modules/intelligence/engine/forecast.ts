@@ -30,7 +30,7 @@ function build(
   predict: (index: number) => number,
   spread: number,
   confidence: number,
-  meta: Record<string, unknown>,
+  meta: Record<string, any>,
 ): ForecastResult {
   const lastDate = history[history.length - 1]!.date;
   const points: ForecastPoint[] = [];
