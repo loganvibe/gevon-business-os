@@ -20,7 +20,7 @@ import {
   listExpenseCategories,
   createExpenseCategory,
   deleteExpenseCategory,
-} from "@/modules/expenses/server/categories.functions";
+} from "@/modules/expenses/api/categories.functions";
 
 export const Route = createFileRoute("/_authenticated/app/expenses/categories")({
   component: CategoriesPage,

@@ -31,9 +31,9 @@ import {
   approveExpense,
   rejectExpense,
   deleteExpense,
-} from "@/modules/expenses/server/expenses.functions";
-import { listExpenseCategories } from "@/modules/expenses/server/categories.functions";
-import { recordExpensePayment } from "@/modules/expenses/server/payments.functions";
+} from "@/modules/expenses/api/expenses.functions";
+import { listExpenseCategories } from "@/modules/expenses/api/categories.functions";
+import { recordExpensePayment } from "@/modules/expenses/api/payments.functions";
 
 export const Route = createFileRoute("/_authenticated/app/expenses/")({
   component: ExpensesPage,

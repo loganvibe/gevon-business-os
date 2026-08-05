@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { listReturns, approveReturn } from "@/modules/sales/server/returns.functions";
+import { listReturns, approveReturn } from "@/modules/sales/api/returns.functions";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 

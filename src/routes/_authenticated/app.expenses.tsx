@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Receipt, Tags, TrendingUp } from "lucide-react";
-import { financeSummary } from "@/modules/expenses/server/summary.functions";
+import { financeSummary } from "@/modules/expenses/api/summary.functions";
 
 export const Route = createFileRoute("/_authenticated/app/expenses")({
   component: ExpensesLayout,

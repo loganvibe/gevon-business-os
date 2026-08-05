@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { listPayments } from "@/modules/sales/server/payments.functions";
+import { listPayments } from "@/modules/sales/api/payments.functions";
 
 export const Route = createFileRoute("/_authenticated/app/payments")({
   component: PaymentsPage,

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { ShoppingCart, LayoutDashboard, ClipboardList, Undo2, Wallet } from "lucide-react";
-import { salesSummary } from "@/modules/sales/server/summary.functions";
+import { salesSummary } from "@/modules/sales/api/summary.functions";
 
 export const Route = createFileRoute("/_authenticated/app/sales")({
   component: SalesLayout,

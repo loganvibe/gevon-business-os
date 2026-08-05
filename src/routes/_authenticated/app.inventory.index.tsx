@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { getLowStockItems, listStockMovements } from "@/modules/inventory/server/inventory.functions";
+import { getLowStockItems, listStockMovements } from "@/modules/inventory/api/inventory.functions";
 
 export const Route = createFileRoute("/_authenticated/app/inventory/")({
   component: InventoryOverview,
