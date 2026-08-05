@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { Package, Boxes, Truck, History, LayoutDashboard } from "lucide-react";
-import { inventorySummary } from "@/modules/inventory/server/inventory.functions";
+import { inventorySummary } from "@/modules/inventory/api/inventory.functions";
 
 export const Route = createFileRoute("/_authenticated/app/inventory")({
   component: InventoryLayout,
