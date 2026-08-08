@@ -22,6 +22,7 @@ import { inventoryEvents } from "./definitions/inventory";
 import { salesEvents } from "./definitions/sales";
 import { expenseEvents } from "./definitions/expenses";
 import { peopleEvents } from "./definitions/people";
+import { workflowEvents } from "./definitions/workflow";
 
 export type EventSubscriberKind = "notification" | "email" | "job" | "ai";
 
@@ -85,6 +86,7 @@ const EVENTS: EventDefinition[] = [
   ...salesEvents,
   ...expenseEvents,
   ...peopleEvents,
+  ...workflowEvents,
 ];
 
 const BY_KEY = new Map<string, EventDefinition>(EVENTS.map((e) => [e.key, e]));
