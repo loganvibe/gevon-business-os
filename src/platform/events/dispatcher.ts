@@ -8,6 +8,7 @@
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getEvent, type EventSubscriber } from "./registry";
+import { runWorkflowsForEvent } from "@/modules/workflow/engine/executor";
 
 const MAX_LEASE = 50;
 const BACKOFF_BASE_SECONDS = 30;
@@ -245,6 +246,13 @@ export async function runDispatcher(admin: SupabaseClient): Promise<{
       if (!def) throw new Error(`event not in registry: ${ev.event_key}`);
       for (const sub of def.subscribers) {
         await dispatchSubscriber(admin, sub, ev);
+      }
+      // Milestone 10: let company-configured workflows / automation rules
+      // react to this event. Failures here never break subscriber fan-out.
+      try {
+        await runWorkflowsForEvent(admin, ev);
+      } catch (wfErr) {
+        console.error("[workflow] engine error", wfErr);
       }
       await (admin as any).from("event_queue")
         .update({ status: "completed", locked_at: null, locked_by: null })

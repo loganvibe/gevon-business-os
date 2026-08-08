@@ -164,6 +164,240 @@ export type Database = {
           },
         ]
       }
+      approval_actions: {
+        Row: {
+          action: string
+          actor_id: string | null
+          approval_request_id: string
+          approval_step_id: string | null
+          comment: string | null
+          company_id: string
+          created_at: string
+          id: string
+          metadata: Json
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          approval_request_id: string
+          approval_step_id?: string | null
+          comment?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          approval_request_id?: string
+          approval_step_id?: string | null
+          comment?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_actions_approval_request_id_fkey"
+            columns: ["approval_request_id"]
+            isOneToOne: false
+            referencedRelation: "approval_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_actions_approval_step_id_fkey"
+            columns: ["approval_step_id"]
+            isOneToOne: false
+            referencedRelation: "approval_steps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_actions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      approval_requests: {
+        Row: {
+          amount: number | null
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          currency_code: string | null
+          current_step: number
+          decided_at: string | null
+          deleted_at: string | null
+          description: string | null
+          due_at: string | null
+          entity_id: string | null
+          entity_type: string | null
+          escalation_level: number
+          id: string
+          last_escalated_at: string | null
+          metadata: Json
+          module_id: string | null
+          requested_by: string | null
+          required_permission: string | null
+          status: Database["public"]["Enums"]["approval_status"]
+          subject: string
+          total_steps: number
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          currency_code?: string | null
+          current_step?: number
+          decided_at?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          due_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          escalation_level?: number
+          id?: string
+          last_escalated_at?: string | null
+          metadata?: Json
+          module_id?: string | null
+          requested_by?: string | null
+          required_permission?: string | null
+          status?: Database["public"]["Enums"]["approval_status"]
+          subject: string
+          total_steps?: number
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          currency_code?: string | null
+          current_step?: number
+          decided_at?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          due_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          escalation_level?: number
+          id?: string
+          last_escalated_at?: string | null
+          metadata?: Json
+          module_id?: string | null
+          requested_by?: string | null
+          required_permission?: string | null
+          status?: Database["public"]["Enums"]["approval_status"]
+          subject?: string
+          total_steps?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_requests_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      approval_steps: {
+        Row: {
+          approval_request_id: string
+          approver_department_id: string | null
+          approver_kind: Database["public"]["Enums"]["assignee_kind"]
+          approver_role_id: string | null
+          approver_user_id: string | null
+          comment: string | null
+          company_id: string
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          id: string
+          name: string | null
+          status: Database["public"]["Enums"]["approval_step_status"]
+          step_number: number
+          updated_at: string
+        }
+        Insert: {
+          approval_request_id: string
+          approver_department_id?: string | null
+          approver_kind?: Database["public"]["Enums"]["assignee_kind"]
+          approver_role_id?: string | null
+          approver_user_id?: string | null
+          comment?: string | null
+          company_id: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          name?: string | null
+          status?: Database["public"]["Enums"]["approval_step_status"]
+          step_number?: number
+          updated_at?: string
+        }
+        Update: {
+          approval_request_id?: string
+          approver_department_id?: string | null
+          approver_kind?: Database["public"]["Enums"]["assignee_kind"]
+          approver_role_id?: string | null
+          approver_user_id?: string | null
+          comment?: string | null
+          company_id?: string
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          name?: string | null
+          status?: Database["public"]["Enums"]["approval_step_status"]
+          step_number?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_steps_approval_request_id_fkey"
+            columns: ["approval_request_id"]
+            isOneToOne: false
+            referencedRelation: "approval_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_steps_approver_department_id_fkey"
+            columns: ["approver_department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_steps_approver_role_id_fkey"
+            columns: ["approver_role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "approval_steps_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attendance_records: {
         Row: {
           approved_at: string | null
@@ -252,6 +486,138 @@ export type Database = {
             columns: ["employee_id"]
             isOneToOne: false
             referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automation_rules: {
+        Row: {
+          actions: Json
+          branch_id: string | null
+          company_id: string
+          conditions: Json
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean
+          last_run_at: string | null
+          module_id: string | null
+          name: string
+          run_count: number
+          schedule_cron: string | null
+          trigger_event: string | null
+          trigger_kind: string
+          updated_at: string
+        }
+        Insert: {
+          actions?: Json
+          branch_id?: string | null
+          company_id: string
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          last_run_at?: string | null
+          module_id?: string | null
+          name: string
+          run_count?: number
+          schedule_cron?: string | null
+          trigger_event?: string | null
+          trigger_kind?: string
+          updated_at?: string
+        }
+        Update: {
+          actions?: Json
+          branch_id?: string | null
+          company_id?: string
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          last_run_at?: string | null
+          module_id?: string | null
+          name?: string
+          run_count?: number
+          schedule_cron?: string | null
+          trigger_event?: string | null
+          trigger_kind?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_rules_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automation_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      automation_runs: {
+        Row: {
+          automation_rule_id: string
+          company_id: string
+          created_at: string
+          error: string | null
+          id: string
+          matched: boolean
+          payload: Json
+          result: Json
+          status: Database["public"]["Enums"]["workflow_run_status"]
+          updated_at: string
+        }
+        Insert: {
+          automation_rule_id: string
+          company_id: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          matched?: boolean
+          payload?: Json
+          result?: Json
+          status?: Database["public"]["Enums"]["workflow_run_status"]
+          updated_at?: string
+        }
+        Update: {
+          automation_rule_id?: string
+          company_id?: string
+          created_at?: string
+          error?: string | null
+          id?: string
+          matched?: boolean
+          payload?: Json
+          result?: Json
+          status?: Database["public"]["Enums"]["workflow_run_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_runs_automation_rule_id_fkey"
+            columns: ["automation_rule_id"]
+            isOneToOne: false
+            referencedRelation: "automation_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "automation_runs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
             referencedColumns: ["id"]
           },
         ]
@@ -377,6 +743,93 @@ export type Database = {
           },
           {
             foreignKeyName: "business_health_scores_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      calendar_events: {
+        Row: {
+          all_day: boolean
+          attendees: Json
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          ends_at: string | null
+          event_type: Database["public"]["Enums"]["calendar_event_type"]
+          external_id: string | null
+          external_source: string | null
+          id: string
+          location: string | null
+          metadata: Json
+          owner_user_id: string | null
+          related_entity_id: string | null
+          related_entity_type: string | null
+          starts_at: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          all_day?: boolean
+          attendees?: Json
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          ends_at?: string | null
+          event_type?: Database["public"]["Enums"]["calendar_event_type"]
+          external_id?: string | null
+          external_source?: string | null
+          id?: string
+          location?: string | null
+          metadata?: Json
+          owner_user_id?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          starts_at: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          all_day?: boolean
+          attendees?: Json
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          ends_at?: string | null
+          event_type?: Database["public"]["Enums"]["calendar_event_type"]
+          external_id?: string | null
+          external_source?: string | null
+          id?: string
+          location?: string | null
+          metadata?: Json
+          owner_user_id?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          starts_at?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "calendar_events_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -1141,6 +1594,69 @@ export type Database = {
           },
         ]
       }
+      escalation_rules: {
+        Row: {
+          after_hours: number
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          level: number
+          name: string
+          notify_kind: Database["public"]["Enums"]["assignee_kind"]
+          notify_role_id: string | null
+          notify_user_id: string | null
+          target_kind: string
+          updated_at: string
+        }
+        Insert: {
+          after_hours?: number
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          level?: number
+          name: string
+          notify_kind?: Database["public"]["Enums"]["assignee_kind"]
+          notify_role_id?: string | null
+          notify_user_id?: string | null
+          target_kind?: string
+          updated_at?: string
+        }
+        Update: {
+          after_hours?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          level?: number
+          name?: string
+          notify_kind?: Database["public"]["Enums"]["assignee_kind"]
+          notify_role_id?: string | null
+          notify_user_id?: string | null
+          target_kind?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "escalation_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "escalation_rules_notify_role_id_fkey"
+            columns: ["notify_role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_log: {
         Row: {
           created_at: string
@@ -1848,6 +2364,112 @@ export type Database = {
           },
           {
             foreignKeyName: "goals_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      internal_requests: {
+        Row: {
+          amount: number | null
+          approval_request_id: string | null
+          attachments: Json
+          branch_id: string | null
+          company_id: string
+          completed_at: string | null
+          created_at: string
+          currency_code: string | null
+          decided_at: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          items: Json
+          metadata: Json
+          needed_by: string | null
+          priority: Database["public"]["Enums"]["task_priority"]
+          related_entity_id: string | null
+          related_entity_type: string | null
+          request_number: string | null
+          request_type: Database["public"]["Enums"]["internal_request_type"]
+          requested_by: string | null
+          status: Database["public"]["Enums"]["request_status"]
+          submitted_at: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          amount?: number | null
+          approval_request_id?: string | null
+          attachments?: Json
+          branch_id?: string | null
+          company_id: string
+          completed_at?: string | null
+          created_at?: string
+          currency_code?: string | null
+          decided_at?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          items?: Json
+          metadata?: Json
+          needed_by?: string | null
+          priority?: Database["public"]["Enums"]["task_priority"]
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          request_number?: string | null
+          request_type?: Database["public"]["Enums"]["internal_request_type"]
+          requested_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          submitted_at?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number | null
+          approval_request_id?: string | null
+          attachments?: Json
+          branch_id?: string | null
+          company_id?: string
+          completed_at?: string | null
+          created_at?: string
+          currency_code?: string | null
+          decided_at?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          items?: Json
+          metadata?: Json
+          needed_by?: string | null
+          priority?: Database["public"]["Enums"]["task_priority"]
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          request_number?: string | null
+          request_type?: Database["public"]["Enums"]["internal_request_type"]
+          requested_by?: string | null
+          status?: Database["public"]["Enums"]["request_status"]
+          submitted_at?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "internal_requests_approval_request_id_fkey"
+            columns: ["approval_request_id"]
+            isOneToOne: false
+            referencedRelation: "approval_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "internal_requests_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "internal_requests_company_id_fkey"
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
@@ -3663,6 +4285,78 @@ export type Database = {
           },
         ]
       }
+      reminders: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          deep_link: string | null
+          id: string
+          message: string | null
+          recipient_user_id: string | null
+          related_entity_id: string | null
+          related_entity_type: string | null
+          remind_at: string
+          repeat_interval: string | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["reminder_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          deep_link?: string | null
+          id?: string
+          message?: string | null
+          recipient_user_id?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          remind_at: string
+          repeat_interval?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["reminder_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          deep_link?: string | null
+          id?: string
+          message?: string | null
+          recipient_user_id?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          remind_at?: string
+          repeat_interval?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["reminder_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminders_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reminders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reports: {
         Row: {
           branch_id: string | null
@@ -4464,6 +5158,235 @@ export type Database = {
           },
         ]
       }
+      task_assignments: {
+        Row: {
+          assigned_by: string | null
+          assigned_department_id: string | null
+          assigned_role_id: string | null
+          assigned_user_id: string | null
+          assignee_kind: Database["public"]["Enums"]["assignee_kind"]
+          company_id: string
+          created_at: string
+          id: string
+          note: string | null
+          task_id: string
+        }
+        Insert: {
+          assigned_by?: string | null
+          assigned_department_id?: string | null
+          assigned_role_id?: string | null
+          assigned_user_id?: string | null
+          assignee_kind?: Database["public"]["Enums"]["assignee_kind"]
+          company_id: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          task_id: string
+        }
+        Update: {
+          assigned_by?: string | null
+          assigned_department_id?: string | null
+          assigned_role_id?: string | null
+          assigned_user_id?: string | null
+          assignee_kind?: Database["public"]["Enums"]["assignee_kind"]
+          company_id?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          task_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_assignments_assigned_department_id_fkey"
+            columns: ["assigned_department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_assignments_assigned_role_id_fkey"
+            columns: ["assigned_role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_assignments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_assignments_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      task_comments: {
+        Row: {
+          attachments: Json
+          author_id: string | null
+          body: string
+          company_id: string
+          created_at: string
+          id: string
+          task_id: string
+          updated_at: string
+        }
+        Insert: {
+          attachments?: Json
+          author_id?: string | null
+          body: string
+          company_id: string
+          created_at?: string
+          id?: string
+          task_id: string
+          updated_at?: string
+        }
+        Update: {
+          attachments?: Json
+          author_id?: string | null
+          body?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          task_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "task_comments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "task_comments_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tasks: {
+        Row: {
+          assigned_department_id: string | null
+          assigned_role_id: string | null
+          assigned_user_id: string | null
+          assignee_kind: Database["public"]["Enums"]["assignee_kind"]
+          attachments: Json
+          branch_id: string | null
+          company_id: string
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          due_at: string | null
+          id: string
+          metadata: Json
+          notes: string | null
+          priority: Database["public"]["Enums"]["task_priority"]
+          related_entity_id: string | null
+          related_entity_type: string | null
+          related_module: string | null
+          source: string
+          source_workflow_run_id: string | null
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_department_id?: string | null
+          assigned_role_id?: string | null
+          assigned_user_id?: string | null
+          assignee_kind?: Database["public"]["Enums"]["assignee_kind"]
+          attachments?: Json
+          branch_id?: string | null
+          company_id: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          metadata?: Json
+          notes?: string | null
+          priority?: Database["public"]["Enums"]["task_priority"]
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          related_module?: string | null
+          source?: string
+          source_workflow_run_id?: string | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_department_id?: string | null
+          assigned_role_id?: string | null
+          assigned_user_id?: string | null
+          assignee_kind?: Database["public"]["Enums"]["assignee_kind"]
+          attachments?: Json
+          branch_id?: string | null
+          company_id?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          due_at?: string | null
+          id?: string
+          metadata?: Json
+          notes?: string | null
+          priority?: Database["public"]["Enums"]["task_priority"]
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          related_module?: string | null
+          source?: string
+          source_workflow_run_id?: string | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_assigned_department_id_fkey"
+            columns: ["assigned_department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_assigned_role_id_fkey"
+            columns: ["assigned_role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       timezones: {
         Row: {
           name: string
@@ -4475,6 +5398,204 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      workflow_actions: {
+        Row: {
+          action_type: Database["public"]["Enums"]["workflow_action_type"]
+          company_id: string
+          config: Json
+          created_at: string
+          id: string
+          is_active: boolean
+          position: number
+          updated_at: string
+          workflow_id: string
+        }
+        Insert: {
+          action_type: Database["public"]["Enums"]["workflow_action_type"]
+          company_id: string
+          config?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          position?: number
+          updated_at?: string
+          workflow_id: string
+        }
+        Update: {
+          action_type?: Database["public"]["Enums"]["workflow_action_type"]
+          company_id?: string
+          config?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          position?: number
+          updated_at?: string
+          workflow_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_actions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workflow_actions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflow_runs: {
+        Row: {
+          attempts: number
+          company_id: string
+          created_at: string
+          error: string | null
+          event_key: string | null
+          event_queue_id: string | null
+          finished_at: string | null
+          id: string
+          idempotency_key: string | null
+          matched: boolean
+          payload: Json
+          result: Json
+          started_at: string
+          status: Database["public"]["Enums"]["workflow_run_status"]
+          updated_at: string
+          workflow_id: string
+        }
+        Insert: {
+          attempts?: number
+          company_id: string
+          created_at?: string
+          error?: string | null
+          event_key?: string | null
+          event_queue_id?: string | null
+          finished_at?: string | null
+          id?: string
+          idempotency_key?: string | null
+          matched?: boolean
+          payload?: Json
+          result?: Json
+          started_at?: string
+          status?: Database["public"]["Enums"]["workflow_run_status"]
+          updated_at?: string
+          workflow_id: string
+        }
+        Update: {
+          attempts?: number
+          company_id?: string
+          created_at?: string
+          error?: string | null
+          event_key?: string | null
+          event_queue_id?: string | null
+          finished_at?: string | null
+          id?: string
+          idempotency_key?: string | null
+          matched?: boolean
+          payload?: Json
+          result?: Json
+          started_at?: string
+          status?: Database["public"]["Enums"]["workflow_run_status"]
+          updated_at?: string
+          workflow_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_runs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workflow_runs_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflows: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          condition_logic: string
+          conditions: Json
+          created_at: string
+          created_by: string | null
+          deleted_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean
+          last_run_at: string | null
+          module_id: string | null
+          name: string
+          owner_user_id: string | null
+          run_count: number
+          trigger_event: string
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          condition_logic?: string
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          last_run_at?: string | null
+          module_id?: string | null
+          name: string
+          owner_user_id?: string | null
+          run_count?: number
+          trigger_event: string
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          condition_logic?: string
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          deleted_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          last_run_at?: string | null
+          module_id?: string | null
+          name?: string
+          owner_user_id?: string | null
+          run_count?: number
+          trigger_event?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflows_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workflows_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
@@ -4509,6 +5630,27 @@ export type Database = {
     Enums: {
       alert_severity: "info" | "warning" | "critical"
       alert_status: "open" | "acknowledged" | "resolved" | "dismissed"
+      approval_status:
+        | "draft"
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "changes_requested"
+        | "cancelled"
+      approval_step_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "changes_requested"
+        | "skipped"
+      assignee_kind:
+        | "user"
+        | "role"
+        | "department"
+        | "branch"
+        | "manager"
+        | "team"
+        | "creator"
       attendance_source: "clock" | "manual" | "import" | "correction"
       attendance_status:
         | "present"
@@ -4517,6 +5659,13 @@ export type Database = {
         | "half_day"
         | "on_leave"
         | "holiday"
+      calendar_event_type:
+        | "task"
+        | "meeting"
+        | "reminder"
+        | "leave"
+        | "appointment"
+        | "other"
       candidate_status:
         | "applied"
         | "screening"
@@ -4584,6 +5733,14 @@ export type Database = {
         | "staff"
         | "customers"
         | "growth"
+      internal_request_type:
+        | "purchase"
+        | "expense"
+        | "leave"
+        | "stock_adjustment"
+        | "maintenance"
+        | "staff"
+        | "other"
       job_status: "queued" | "running" | "completed" | "failed" | "cancelled"
       leave_status: "draft" | "pending" | "approved" | "rejected" | "cancelled"
       leave_type:
@@ -4650,6 +5807,7 @@ export type Database = {
         | "accepted"
         | "dismissed"
         | "done"
+      reminder_status: "scheduled" | "sent" | "cancelled" | "failed"
       report_period: "daily" | "weekly" | "monthly" | "yearly" | "custom"
       report_status: "queued" | "running" | "completed" | "failed"
       report_type:
@@ -4662,6 +5820,14 @@ export type Database = {
         | "suppliers"
         | "branches"
         | "finance"
+      request_status:
+        | "draft"
+        | "submitted"
+        | "under_review"
+        | "approved"
+        | "rejected"
+        | "completed"
+        | "cancelled"
       return_status: "draft" | "approved" | "completed" | "rejected"
       return_type: "full" | "partial" | "damaged"
       review_status:
@@ -4685,6 +5851,31 @@ export type Database = {
         | "return"
       subscription_status: "trial" | "active" | "past_due" | "cancelled"
       supplier_status: "active" | "archived"
+      task_priority: "low" | "normal" | "high" | "urgent"
+      task_status:
+        | "todo"
+        | "in_progress"
+        | "waiting"
+        | "completed"
+        | "cancelled"
+      workflow_action_type:
+        | "create_task"
+        | "send_notification"
+        | "queue_email"
+        | "create_approval"
+        | "create_alert"
+        | "assign_user"
+        | "assign_team"
+        | "publish_event"
+        | "create_reminder"
+        | "create_request"
+        | "update_record"
+      workflow_run_status:
+        | "pending"
+        | "running"
+        | "completed"
+        | "failed"
+        | "skipped"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4814,6 +6005,30 @@ export const Constants = {
     Enums: {
       alert_severity: ["info", "warning", "critical"],
       alert_status: ["open", "acknowledged", "resolved", "dismissed"],
+      approval_status: [
+        "draft",
+        "pending",
+        "approved",
+        "rejected",
+        "changes_requested",
+        "cancelled",
+      ],
+      approval_step_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "changes_requested",
+        "skipped",
+      ],
+      assignee_kind: [
+        "user",
+        "role",
+        "department",
+        "branch",
+        "manager",
+        "team",
+        "creator",
+      ],
       attendance_source: ["clock", "manual", "import", "correction"],
       attendance_status: [
         "present",
@@ -4822,6 +6037,14 @@ export const Constants = {
         "half_day",
         "on_leave",
         "holiday",
+      ],
+      calendar_event_type: [
+        "task",
+        "meeting",
+        "reminder",
+        "leave",
+        "appointment",
+        "other",
       ],
       candidate_status: [
         "applied",
@@ -4898,6 +6121,15 @@ export const Constants = {
         "customers",
         "growth",
       ],
+      internal_request_type: [
+        "purchase",
+        "expense",
+        "leave",
+        "stock_adjustment",
+        "maintenance",
+        "staff",
+        "other",
+      ],
       job_status: ["queued", "running", "completed", "failed", "cancelled"],
       leave_status: ["draft", "pending", "approved", "rejected", "cancelled"],
       leave_type: [
@@ -4959,6 +6191,7 @@ export const Constants = {
       ],
       purchase_status: ["draft", "recorded", "cancelled"],
       recommendation_status: ["new", "viewed", "accepted", "dismissed", "done"],
+      reminder_status: ["scheduled", "sent", "cancelled", "failed"],
       report_period: ["daily", "weekly", "monthly", "yearly", "custom"],
       report_status: ["queued", "running", "completed", "failed"],
       report_type: [
@@ -4971,6 +6204,15 @@ export const Constants = {
         "suppliers",
         "branches",
         "finance",
+      ],
+      request_status: [
+        "draft",
+        "submitted",
+        "under_review",
+        "approved",
+        "rejected",
+        "completed",
+        "cancelled",
       ],
       return_status: ["draft", "approved", "completed", "rejected"],
       return_type: ["full", "partial", "damaged"],
@@ -4997,6 +6239,28 @@ export const Constants = {
       ],
       subscription_status: ["trial", "active", "past_due", "cancelled"],
       supplier_status: ["active", "archived"],
+      task_priority: ["low", "normal", "high", "urgent"],
+      task_status: ["todo", "in_progress", "waiting", "completed", "cancelled"],
+      workflow_action_type: [
+        "create_task",
+        "send_notification",
+        "queue_email",
+        "create_approval",
+        "create_alert",
+        "assign_user",
+        "assign_team",
+        "publish_event",
+        "create_reminder",
+        "create_request",
+        "update_record",
+      ],
+      workflow_run_status: [
+        "pending",
+        "running",
+        "completed",
+        "failed",
+        "skipped",
+      ],
     },
   },
 } as const
