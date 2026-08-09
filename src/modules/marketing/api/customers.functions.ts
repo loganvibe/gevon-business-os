@@ -107,16 +107,17 @@ export const updateCustomer = createServerFn({ method: "POST" })
       .parse(d),
   )
   .handler(async ({ data, context }) => {
-    const patch: Record<string, unknown> = {};
-    if (data.name !== undefined) patch['name'] = data.name;
-    if (data.phone !== undefined) patch['phone'] = data.phone;
-    if (data.email !== undefined) patch['email'] = data.email;
-    if (data.customerType !== undefined) patch['customer_type'] = data.customerType;
-    if (data.status !== undefined) patch['status'] = data.status;
-    if (data.city !== undefined) patch['city'] = data.city;
-    if (data.state !== undefined) patch['state'] = data.state;
-    if (data.tags !== undefined) patch['tags'] = data.tags;
-    if (data.notes !== undefined) patch['notes'] = data.notes;
+    const patch = {
+      ...(data.name !== undefined ? { name: data.name } : {}),
+      ...(data.phone !== undefined ? { phone: data.phone } : {}),
+      ...(data.email !== undefined ? { email: data.email } : {}),
+      ...(data.customerType !== undefined ? { customer_type: data.customerType } : {}),
+      ...(data.status !== undefined ? { status: data.status } : {}),
+      ...(data.city !== undefined ? { city: data.city } : {}),
+      ...(data.state !== undefined ? { state: data.state } : {}),
+      ...(data.tags !== undefined ? { tags: data.tags } : {}),
+      ...(data.notes !== undefined ? { notes: data.notes } : {}),
+    };
 
     const { error } = await context.supabase
       .from("customers")
