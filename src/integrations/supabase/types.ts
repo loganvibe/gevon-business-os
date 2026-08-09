@@ -837,6 +837,235 @@ export type Database = {
           },
         ]
       }
+      campaign_audiences: {
+        Row: {
+          campaign_id: string
+          company_id: string
+          created_at: string
+          customer_id: string | null
+          id: string
+          segment_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          campaign_id: string
+          company_id: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          segment_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          campaign_id?: string
+          company_id?: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          segment_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_audiences_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_audiences_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_audiences_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_audiences_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "customer_segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_events: {
+        Row: {
+          campaign_id: string
+          company_id: string
+          created_at: string
+          customer_id: string | null
+          event_type: Database["public"]["Enums"]["campaign_event_type"]
+          id: string
+          message_id: string | null
+          metadata: Json
+          occurred_at: string
+          revenue: number | null
+          sale_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          campaign_id: string
+          company_id: string
+          created_at?: string
+          customer_id?: string | null
+          event_type: Database["public"]["Enums"]["campaign_event_type"]
+          id?: string
+          message_id?: string | null
+          metadata?: Json
+          occurred_at?: string
+          revenue?: number | null
+          sale_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          campaign_id?: string
+          company_id?: string
+          created_at?: string
+          customer_id?: string | null
+          event_type?: Database["public"]["Enums"]["campaign_event_type"]
+          id?: string
+          message_id?: string | null
+          metadata?: Json
+          occurred_at?: string
+          revenue?: number | null
+          sale_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_events_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_events_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_events_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_events_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "campaign_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_events_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaign_messages: {
+        Row: {
+          body: string | null
+          campaign_id: string
+          channel: Database["public"]["Enums"]["communication_channel"]
+          communication_log_id: string | null
+          company_id: string
+          created_at: string
+          customer_id: string | null
+          delivered_at: string | null
+          error: string | null
+          id: string
+          provider: string | null
+          provider_message_id: string | null
+          recipient: string | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["campaign_message_status"]
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          campaign_id: string
+          channel: Database["public"]["Enums"]["communication_channel"]
+          communication_log_id?: string | null
+          company_id: string
+          created_at?: string
+          customer_id?: string | null
+          delivered_at?: string | null
+          error?: string | null
+          id?: string
+          provider?: string | null
+          provider_message_id?: string | null
+          recipient?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["campaign_message_status"]
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          campaign_id?: string
+          channel?: Database["public"]["Enums"]["communication_channel"]
+          communication_log_id?: string | null
+          company_id?: string
+          created_at?: string
+          customer_id?: string | null
+          delivered_at?: string | null
+          error?: string | null
+          id?: string
+          provider?: string | null
+          provider_message_id?: string | null
+          recipient?: string | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["campaign_message_status"]
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_messages_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "marketing_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_messages_communication_log_id_fkey"
+            columns: ["communication_log_id"]
+            isOneToOne: false
+            referencedRelation: "communication_logs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_messages_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_messages_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       communication_logs: {
         Row: {
           attempts: number
@@ -1141,6 +1370,212 @@ export type Database = {
         }
         Relationships: []
       }
+      coupon_redemptions: {
+        Row: {
+          amount_discounted: number
+          branch_id: string | null
+          company_id: string
+          coupon_id: string
+          created_at: string
+          customer_id: string | null
+          id: string
+          redeemed_at: string
+          redeemed_by: string | null
+          sale_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_discounted?: number
+          branch_id?: string | null
+          company_id: string
+          coupon_id: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          redeemed_at?: string
+          redeemed_by?: string | null
+          sale_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_discounted?: number
+          branch_id?: string | null
+          company_id?: string
+          coupon_id?: string
+          created_at?: string
+          customer_id?: string | null
+          id?: string
+          redeemed_at?: string
+          redeemed_by?: string | null
+          sale_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coupon_redemptions_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupon_redemptions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupon_redemptions_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "coupons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupon_redemptions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupon_redemptions_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coupons: {
+        Row: {
+          branch_id: string | null
+          category_id: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          description: string | null
+          discount_type: Database["public"]["Enums"]["discount_type"]
+          discount_value: number
+          expires_at: string | null
+          id: string
+          max_discount_amount: number | null
+          min_purchase_amount: number
+          product_id: string | null
+          promotion_id: string | null
+          segment_id: string | null
+          starts_at: string | null
+          status: Database["public"]["Enums"]["coupon_status"]
+          updated_at: string
+          usage_count: number
+          usage_limit: number | null
+          usage_limit_per_customer: number
+        }
+        Insert: {
+          branch_id?: string | null
+          category_id?: string | null
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          description?: string | null
+          discount_type?: Database["public"]["Enums"]["discount_type"]
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          max_discount_amount?: number | null
+          min_purchase_amount?: number
+          product_id?: string | null
+          promotion_id?: string | null
+          segment_id?: string | null
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["coupon_status"]
+          updated_at?: string
+          usage_count?: number
+          usage_limit?: number | null
+          usage_limit_per_customer?: number
+        }
+        Update: {
+          branch_id?: string | null
+          category_id?: string | null
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          description?: string | null
+          discount_type?: Database["public"]["Enums"]["discount_type"]
+          discount_value?: number
+          expires_at?: string | null
+          id?: string
+          max_discount_amount?: number | null
+          min_purchase_amount?: number
+          product_id?: string | null
+          promotion_id?: string | null
+          segment_id?: string | null
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["coupon_status"]
+          updated_at?: string
+          usage_count?: number
+          usage_limit?: number | null
+          usage_limit_per_customer?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coupons_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupons_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupons_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupons_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupons_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupons_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "promotions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "coupons_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "customer_segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       currencies: {
         Row: {
           code: string
@@ -1161,6 +1596,274 @@ export type Database = {
           symbol?: string | null
         }
         Relationships: []
+      }
+      customer_consents: {
+        Row: {
+          channel: Database["public"]["Enums"]["communication_channel"]
+          company_id: string
+          consented_at: string | null
+          created_at: string
+          customer_id: string
+          id: string
+          revoked_at: string | null
+          source: string | null
+          status: Database["public"]["Enums"]["consent_status"]
+          updated_at: string
+        }
+        Insert: {
+          channel: Database["public"]["Enums"]["communication_channel"]
+          company_id: string
+          consented_at?: string | null
+          created_at?: string
+          customer_id: string
+          id?: string
+          revoked_at?: string | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["consent_status"]
+          updated_at?: string
+        }
+        Update: {
+          channel?: Database["public"]["Enums"]["communication_channel"]
+          company_id?: string
+          consented_at?: string | null
+          created_at?: string
+          customer_id?: string
+          id?: string
+          revoked_at?: string | null
+          source?: string | null
+          status?: Database["public"]["Enums"]["consent_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_consents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_consents_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_segment_members: {
+        Row: {
+          added_by: string
+          company_id: string
+          created_at: string
+          customer_id: string
+          entered_at: string
+          id: string
+          segment_id: string
+          updated_at: string
+        }
+        Insert: {
+          added_by?: string
+          company_id: string
+          created_at?: string
+          customer_id: string
+          entered_at?: string
+          id?: string
+          segment_id: string
+          updated_at?: string
+        }
+        Update: {
+          added_by?: string
+          company_id?: string
+          created_at?: string
+          customer_id?: string
+          entered_at?: string
+          id?: string
+          segment_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_segment_members_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_segment_members_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_segment_members_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "customer_segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_segments: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean
+          is_system: boolean
+          kind: Database["public"]["Enums"]["segment_kind"]
+          last_evaluated_at: string | null
+          member_count: number
+          name: string
+          rules: Json
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          is_system?: boolean
+          kind?: Database["public"]["Enums"]["segment_kind"]
+          last_evaluated_at?: string | null
+          member_count?: number
+          name: string
+          rules?: Json
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          is_system?: boolean
+          kind?: Database["public"]["Enums"]["segment_kind"]
+          last_evaluated_at?: string | null
+          member_count?: number
+          name?: string
+          rules?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_segments_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customer_segments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customers: {
+        Row: {
+          address: string | null
+          attributes: Json
+          branch_id: string | null
+          city: string | null
+          company_id: string
+          country_code: string | null
+          created_at: string
+          created_by: string | null
+          customer_type: Database["public"]["Enums"]["customer_type"]
+          deleted_at: string | null
+          email: string | null
+          first_purchase_at: string | null
+          id: string
+          last_purchase_at: string | null
+          name: string
+          notes: string | null
+          phone: string | null
+          purchase_count: number
+          state: string | null
+          status: Database["public"]["Enums"]["customer_status"]
+          tags: string[]
+          total_spent: number
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          attributes?: Json
+          branch_id?: string | null
+          city?: string | null
+          company_id: string
+          country_code?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_type?: Database["public"]["Enums"]["customer_type"]
+          deleted_at?: string | null
+          email?: string | null
+          first_purchase_at?: string | null
+          id?: string
+          last_purchase_at?: string | null
+          name: string
+          notes?: string | null
+          phone?: string | null
+          purchase_count?: number
+          state?: string | null
+          status?: Database["public"]["Enums"]["customer_status"]
+          tags?: string[]
+          total_spent?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          attributes?: Json
+          branch_id?: string | null
+          city?: string | null
+          company_id?: string
+          country_code?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_type?: Database["public"]["Enums"]["customer_type"]
+          deleted_at?: string | null
+          email?: string | null
+          first_purchase_at?: string | null
+          id?: string
+          last_purchase_at?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string | null
+          purchase_count?: number
+          state?: string | null
+          status?: Database["public"]["Enums"]["customer_status"]
+          tags?: string[]
+          total_spent?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       dashboard_widgets: {
         Row: {
@@ -2239,6 +2942,172 @@ export type Database = {
           },
         ]
       }
+      gift_card_transactions: {
+        Row: {
+          amount: number
+          balance_after: number
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          gift_card_id: string
+          id: string
+          reason: string | null
+          sale_id: string | null
+          txn_type: Database["public"]["Enums"]["gift_card_txn_type"]
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          balance_after?: number
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          gift_card_id: string
+          id?: string
+          reason?: string | null
+          sale_id?: string | null
+          txn_type: Database["public"]["Enums"]["gift_card_txn_type"]
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          balance_after?: number
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          gift_card_id?: string
+          id?: string
+          reason?: string | null
+          sale_id?: string | null
+          txn_type?: Database["public"]["Enums"]["gift_card_txn_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_card_transactions_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_card_transactions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_card_transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_card_transactions_gift_card_id_fkey"
+            columns: ["gift_card_id"]
+            isOneToOne: false
+            referencedRelation: "gift_cards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_card_transactions_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gift_cards: {
+        Row: {
+          activated_at: string | null
+          balance: number
+          branch_id: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency_code: string | null
+          customer_id: string | null
+          expires_at: string | null
+          id: string
+          initial_value: number
+          note: string | null
+          recipient_email: string | null
+          recipient_name: string | null
+          status: Database["public"]["Enums"]["gift_card_status"]
+          updated_at: string
+        }
+        Insert: {
+          activated_at?: string | null
+          balance?: number
+          branch_id?: string | null
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string | null
+          customer_id?: string | null
+          expires_at?: string | null
+          id?: string
+          initial_value?: number
+          note?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          status?: Database["public"]["Enums"]["gift_card_status"]
+          updated_at?: string
+        }
+        Update: {
+          activated_at?: string | null
+          balance?: number
+          branch_id?: string | null
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string | null
+          customer_id?: string | null
+          expires_at?: string | null
+          id?: string
+          initial_value?: number
+          note?: string | null
+          recipient_email?: string | null
+          recipient_name?: string | null
+          status?: Database["public"]["Enums"]["gift_card_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gift_cards_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_cards_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gift_cards_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goal_progress: {
         Row: {
           company_id: string
@@ -2923,6 +3792,351 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      loyalty_accounts: {
+        Row: {
+          company_id: string
+          created_at: string
+          customer_id: string
+          enrolled_at: string
+          id: string
+          last_activity_at: string | null
+          lifetime_points: number
+          points_balance: number
+          program_id: string
+          redeemed_points: number
+          tier: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          customer_id: string
+          enrolled_at?: string
+          id?: string
+          last_activity_at?: string | null
+          lifetime_points?: number
+          points_balance?: number
+          program_id: string
+          redeemed_points?: number
+          tier?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          customer_id?: string
+          enrolled_at?: string
+          id?: string
+          last_activity_at?: string | null
+          lifetime_points?: number
+          points_balance?: number
+          program_id?: string
+          redeemed_points?: number
+          tier?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_accounts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loyalty_accounts_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loyalty_accounts_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      loyalty_programs: {
+        Row: {
+          amount_unit: number
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency_code: string | null
+          description: string | null
+          id: string
+          is_active: boolean
+          min_redemption_points: number
+          name: string
+          point_value: number
+          points_expire_after_days: number | null
+          points_per_amount: number
+          tiers: Json
+          updated_at: string
+        }
+        Insert: {
+          amount_unit?: number
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          min_redemption_points?: number
+          name: string
+          point_value?: number
+          points_expire_after_days?: number | null
+          points_per_amount?: number
+          tiers?: Json
+          updated_at?: string
+        }
+        Update: {
+          amount_unit?: number
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          min_redemption_points?: number
+          name?: string
+          point_value?: number
+          points_expire_after_days?: number | null
+          points_per_amount?: number
+          tiers?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_programs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      loyalty_transactions: {
+        Row: {
+          account_id: string
+          balance_after: number
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          customer_id: string
+          expires_at: string | null
+          id: string
+          points: number
+          reason: string | null
+          sale_id: string | null
+          txn_type: Database["public"]["Enums"]["loyalty_txn_type"]
+          updated_at: string
+        }
+        Insert: {
+          account_id: string
+          balance_after?: number
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          customer_id: string
+          expires_at?: string | null
+          id?: string
+          points: number
+          reason?: string | null
+          sale_id?: string | null
+          txn_type: Database["public"]["Enums"]["loyalty_txn_type"]
+          updated_at?: string
+        }
+        Update: {
+          account_id?: string
+          balance_after?: number
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string
+          expires_at?: string | null
+          id?: string
+          points?: number
+          reason?: string | null
+          sale_id?: string | null
+          txn_type?: Database["public"]["Enums"]["loyalty_txn_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_transactions_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loyalty_transactions_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loyalty_transactions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loyalty_transactions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loyalty_transactions_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketing_campaigns: {
+        Row: {
+          body: string | null
+          branch_id: string | null
+          cancelled_at: string | null
+          channel: Database["public"]["Enums"]["communication_channel"]
+          clicked_count: number
+          company_id: string
+          completed_at: string | null
+          converted_count: number
+          coupon_id: string | null
+          created_at: string
+          created_by: string | null
+          delivered_count: number
+          description: string | null
+          failed_count: number
+          id: string
+          name: string
+          opened_count: number
+          promotion_id: string | null
+          revenue_attributed: number
+          scheduled_at: string | null
+          segment_id: string | null
+          sent_count: number
+          started_at: string | null
+          status: Database["public"]["Enums"]["campaign_status"]
+          subject: string | null
+          targeted_count: number
+          template_key: string | null
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          branch_id?: string | null
+          cancelled_at?: string | null
+          channel?: Database["public"]["Enums"]["communication_channel"]
+          clicked_count?: number
+          company_id: string
+          completed_at?: string | null
+          converted_count?: number
+          coupon_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          delivered_count?: number
+          description?: string | null
+          failed_count?: number
+          id?: string
+          name: string
+          opened_count?: number
+          promotion_id?: string | null
+          revenue_attributed?: number
+          scheduled_at?: string | null
+          segment_id?: string | null
+          sent_count?: number
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["campaign_status"]
+          subject?: string | null
+          targeted_count?: number
+          template_key?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          branch_id?: string | null
+          cancelled_at?: string | null
+          channel?: Database["public"]["Enums"]["communication_channel"]
+          clicked_count?: number
+          company_id?: string
+          completed_at?: string | null
+          converted_count?: number
+          coupon_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          delivered_count?: number
+          description?: string | null
+          failed_count?: number
+          id?: string
+          name?: string
+          opened_count?: number
+          promotion_id?: string | null
+          revenue_attributed?: number
+          scheduled_at?: string | null
+          segment_id?: string | null
+          sent_count?: number
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["campaign_status"]
+          subject?: string | null
+          targeted_count?: number
+          template_key?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_campaigns_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_campaigns_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_campaigns_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "coupons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_campaigns_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "promotions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketing_campaigns_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "customer_segments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       member_roles: {
         Row: {
@@ -4062,6 +5276,168 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "locales"
             referencedColumns: ["code"]
+          },
+        ]
+      }
+      promotion_rules: {
+        Row: {
+          category_id: string | null
+          company_id: string
+          created_at: string
+          id: string
+          min_quantity: number
+          product_id: string | null
+          promotion_id: string
+          updated_at: string
+        }
+        Insert: {
+          category_id?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          min_quantity?: number
+          product_id?: string | null
+          promotion_id: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          min_quantity?: number
+          product_id?: string | null
+          promotion_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promotion_rules_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promotion_rules_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promotion_rules_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promotion_rules_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "promotions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      promotions: {
+        Row: {
+          branch_id: string | null
+          buy_quantity: number | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency_code: string | null
+          description: string | null
+          ends_at: string | null
+          get_quantity: number | null
+          id: string
+          max_discount_amount: number | null
+          min_purchase_amount: number
+          name: string
+          promo_type: Database["public"]["Enums"]["promotion_type"]
+          scope: Database["public"]["Enums"]["promotion_scope"]
+          segment_id: string | null
+          starts_at: string | null
+          status: Database["public"]["Enums"]["promotion_status"]
+          updated_at: string
+          usage_count: number
+          usage_limit: number | null
+          usage_limit_per_customer: number | null
+          value: number
+        }
+        Insert: {
+          branch_id?: string | null
+          buy_quantity?: number | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string | null
+          description?: string | null
+          ends_at?: string | null
+          get_quantity?: number | null
+          id?: string
+          max_discount_amount?: number | null
+          min_purchase_amount?: number
+          name: string
+          promo_type?: Database["public"]["Enums"]["promotion_type"]
+          scope?: Database["public"]["Enums"]["promotion_scope"]
+          segment_id?: string | null
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["promotion_status"]
+          updated_at?: string
+          usage_count?: number
+          usage_limit?: number | null
+          usage_limit_per_customer?: number | null
+          value?: number
+        }
+        Update: {
+          branch_id?: string | null
+          buy_quantity?: number | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string | null
+          description?: string | null
+          ends_at?: string | null
+          get_quantity?: number | null
+          id?: string
+          max_discount_amount?: number | null
+          min_purchase_amount?: number
+          name?: string
+          promo_type?: Database["public"]["Enums"]["promotion_type"]
+          scope?: Database["public"]["Enums"]["promotion_scope"]
+          segment_id?: string | null
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["promotion_status"]
+          updated_at?: string
+          usage_count?: number
+          usage_limit?: number | null
+          usage_limit_per_customer?: number | null
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "promotions_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promotions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "promotions_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "customer_segments"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -5666,6 +7042,29 @@ export type Database = {
         | "leave"
         | "appointment"
         | "other"
+      campaign_event_type:
+        | "sent"
+        | "delivered"
+        | "opened"
+        | "clicked"
+        | "bounced"
+        | "failed"
+        | "unsubscribed"
+        | "converted"
+      campaign_message_status:
+        | "pending"
+        | "queued"
+        | "sent"
+        | "delivered"
+        | "failed"
+        | "skipped"
+        | "suppressed"
+      campaign_status:
+        | "draft"
+        | "scheduled"
+        | "running"
+        | "completed"
+        | "cancelled"
       candidate_status:
         | "applied"
         | "screening"
@@ -5681,6 +7080,10 @@ export type Database = {
         | "failed"
         | "suppressed"
         | "rate_limited"
+      consent_status: "unknown" | "opted_in" | "opted_out"
+      coupon_status: "active" | "disabled" | "expired"
+      customer_status: "active" | "inactive" | "blocked"
+      customer_type: "individual" | "business" | "wholesale" | "vip" | "other"
       digest_frequency: "none" | "daily" | "weekly"
       discount_type: "percentage" | "fixed"
       employee_document_type:
@@ -5716,6 +7119,13 @@ export type Database = {
         | "public"
         | "disabled"
       forecast_kind: "sales" | "inventory" | "expense" | "cashflow" | "demand"
+      gift_card_status:
+        | "draft"
+        | "active"
+        | "redeemed"
+        | "expired"
+        | "cancelled"
+      gift_card_txn_type: "issue" | "redeem" | "adjust" | "expire" | "refund"
       goal_status: "active" | "achieved" | "missed" | "cancelled"
       goal_type:
         | "revenue"
@@ -5752,6 +7162,7 @@ export type Database = {
         | "compassionate"
         | "study"
         | "other"
+      loyalty_txn_type: "earn" | "redeem" | "adjust" | "expire" | "revoke"
       module_status: "active" | "deprecated" | "disabled_global"
       notification_category:
         | "system"
@@ -5800,6 +7211,9 @@ export type Database = {
         | "carton"
         | "dozen"
         | "other"
+      promotion_scope: "all" | "product" | "category" | "segment"
+      promotion_status: "draft" | "active" | "paused" | "expired" | "cancelled"
+      promotion_type: "percentage" | "fixed" | "buy_x_get_y"
       purchase_status: "draft" | "recorded" | "cancelled"
       recommendation_status:
         | "new"
@@ -5838,6 +7252,7 @@ export type Database = {
         | "cancelled"
       sale_channel: "walk_in" | "online" | "whatsapp" | "phone" | "external_pos"
       sale_status: "draft" | "completed" | "cancelled"
+      segment_kind: "dynamic" | "static"
       shift_type: "morning" | "afternoon" | "night" | "custom"
       stock_movement_type:
         | "purchase"
@@ -6046,6 +7461,32 @@ export const Constants = {
         "appointment",
         "other",
       ],
+      campaign_event_type: [
+        "sent",
+        "delivered",
+        "opened",
+        "clicked",
+        "bounced",
+        "failed",
+        "unsubscribed",
+        "converted",
+      ],
+      campaign_message_status: [
+        "pending",
+        "queued",
+        "sent",
+        "delivered",
+        "failed",
+        "skipped",
+        "suppressed",
+      ],
+      campaign_status: [
+        "draft",
+        "scheduled",
+        "running",
+        "completed",
+        "cancelled",
+      ],
       candidate_status: [
         "applied",
         "screening",
@@ -6063,6 +7504,10 @@ export const Constants = {
         "suppressed",
         "rate_limited",
       ],
+      consent_status: ["unknown", "opted_in", "opted_out"],
+      coupon_status: ["active", "disabled", "expired"],
+      customer_status: ["active", "inactive", "blocked"],
+      customer_type: ["individual", "business", "wholesale", "vip", "other"],
       digest_frequency: ["none", "daily", "weekly"],
       discount_type: ["percentage", "fixed"],
       employee_document_type: [
@@ -6102,6 +7547,8 @@ export const Constants = {
         "disabled",
       ],
       forecast_kind: ["sales", "inventory", "expense", "cashflow", "demand"],
+      gift_card_status: ["draft", "active", "redeemed", "expired", "cancelled"],
+      gift_card_txn_type: ["issue", "redeem", "adjust", "expire", "refund"],
       goal_status: ["active", "achieved", "missed", "cancelled"],
       goal_type: [
         "revenue",
@@ -6142,6 +7589,7 @@ export const Constants = {
         "study",
         "other",
       ],
+      loyalty_txn_type: ["earn", "redeem", "adjust", "expire", "revoke"],
       module_status: ["active", "deprecated", "disabled_global"],
       notification_category: [
         "system",
@@ -6189,6 +7637,9 @@ export const Constants = {
         "dozen",
         "other",
       ],
+      promotion_scope: ["all", "product", "category", "segment"],
+      promotion_status: ["draft", "active", "paused", "expired", "cancelled"],
+      promotion_type: ["percentage", "fixed", "buy_x_get_y"],
       purchase_status: ["draft", "recorded", "cancelled"],
       recommendation_status: ["new", "viewed", "accepted", "dismissed", "done"],
       reminder_status: ["scheduled", "sent", "cancelled", "failed"],
@@ -6225,6 +7676,7 @@ export const Constants = {
       ],
       sale_channel: ["walk_in", "online", "whatsapp", "phone", "external_pos"],
       sale_status: ["draft", "completed", "cancelled"],
+      segment_kind: ["dynamic", "static"],
       shift_type: ["morning", "afternoon", "night", "custom"],
       stock_movement_type: [
         "purchase",
