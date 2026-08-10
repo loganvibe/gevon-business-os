@@ -1066,6 +1066,248 @@ export type Database = {
           },
         ]
       }
+      cart_items: {
+        Row: {
+          cart_id: string
+          created_at: string
+          discount: number
+          id: string
+          name_snapshot: string | null
+          notes: string | null
+          product_id: string
+          quantity: number
+          tax_amount: number
+          total: number
+          unit_price: number
+          updated_at: string
+        }
+        Insert: {
+          cart_id: string
+          created_at?: string
+          discount?: number
+          id?: string
+          name_snapshot?: string | null
+          notes?: string | null
+          product_id: string
+          quantity: number
+          tax_amount?: number
+          total?: number
+          unit_price: number
+          updated_at?: string
+        }
+        Update: {
+          cart_id?: string
+          created_at?: string
+          discount?: number
+          id?: string
+          name_snapshot?: string | null
+          notes?: string | null
+          product_id?: string
+          quantity?: number
+          tax_amount?: number
+          total?: number
+          unit_price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cart_items_cart_id_fkey"
+            columns: ["cart_id"]
+            isOneToOne: false
+            referencedRelation: "carts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cart_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      carts: {
+        Row: {
+          branch_id: string | null
+          channel: Database["public"]["Enums"]["sale_channel"]
+          company_id: string
+          coupon_code: string | null
+          created_at: string
+          created_by: string | null
+          currency_code: string
+          customer_id: string | null
+          discount_total: number
+          expires_at: string | null
+          id: string
+          notes: string | null
+          order_id: string | null
+          promotion_id: string | null
+          sale_id: string | null
+          session_token: string
+          status: Database["public"]["Enums"]["cart_status"]
+          store_id: string | null
+          subtotal: number
+          tax_total: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          channel?: Database["public"]["Enums"]["sale_channel"]
+          company_id: string
+          coupon_code?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          customer_id?: string | null
+          discount_total?: number
+          expires_at?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          promotion_id?: string | null
+          sale_id?: string | null
+          session_token?: string
+          status?: Database["public"]["Enums"]["cart_status"]
+          store_id?: string | null
+          subtotal?: number
+          tax_total?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          channel?: Database["public"]["Enums"]["sale_channel"]
+          company_id?: string
+          coupon_code?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          customer_id?: string | null
+          discount_total?: number
+          expires_at?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          promotion_id?: string | null
+          sale_id?: string | null
+          session_token?: string
+          status?: Database["public"]["Enums"]["cart_status"]
+          store_id?: string | null
+          subtotal?: number
+          tax_total?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carts_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carts_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carts_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carts_promotion_id_fkey"
+            columns: ["promotion_id"]
+            isOneToOne: false
+            referencedRelation: "promotions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carts_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carts_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commerce_channels: {
+        Row: {
+          adapter_key: string | null
+          branch_id: string | null
+          channel_type: Database["public"]["Enums"]["commerce_channel_type"]
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_enabled: boolean
+          name: string
+          settings: Json
+          updated_at: string
+        }
+        Insert: {
+          adapter_key?: string | null
+          branch_id?: string | null
+          channel_type: Database["public"]["Enums"]["commerce_channel_type"]
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_enabled?: boolean
+          name: string
+          settings?: Json
+          updated_at?: string
+        }
+        Update: {
+          adapter_key?: string | null
+          branch_id?: string | null
+          channel_type?: Database["public"]["Enums"]["commerce_channel_type"]
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_enabled?: boolean
+          name?: string
+          settings?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commerce_channels_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commerce_channels_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       communication_logs: {
         Row: {
           attempts: number
@@ -1914,6 +2156,130 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_orders: {
+        Row: {
+          address_line: string
+          assigned_employee_id: string | null
+          assigned_to: string | null
+          branch_id: string | null
+          city: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          delivered_at: string | null
+          delivery_fee: number
+          estimated_at: string | null
+          failure_reason: string | null
+          id: string
+          landmark: string | null
+          notes: string | null
+          order_id: string | null
+          picked_up_at: string | null
+          recipient_name: string | null
+          recipient_phone: string | null
+          sale_id: string | null
+          state: string | null
+          status: Database["public"]["Enums"]["delivery_status"]
+          updated_at: string
+        }
+        Insert: {
+          address_line: string
+          assigned_employee_id?: string | null
+          assigned_to?: string | null
+          branch_id?: string | null
+          city?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          delivered_at?: string | null
+          delivery_fee?: number
+          estimated_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          landmark?: string | null
+          notes?: string | null
+          order_id?: string | null
+          picked_up_at?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          sale_id?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["delivery_status"]
+          updated_at?: string
+        }
+        Update: {
+          address_line?: string
+          assigned_employee_id?: string | null
+          assigned_to?: string | null
+          branch_id?: string | null
+          city?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          delivered_at?: string | null
+          delivery_fee?: number
+          estimated_at?: string | null
+          failure_reason?: string | null
+          id?: string
+          landmark?: string | null
+          notes?: string | null
+          order_id?: string | null
+          picked_up_at?: string | null
+          recipient_name?: string | null
+          recipient_phone?: string | null
+          sale_id?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["delivery_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_orders_assigned_employee_id_fkey"
+            columns: ["assigned_employee_id"]
+            isOneToOne: false
+            referencedRelation: "employees"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_orders_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_orders_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_orders_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "delivery_orders_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
             referencedColumns: ["id"]
           },
         ]
@@ -5108,6 +5474,145 @@ export type Database = {
           },
         ]
       }
+      pos_registers: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string | null
+          device_identifier: string | null
+          id: string
+          is_active: boolean
+          name: string
+          settings: Json
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          device_identifier?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          settings?: Json
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          device_identifier?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          settings?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_registers_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_registers_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pos_sessions: {
+        Row: {
+          branch_id: string | null
+          cashier_user_id: string
+          closed_at: string | null
+          closing_balance: number | null
+          company_id: string
+          counted_cash: number | null
+          created_at: string
+          difference: number | null
+          expected_cash: number | null
+          id: string
+          notes: string | null
+          opened_at: string
+          opening_balance: number
+          register_id: string | null
+          sales_count: number
+          sales_total: number
+          status: Database["public"]["Enums"]["pos_session_status"]
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          cashier_user_id: string
+          closed_at?: string | null
+          closing_balance?: number | null
+          company_id: string
+          counted_cash?: number | null
+          created_at?: string
+          difference?: number | null
+          expected_cash?: number | null
+          id?: string
+          notes?: string | null
+          opened_at?: string
+          opening_balance?: number
+          register_id?: string | null
+          sales_count?: number
+          sales_total?: number
+          status?: Database["public"]["Enums"]["pos_session_status"]
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          cashier_user_id?: string
+          closed_at?: string | null
+          closing_balance?: number | null
+          company_id?: string
+          counted_cash?: number | null
+          created_at?: string
+          difference?: number | null
+          expected_cash?: number | null
+          id?: string
+          notes?: string | null
+          opened_at?: string
+          opening_balance?: number
+          register_id?: string | null
+          sales_count?: number
+          sales_total?: number
+          status?: Database["public"]["Enums"]["pos_session_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pos_sessions_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_sessions_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pos_sessions_register_id_fkey"
+            columns: ["register_id"]
+            isOneToOne: false
+            referencedRelation: "pos_registers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_categories: {
         Row: {
           company_id: string
@@ -5556,6 +6061,243 @@ export type Database = {
           },
         ]
       }
+      qr_codes: {
+        Row: {
+          branch_id: string | null
+          code: string
+          company_id: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          label: string | null
+          last_scanned_at: string | null
+          metadata: Json
+          qr_type: Database["public"]["Enums"]["qr_code_type"]
+          scan_count: number
+          store_id: string | null
+          target_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          code: string
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string | null
+          last_scanned_at?: string | null
+          metadata?: Json
+          qr_type?: Database["public"]["Enums"]["qr_code_type"]
+          scan_count?: number
+          store_id?: string | null
+          target_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          code?: string
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string | null
+          last_scanned_at?: string | null
+          metadata?: Json
+          qr_type?: Database["public"]["Enums"]["qr_code_type"]
+          scan_count?: number
+          store_id?: string | null
+          target_path?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qr_codes_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "qr_codes_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "qr_codes_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      receipt_items: {
+        Row: {
+          created_at: string
+          discount: number
+          id: string
+          name: string
+          product_id: string | null
+          quantity: number
+          receipt_id: string
+          total: number
+          unit_price: number
+        }
+        Insert: {
+          created_at?: string
+          discount?: number
+          id?: string
+          name: string
+          product_id?: string | null
+          quantity: number
+          receipt_id: string
+          total?: number
+          unit_price: number
+        }
+        Update: {
+          created_at?: string
+          discount?: number
+          id?: string
+          name?: string
+          product_id?: string | null
+          quantity?: number
+          receipt_id?: string
+          total?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "receipt_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receipt_items_receipt_id_fkey"
+            columns: ["receipt_id"]
+            isOneToOne: false
+            referencedRelation: "receipts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      receipts: {
+        Row: {
+          branch_id: string | null
+          business_snapshot: Json
+          company_id: string
+          created_at: string
+          created_by: string | null
+          currency_code: string
+          customer_contact: string | null
+          customer_name: string | null
+          delivery_channel:
+            | Database["public"]["Enums"]["communication_channel"]
+            | null
+          delivery_status: Database["public"]["Enums"]["receipt_delivery_status"]
+          discount_total: number
+          id: string
+          issued_at: string
+          notes: string | null
+          order_id: string | null
+          payment_method: Database["public"]["Enums"]["payment_method"] | null
+          receipt_number: string
+          sale_id: string | null
+          subtotal: number
+          tax_total: number
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          business_snapshot?: Json
+          company_id: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          customer_contact?: string | null
+          customer_name?: string | null
+          delivery_channel?:
+            | Database["public"]["Enums"]["communication_channel"]
+            | null
+          delivery_status?: Database["public"]["Enums"]["receipt_delivery_status"]
+          discount_total?: number
+          id?: string
+          issued_at?: string
+          notes?: string | null
+          order_id?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          receipt_number: string
+          sale_id?: string | null
+          subtotal?: number
+          tax_total?: number
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          business_snapshot?: Json
+          company_id?: string
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          customer_contact?: string | null
+          customer_name?: string | null
+          delivery_channel?:
+            | Database["public"]["Enums"]["communication_channel"]
+            | null
+          delivery_status?: Database["public"]["Enums"]["receipt_delivery_status"]
+          discount_total?: number
+          id?: string
+          issued_at?: string
+          notes?: string | null
+          order_id?: string | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          receipt_number?: string
+          sale_id?: string | null
+          subtotal?: number
+          tax_total?: number
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "receipts_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receipts_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receipts_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "receipts_sale_id_fkey"
+            columns: ["sale_id"]
+            isOneToOne: false
+            referencedRelation: "sales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recruitment_candidates: {
         Row: {
           branch_id: string | null
@@ -5801,6 +6543,95 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reservations: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          duration_minutes: number
+          id: string
+          notes: string | null
+          order_id: string | null
+          party_size: number
+          reservation_number: string | null
+          reserved_for: string
+          resource_label: string | null
+          status: Database["public"]["Enums"]["reservation_status"]
+          updated_at: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          party_size?: number
+          reservation_number?: string | null
+          reserved_for: string
+          resource_label?: string | null
+          status?: Database["public"]["Enums"]["reservation_status"]
+          updated_at?: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          duration_minutes?: number
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          party_size?: number
+          reservation_number?: string | null
+          reserved_for?: string
+          resource_label?: string | null
+          status?: Database["public"]["Enums"]["reservation_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
             referencedColumns: ["id"]
           },
         ]
@@ -6384,6 +7215,172 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_products: {
+        Row: {
+          availability: string
+          company_id: string
+          created_at: string
+          id: string
+          image_url: string | null
+          is_featured: boolean
+          is_published: boolean
+          price_override: number | null
+          product_id: string
+          public_description: string | null
+          sort_order: number
+          store_id: string
+          updated_at: string
+        }
+        Insert: {
+          availability?: string
+          company_id: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean
+          is_published?: boolean
+          price_override?: number | null
+          product_id: string
+          public_description?: string | null
+          sort_order?: number
+          store_id: string
+          updated_at?: string
+        }
+        Update: {
+          availability?: string
+          company_id?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean
+          is_published?: boolean
+          price_override?: number | null
+          product_id?: string
+          public_description?: string | null
+          sort_order?: number
+          store_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_products_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_products_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "stores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stores: {
+        Row: {
+          accepts_delivery: boolean
+          accepts_pickup: boolean
+          address: string | null
+          banner_url: string | null
+          branch_id: string | null
+          company_id: string
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          created_by: string | null
+          currency_code: string
+          deleted_at: string | null
+          delivery_fee: number
+          description: string | null
+          id: string
+          is_published: boolean
+          logo_url: string | null
+          min_order_amount: number
+          name: string
+          settings: Json
+          slug: string
+          tagline: string | null
+          theme: Json
+          updated_at: string
+        }
+        Insert: {
+          accepts_delivery?: boolean
+          accepts_pickup?: boolean
+          address?: string | null
+          banner_url?: string | null
+          branch_id?: string | null
+          company_id: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          deleted_at?: string | null
+          delivery_fee?: number
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          logo_url?: string | null
+          min_order_amount?: number
+          name: string
+          settings?: Json
+          slug: string
+          tagline?: string | null
+          theme?: Json
+          updated_at?: string
+        }
+        Update: {
+          accepts_delivery?: boolean
+          accepts_pickup?: boolean
+          address?: string | null
+          banner_url?: string | null
+          branch_id?: string | null
+          company_id?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency_code?: string
+          deleted_at?: string | null
+          delivery_fee?: number
+          description?: string | null
+          id?: string
+          is_published?: boolean
+          logo_url?: string | null
+          min_order_amount?: number
+          name?: string
+          settings?: Json
+          slug?: string
+          tagline?: string | null
+          theme?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stores_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "stores_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
             referencedColumns: ["id"]
           },
         ]
@@ -7073,6 +8070,16 @@ export type Database = {
         | "hired"
         | "rejected"
         | "withdrawn"
+      cart_status: "open" | "converted" | "abandoned" | "cancelled"
+      commerce_channel_type:
+        | "in_store"
+        | "online"
+        | "mobile"
+        | "qr"
+        | "whatsapp"
+        | "delivery"
+        | "external_pos"
+        | "marketplace"
       communication_channel: "email" | "in_app" | "sms" | "whatsapp"
       communication_status:
         | "queued"
@@ -7084,6 +8091,14 @@ export type Database = {
       coupon_status: "active" | "disabled" | "expired"
       customer_status: "active" | "inactive" | "blocked"
       customer_type: "individual" | "business" | "wholesale" | "vip" | "other"
+      delivery_status:
+        | "pending"
+        | "assigned"
+        | "picked_up"
+        | "in_transit"
+        | "delivered"
+        | "failed"
+        | "cancelled"
       digest_frequency: "none" | "daily" | "weekly"
       discount_type: "percentage" | "fixed"
       employee_document_type:
@@ -7179,6 +8194,10 @@ export type Database = {
         | "confirmed"
         | "completed"
         | "cancelled"
+        | "preparing"
+        | "ready"
+        | "out_for_delivery"
+        | "returned"
       payment_method: "cash" | "transfer" | "card" | "split" | "other"
       payment_status: "pending" | "partial" | "paid" | "refunded" | "failed"
       payroll_status:
@@ -7198,6 +8217,7 @@ export type Database = {
         | "compliance"
         | "security"
         | "billing"
+      pos_session_status: "open" | "closed" | "reconciled"
       position_status: "draft" | "open" | "on_hold" | "closed" | "filled"
       product_status: "active" | "archived" | "draft"
       product_unit:
@@ -7215,6 +8235,8 @@ export type Database = {
       promotion_status: "draft" | "active" | "paused" | "expired" | "cancelled"
       promotion_type: "percentage" | "fixed" | "buy_x_get_y"
       purchase_status: "draft" | "recorded" | "cancelled"
+      qr_code_type: "store" | "table" | "product" | "order" | "payment"
+      receipt_delivery_status: "not_sent" | "queued" | "sent" | "failed"
       recommendation_status:
         | "new"
         | "viewed"
@@ -7242,6 +8264,13 @@ export type Database = {
         | "rejected"
         | "completed"
         | "cancelled"
+      reservation_status:
+        | "requested"
+        | "confirmed"
+        | "checked_in"
+        | "completed"
+        | "cancelled"
+        | "no_show"
       return_status: "draft" | "approved" | "completed" | "rejected"
       return_type: "full" | "partial" | "damaged"
       review_status:
@@ -7496,6 +8525,17 @@ export const Constants = {
         "rejected",
         "withdrawn",
       ],
+      cart_status: ["open", "converted", "abandoned", "cancelled"],
+      commerce_channel_type: [
+        "in_store",
+        "online",
+        "mobile",
+        "qr",
+        "whatsapp",
+        "delivery",
+        "external_pos",
+        "marketplace",
+      ],
       communication_channel: ["email", "in_app", "sms", "whatsapp"],
       communication_status: [
         "queued",
@@ -7508,6 +8548,15 @@ export const Constants = {
       coupon_status: ["active", "disabled", "expired"],
       customer_status: ["active", "inactive", "blocked"],
       customer_type: ["individual", "business", "wholesale", "vip", "other"],
+      delivery_status: [
+        "pending",
+        "assigned",
+        "picked_up",
+        "in_transit",
+        "delivered",
+        "failed",
+        "cancelled",
+      ],
       digest_frequency: ["none", "daily", "weekly"],
       discount_type: ["percentage", "fixed"],
       employee_document_type: [
@@ -7601,7 +8650,17 @@ export const Constants = {
       ],
       notification_priority: ["low", "normal", "high", "critical"],
       notification_status: ["unread", "read", "archived"],
-      order_status: ["draft", "pending", "confirmed", "completed", "cancelled"],
+      order_status: [
+        "draft",
+        "pending",
+        "confirmed",
+        "completed",
+        "cancelled",
+        "preparing",
+        "ready",
+        "out_for_delivery",
+        "returned",
+      ],
       payment_method: ["cash", "transfer", "card", "split", "other"],
       payment_status: ["pending", "partial", "paid", "refunded", "failed"],
       payroll_status: [
@@ -7623,6 +8682,7 @@ export const Constants = {
         "security",
         "billing",
       ],
+      pos_session_status: ["open", "closed", "reconciled"],
       position_status: ["draft", "open", "on_hold", "closed", "filled"],
       product_status: ["active", "archived", "draft"],
       product_unit: [
@@ -7641,6 +8701,8 @@ export const Constants = {
       promotion_status: ["draft", "active", "paused", "expired", "cancelled"],
       promotion_type: ["percentage", "fixed", "buy_x_get_y"],
       purchase_status: ["draft", "recorded", "cancelled"],
+      qr_code_type: ["store", "table", "product", "order", "payment"],
+      receipt_delivery_status: ["not_sent", "queued", "sent", "failed"],
       recommendation_status: ["new", "viewed", "accepted", "dismissed", "done"],
       reminder_status: ["scheduled", "sent", "cancelled", "failed"],
       report_period: ["daily", "weekly", "monthly", "yearly", "custom"],
@@ -7664,6 +8726,14 @@ export const Constants = {
         "rejected",
         "completed",
         "cancelled",
+      ],
+      reservation_status: [
+        "requested",
+        "confirmed",
+        "checked_in",
+        "completed",
+        "cancelled",
+        "no_show",
       ],
       return_status: ["draft", "approved", "completed", "rejected"],
       return_type: ["full", "partial", "damaged"],

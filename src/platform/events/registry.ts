@@ -20,6 +20,7 @@ import { billingEvents } from "./definitions/billing";
 import { securityEvents } from "./definitions/security";
 import { inventoryEvents } from "./definitions/inventory";
 import { salesEvents } from "./definitions/sales";
+import { commerceEvents } from "./definitions/commerce";
 import { expenseEvents } from "./definitions/expenses";
 import { peopleEvents } from "./definitions/people";
 import { workflowEvents } from "./definitions/workflow";
@@ -85,6 +86,7 @@ const EVENTS: EventDefinition[] = [
   ...securityEvents,
   ...inventoryEvents,
   ...salesEvents,
+  ...commerceEvents,
   ...expenseEvents,
   ...peopleEvents,
   ...workflowEvents,
