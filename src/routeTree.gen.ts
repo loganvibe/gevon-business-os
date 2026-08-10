@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as PlatformRouteRouteImport } from './routes/_platform/route'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as PlatformDevelopersRouteImport } from './routes/_platform/developers'
@@ -34,10 +35,14 @@ import { Route as PlatformAdminCommunicationsRouteImport } from './routes/_platf
 import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
 import { Route as PlatformAdminAnalyticsRouteImport } from './routes/_platform/admin.analytics'
 import { Route as AuthenticatedAppSuppliersRouteImport } from './routes/_authenticated/app.suppliers'
+import { Route as AuthenticatedAppStoreRouteImport } from './routes/_authenticated/app.store'
 import { Route as AuthenticatedAppStockHistoryRouteImport } from './routes/_authenticated/app.stock-history'
 import { Route as AuthenticatedAppSalesRouteImport } from './routes/_authenticated/app.sales'
 import { Route as AuthenticatedAppReturnsRouteImport } from './routes/_authenticated/app.returns'
+import { Route as AuthenticatedAppReservationsRouteImport } from './routes/_authenticated/app.reservations'
+import { Route as AuthenticatedAppReceiptsRouteImport } from './routes/_authenticated/app.receipts'
 import { Route as AuthenticatedAppProductsRouteImport } from './routes/_authenticated/app.products'
+import { Route as AuthenticatedAppPosRouteImport } from './routes/_authenticated/app.pos'
 import { Route as AuthenticatedAppPaymentsRouteImport } from './routes/_authenticated/app.payments'
 import { Route as AuthenticatedAppOrdersRouteImport } from './routes/_authenticated/app.orders'
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
@@ -45,6 +50,8 @@ import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_aut
 import { Route as AuthenticatedAppInventoryRouteImport } from './routes/_authenticated/app.inventory'
 import { Route as AuthenticatedAppFinanceRouteImport } from './routes/_authenticated/app.finance'
 import { Route as AuthenticatedAppExpensesRouteImport } from './routes/_authenticated/app.expenses'
+import { Route as AuthenticatedAppDeliveriesRouteImport } from './routes/_authenticated/app.deliveries'
+import { Route as AuthenticatedAppCommerceRouteImport } from './routes/_authenticated/app.commerce'
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
 import { Route as AuthenticatedAppSalesIndexRouteImport } from './routes/_authenticated/app.sales.index'
 import { Route as AuthenticatedAppInventoryIndexRouteImport } from './routes/_authenticated/app.inventory.index'
@@ -88,6 +95,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StoreSlugRoute = StoreSlugRouteImport.update({
+  id: '/store/$slug',
+  path: '/store/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalTermsRoute = LegalTermsRouteImport.update({
@@ -189,6 +201,11 @@ const AuthenticatedAppSuppliersRoute =
     path: '/suppliers',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppStoreRoute = AuthenticatedAppStoreRouteImport.update({
+  id: '/store',
+  path: '/store',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 const AuthenticatedAppStockHistoryRoute =
   AuthenticatedAppStockHistoryRouteImport.update({
     id: '/stock-history',
@@ -205,12 +222,29 @@ const AuthenticatedAppReturnsRoute = AuthenticatedAppReturnsRouteImport.update({
   path: '/returns',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppReservationsRoute =
+  AuthenticatedAppReservationsRouteImport.update({
+    id: '/reservations',
+    path: '/reservations',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppReceiptsRoute =
+  AuthenticatedAppReceiptsRouteImport.update({
+    id: '/receipts',
+    path: '/receipts',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppProductsRoute =
   AuthenticatedAppProductsRouteImport.update({
     id: '/products',
     path: '/products',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppPosRoute = AuthenticatedAppPosRouteImport.update({
+  id: '/pos',
+  path: '/pos',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 const AuthenticatedAppPaymentsRoute =
   AuthenticatedAppPaymentsRouteImport.update({
     id: '/payments',
@@ -249,6 +283,18 @@ const AuthenticatedAppExpensesRoute =
   AuthenticatedAppExpensesRouteImport.update({
     id: '/expenses',
     path: '/expenses',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppDeliveriesRoute =
+  AuthenticatedAppDeliveriesRouteImport.update({
+    id: '/deliveries',
+    path: '/deliveries',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppCommerceRoute =
+  AuthenticatedAppCommerceRouteImport.update({
+    id: '/commerce',
+    path: '/commerce',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
 const AuthenticatedAppSettingsIndexRoute =
@@ -357,6 +403,9 @@ export interface FileRoutesByFullPath {
   '/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/store/$slug': typeof StoreSlugRoute
+  '/app/commerce': typeof AuthenticatedAppCommerceRoute
+  '/app/deliveries': typeof AuthenticatedAppDeliveriesRoute
   '/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
   '/app/finance': typeof AuthenticatedAppFinanceRoute
   '/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
@@ -364,10 +413,14 @@ export interface FileRoutesByFullPath {
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/payments': typeof AuthenticatedAppPaymentsRoute
+  '/app/pos': typeof AuthenticatedAppPosRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
+  '/app/receipts': typeof AuthenticatedAppReceiptsRoute
+  '/app/reservations': typeof AuthenticatedAppReservationsRoute
   '/app/returns': typeof AuthenticatedAppReturnsRoute
   '/app/sales': typeof AuthenticatedAppSalesRouteWithChildren
   '/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
+  '/app/store': typeof AuthenticatedAppStoreRoute
   '/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
@@ -406,14 +459,21 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/store/$slug': typeof StoreSlugRoute
+  '/app/commerce': typeof AuthenticatedAppCommerceRoute
+  '/app/deliveries': typeof AuthenticatedAppDeliveriesRoute
   '/app/finance': typeof AuthenticatedAppFinanceRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/payments': typeof AuthenticatedAppPaymentsRoute
+  '/app/pos': typeof AuthenticatedAppPosRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
+  '/app/receipts': typeof AuthenticatedAppReceiptsRoute
+  '/app/reservations': typeof AuthenticatedAppReservationsRoute
   '/app/returns': typeof AuthenticatedAppReturnsRoute
   '/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
+  '/app/store': typeof AuthenticatedAppStoreRoute
   '/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
@@ -458,6 +518,9 @@ export interface FileRoutesById {
   '/_platform/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
+  '/store/$slug': typeof StoreSlugRoute
+  '/_authenticated/app/commerce': typeof AuthenticatedAppCommerceRoute
+  '/_authenticated/app/deliveries': typeof AuthenticatedAppDeliveriesRoute
   '/_authenticated/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
   '/_authenticated/app/finance': typeof AuthenticatedAppFinanceRoute
   '/_authenticated/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
@@ -465,10 +528,14 @@ export interface FileRoutesById {
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/_authenticated/app/orders': typeof AuthenticatedAppOrdersRoute
   '/_authenticated/app/payments': typeof AuthenticatedAppPaymentsRoute
+  '/_authenticated/app/pos': typeof AuthenticatedAppPosRoute
   '/_authenticated/app/products': typeof AuthenticatedAppProductsRoute
+  '/_authenticated/app/receipts': typeof AuthenticatedAppReceiptsRoute
+  '/_authenticated/app/reservations': typeof AuthenticatedAppReservationsRoute
   '/_authenticated/app/returns': typeof AuthenticatedAppReturnsRoute
   '/_authenticated/app/sales': typeof AuthenticatedAppSalesRouteWithChildren
   '/_authenticated/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
+  '/_authenticated/app/store': typeof AuthenticatedAppStoreRoute
   '/_authenticated/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/_platform/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/_platform/admin/audit': typeof PlatformAdminAuditRoute
@@ -512,6 +579,9 @@ export interface FileRouteTypes {
     | '/developers'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/store/$slug'
+    | '/app/commerce'
+    | '/app/deliveries'
     | '/app/expenses'
     | '/app/finance'
     | '/app/inventory'
@@ -519,10 +589,14 @@ export interface FileRouteTypes {
     | '/app/onboarding'
     | '/app/orders'
     | '/app/payments'
+    | '/app/pos'
     | '/app/products'
+    | '/app/receipts'
+    | '/app/reservations'
     | '/app/returns'
     | '/app/sales'
     | '/app/stock-history'
+    | '/app/store'
     | '/app/suppliers'
     | '/admin/analytics'
     | '/admin/audit'
@@ -561,14 +635,21 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/store/$slug'
+    | '/app/commerce'
+    | '/app/deliveries'
     | '/app/finance'
     | '/app/notifications'
     | '/app/onboarding'
     | '/app/orders'
     | '/app/payments'
+    | '/app/pos'
     | '/app/products'
+    | '/app/receipts'
+    | '/app/reservations'
     | '/app/returns'
     | '/app/stock-history'
+    | '/app/store'
     | '/app/suppliers'
     | '/admin/analytics'
     | '/admin/audit'
@@ -612,6 +693,9 @@ export interface FileRouteTypes {
     | '/_platform/developers'
     | '/legal/privacy'
     | '/legal/terms'
+    | '/store/$slug'
+    | '/_authenticated/app/commerce'
+    | '/_authenticated/app/deliveries'
     | '/_authenticated/app/expenses'
     | '/_authenticated/app/finance'
     | '/_authenticated/app/inventory'
@@ -619,10 +703,14 @@ export interface FileRouteTypes {
     | '/_authenticated/app/onboarding'
     | '/_authenticated/app/orders'
     | '/_authenticated/app/payments'
+    | '/_authenticated/app/pos'
     | '/_authenticated/app/products'
+    | '/_authenticated/app/receipts'
+    | '/_authenticated/app/reservations'
     | '/_authenticated/app/returns'
     | '/_authenticated/app/sales'
     | '/_authenticated/app/stock-history'
+    | '/_authenticated/app/store'
     | '/_authenticated/app/suppliers'
     | '/_platform/admin/analytics'
     | '/_platform/admin/audit'
@@ -664,6 +752,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   LegalPrivacyRoute: typeof LegalPrivacyRoute
   LegalTermsRoute: typeof LegalTermsRoute
+  StoreSlugRoute: typeof StoreSlugRoute
   ApiPublicHooksEventDispatcherRoute: typeof ApiPublicHooksEventDispatcherRoute
   ApiPublicHooksJobRunnerRoute: typeof ApiPublicHooksJobRunnerRoute
   ApiPublicHooksSalesIngestRoute: typeof ApiPublicHooksSalesIngestRoute
@@ -711,6 +800,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/store/$slug': {
+      id: '/store/$slug'
+      path: '/store/$slug'
+      fullPath: '/store/$slug'
+      preLoaderRoute: typeof StoreSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal/terms': {
@@ -846,6 +942,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSuppliersRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/store': {
+      id: '/_authenticated/app/store'
+      path: '/store'
+      fullPath: '/app/store'
+      preLoaderRoute: typeof AuthenticatedAppStoreRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/stock-history': {
       id: '/_authenticated/app/stock-history'
       path: '/stock-history'
@@ -867,11 +970,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppReturnsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/reservations': {
+      id: '/_authenticated/app/reservations'
+      path: '/reservations'
+      fullPath: '/app/reservations'
+      preLoaderRoute: typeof AuthenticatedAppReservationsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/receipts': {
+      id: '/_authenticated/app/receipts'
+      path: '/receipts'
+      fullPath: '/app/receipts'
+      preLoaderRoute: typeof AuthenticatedAppReceiptsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/products': {
       id: '/_authenticated/app/products'
       path: '/products'
       fullPath: '/app/products'
       preLoaderRoute: typeof AuthenticatedAppProductsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/pos': {
+      id: '/_authenticated/app/pos'
+      path: '/pos'
+      fullPath: '/app/pos'
+      preLoaderRoute: typeof AuthenticatedAppPosRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/payments': {
@@ -921,6 +1045,20 @@ declare module '@tanstack/react-router' {
       path: '/expenses'
       fullPath: '/app/expenses'
       preLoaderRoute: typeof AuthenticatedAppExpensesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/deliveries': {
+      id: '/_authenticated/app/deliveries'
+      path: '/deliveries'
+      fullPath: '/app/deliveries'
+      preLoaderRoute: typeof AuthenticatedAppDeliveriesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/commerce': {
+      id: '/_authenticated/app/commerce'
+      path: '/commerce'
+      fullPath: '/app/commerce'
+      preLoaderRoute: typeof AuthenticatedAppCommerceRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/settings/': {
@@ -1083,6 +1221,8 @@ const AuthenticatedAppSalesRouteWithChildren =
   )
 
 interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppCommerceRoute: typeof AuthenticatedAppCommerceRoute
+  AuthenticatedAppDeliveriesRoute: typeof AuthenticatedAppDeliveriesRoute
   AuthenticatedAppExpensesRoute: typeof AuthenticatedAppExpensesRouteWithChildren
   AuthenticatedAppFinanceRoute: typeof AuthenticatedAppFinanceRoute
   AuthenticatedAppInventoryRoute: typeof AuthenticatedAppInventoryRouteWithChildren
@@ -1090,10 +1230,14 @@ interface AuthenticatedAppRouteChildren {
   AuthenticatedAppOnboardingRoute: typeof AuthenticatedAppOnboardingRoute
   AuthenticatedAppOrdersRoute: typeof AuthenticatedAppOrdersRoute
   AuthenticatedAppPaymentsRoute: typeof AuthenticatedAppPaymentsRoute
+  AuthenticatedAppPosRoute: typeof AuthenticatedAppPosRoute
   AuthenticatedAppProductsRoute: typeof AuthenticatedAppProductsRoute
+  AuthenticatedAppReceiptsRoute: typeof AuthenticatedAppReceiptsRoute
+  AuthenticatedAppReservationsRoute: typeof AuthenticatedAppReservationsRoute
   AuthenticatedAppReturnsRoute: typeof AuthenticatedAppReturnsRoute
   AuthenticatedAppSalesRoute: typeof AuthenticatedAppSalesRouteWithChildren
   AuthenticatedAppStockHistoryRoute: typeof AuthenticatedAppStockHistoryRoute
+  AuthenticatedAppStoreRoute: typeof AuthenticatedAppStoreRoute
   AuthenticatedAppSuppliersRoute: typeof AuthenticatedAppSuppliersRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
   AuthenticatedAppAcceptInviteTokenRoute: typeof AuthenticatedAppAcceptInviteTokenRoute
@@ -1108,6 +1252,8 @@ interface AuthenticatedAppRouteChildren {
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppCommerceRoute: AuthenticatedAppCommerceRoute,
+  AuthenticatedAppDeliveriesRoute: AuthenticatedAppDeliveriesRoute,
   AuthenticatedAppExpensesRoute: AuthenticatedAppExpensesRouteWithChildren,
   AuthenticatedAppFinanceRoute: AuthenticatedAppFinanceRoute,
   AuthenticatedAppInventoryRoute: AuthenticatedAppInventoryRouteWithChildren,
@@ -1115,10 +1261,14 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppOnboardingRoute: AuthenticatedAppOnboardingRoute,
   AuthenticatedAppOrdersRoute: AuthenticatedAppOrdersRoute,
   AuthenticatedAppPaymentsRoute: AuthenticatedAppPaymentsRoute,
+  AuthenticatedAppPosRoute: AuthenticatedAppPosRoute,
   AuthenticatedAppProductsRoute: AuthenticatedAppProductsRoute,
+  AuthenticatedAppReceiptsRoute: AuthenticatedAppReceiptsRoute,
+  AuthenticatedAppReservationsRoute: AuthenticatedAppReservationsRoute,
   AuthenticatedAppReturnsRoute: AuthenticatedAppReturnsRoute,
   AuthenticatedAppSalesRoute: AuthenticatedAppSalesRouteWithChildren,
   AuthenticatedAppStockHistoryRoute: AuthenticatedAppStockHistoryRoute,
+  AuthenticatedAppStoreRoute: AuthenticatedAppStoreRoute,
   AuthenticatedAppSuppliersRoute: AuthenticatedAppSuppliersRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
   AuthenticatedAppAcceptInviteTokenRoute:
@@ -1215,6 +1365,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   LegalPrivacyRoute: LegalPrivacyRoute,
   LegalTermsRoute: LegalTermsRoute,
+  StoreSlugRoute: StoreSlugRoute,
   ApiPublicHooksEventDispatcherRoute: ApiPublicHooksEventDispatcherRoute,
   ApiPublicHooksJobRunnerRoute: ApiPublicHooksJobRunnerRoute,
   ApiPublicHooksSalesIngestRoute: ApiPublicHooksSalesIngestRoute,
@@ -1222,13 +1373,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
