@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: gevon-business-os
+    runtime: node
+    plan: standard
+    buildCommand: npm install && npm run build:node
+    startCommand: node .output/server/index.mjs
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SALES_INGEST_SECRET
+        sync: false
+      - key: APP_URL
+        sync: false
+      - key: APP_VERSION
+        value: 1.0.0

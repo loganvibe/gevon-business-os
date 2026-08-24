@@ -45,6 +45,13 @@
 - [ ] Webhooks operational
 - [ ] Integrations operational
 
+## Infrastructure
+- [ ] Render Web Service configured (or Cloudflare Worker deployed)
+- [ ] Build command: `npm run build:node`
+- [ ] Start command: `node .output/server/index.mjs`
+- [ ] Environment variables set in Render dashboard
+- [ ] Health check endpoint responding
+
 ## Performance
 - [ ] Dashboard loads < 2s
 - [ ] Server functions optimized

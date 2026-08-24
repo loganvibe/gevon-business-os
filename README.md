@@ -216,9 +216,34 @@ npm run lint
 ## Deployment
 
 Gevon BusinessOS is designed for deployment on:
+- **Render** (Node.js / Docker)
 - **Cloudflare Workers** via Nitro (preset: `cloudflare-module`)
 - **Docker** containers
 - Any Node.js 22+ environment
+
+### Deploy to Render
+
+Render supports both Web Service and Docker deployments.
+
+#### Option A: Web Service (recommended)
+
+Use the included `render.yaml` blueprint, or manually configure:
+
+1. Push this repo to GitHub.
+2. In Render, create a new **Web Service** and connect your repo.
+3. Use these settings:
+   - **Environment**: `Node`
+   - **Build Command**: `npm install && npm run build:node`
+   - **Start Command**: `node .output/server/index.mjs`
+   - **Plan**: `Standard` or higher for production
+4. Add environment variables (see below).
+5. Deploy.
+
+Render automatically sets the `PORT` env var, which Nitro reads at runtime.
+
+#### Option B: Docker
+
+Use the included `Dockerfile` (add one if missing) or Render's native Docker workflow.
 
 ### Environment Variables (Production)
 
@@ -227,9 +252,22 @@ NODE_ENV=production
 SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 SUPABASE_SERVICE_ROLE_KEY=sb_secret_...
-SALES_INGEST_SECRET=your-secret-key
+SALES_INGEST_SECRET=your-pos-ingest-secret
 APP_URL=https://your-domain.com
 APP_VERSION=1.0.0
+```
+
+### Build for Self-Hosted Node.js
+
+```sh
+# Install
+npm install
+
+# Build (forces Node.js server output)
+NITRO_PRESET=node-server npm run build
+
+# Start
+node .output/server/index.mjs
 ```
 
 ## Contributing
