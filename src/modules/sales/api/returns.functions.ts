@@ -22,7 +22,7 @@ const createInput = z.object({
 
 export const createReturn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => createInput.parse(d))
+  .validator((d: unknown) => createInput.parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase;
     let subtotal = 0;
@@ -35,15 +35,16 @@ export const createReturn = createServerFn({ method: "POST" })
     const { data: num, error: numErr } = await supabase.rpc("next_document_number", {
       _company_id: data.companyId,
       _prefix: "RET",
-    } as any);
+    });
     if (numErr) throw new Error(numErr.message);
+    const returnNumber = String(num ?? "");
 
     const { data: ret, error } = await supabase
       .from("returns")
       .insert({
         company_id: data.companyId,
         branch_id: data.branchId,
-        return_number: num as any,
+        return_number: returnNumber,
         sale_id: data.saleId,
         return_type: data.returnType,
         status: "draft",
@@ -74,7 +75,7 @@ export const createReturn = createServerFn({ method: "POST" })
 
 export const approveReturn = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.rpc("record_return_atomic", {
       _return_id: data.id,
@@ -85,7 +86,7 @@ export const approveReturn = createServerFn({ method: "POST" })
 
 export const listReturns = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       companyId: z.string().uuid(),
       status: z.enum(["draft", "approved", "completed", "rejected"]).optional(),

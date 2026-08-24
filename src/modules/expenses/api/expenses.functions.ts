@@ -15,7 +15,7 @@ const listInput = z.object({
 
 export const listExpenses = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => listInput.parse(d))
+  .validator((d: unknown) => listInput.parse(d))
   .handler(async ({ data, context }) => {
     let q = context.supabase
       .from("expenses")
@@ -41,7 +41,7 @@ export const listExpenses = createServerFn({ method: "POST" })
 
 export const getExpense = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: expense, error } = await context.supabase
       .from("expenses")
@@ -87,7 +87,7 @@ const createInput = z.object({
 
 export const createExpense = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => createInput.parse(d))
+  .validator((d: unknown) => createInput.parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase;
 
@@ -166,7 +166,7 @@ const updateInput = createInput
 
 export const updateExpense = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => updateInput.parse(d))
+  .validator((d: unknown) => updateInput.parse(d))
   .handler(async ({ data, context }) => {
     const patch: Record<string, unknown> = {};
     if (data.title !== undefined) patch['title'] = data.title;
@@ -205,7 +205,7 @@ export const updateExpense = createServerFn({ method: "POST" })
 
 export const submitExpense = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), companyId: z.string().uuid() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -233,7 +233,7 @@ export const submitExpense = createServerFn({ method: "POST" })
 
 export const approveExpense = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), companyId: z.string().uuid() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -268,7 +268,7 @@ export const approveExpense = createServerFn({ method: "POST" })
 
 export const rejectExpense = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -298,7 +298,7 @@ export const rejectExpense = createServerFn({ method: "POST" })
 
 export const deleteExpense = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), companyId: z.string().uuid() }).parse(d),
   )
   .handler(async ({ data, context }) => {

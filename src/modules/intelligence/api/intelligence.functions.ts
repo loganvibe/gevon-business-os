@@ -26,7 +26,7 @@ const scopeSchema = z.object({
 /** Executive dashboard + business health + advisor in one read-only call. */
 export const dashboardOverview = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => scopeSchema.parse(d))
+  .validator((d: unknown) => scopeSchema.parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase as unknown as Sb;
     const { start, end } = resolvePeriod(data.period, data.from, data.to);
@@ -57,7 +57,7 @@ export const dashboardOverview = createServerFn({ method: "POST" })
 /** Persists KPIs, health score, recommendations and alerts, and emits events. */
 export const refreshIntelligence = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => scopeSchema.parse(d))
+  .validator((d: unknown) => scopeSchema.parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase as unknown as Sb;
     const { start, end } = resolvePeriod(data.period, data.from, data.to);

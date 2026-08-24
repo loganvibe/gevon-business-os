@@ -13,7 +13,7 @@ const EMPLOYMENT_STATUS = ["active", "probation", "suspended", "on_leave", "term
 
 export const listDepartments = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("departments")
@@ -37,7 +37,7 @@ const departmentInput = z.object({
 
 export const createDepartment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => departmentInput.parse(d))
+  .validator((d: unknown) => departmentInput.parse(d))
   .handler(async ({ data, context }) => {
     const { data: row, error } = await context.supabase
       .from("departments")
@@ -58,7 +58,7 @@ export const createDepartment = createServerFn({ method: "POST" })
 
 export const updateDepartment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     departmentInput.partial().extend({ id: z.string().uuid() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -76,7 +76,7 @@ export const updateDepartment = createServerFn({ method: "POST" })
 
 export const deleteDepartment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("departments")
@@ -99,7 +99,7 @@ const listInput = z.object({
 
 export const listEmployees = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => listInput.parse(d))
+  .validator((d: unknown) => listInput.parse(d))
   .handler(async ({ data, context }) => {
     let q = context.supabase
       .from("employees")
@@ -123,7 +123,7 @@ export const listEmployees = createServerFn({ method: "POST" })
 
 export const getEmployee = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: employee, error } = await context.supabase
       .from("employees")
@@ -168,7 +168,7 @@ const createInput = z.object({
 
 export const createEmployee = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => createInput.parse(d))
+  .validator((d: unknown) => createInput.parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase;
 
@@ -238,7 +238,7 @@ const updateInput = createInput.partial().extend({
 
 export const updateEmployee = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => updateInput.parse(d))
+  .validator((d: unknown) => updateInput.parse(d))
   .handler(async ({ data, context }) => {
     const patch: Record<string, unknown> = {};
     if (data.firstName !== undefined) patch["first_name"] = data.firstName;
@@ -280,7 +280,7 @@ export const updateEmployee = createServerFn({ method: "POST" })
 
 export const terminateEmployee = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -317,7 +317,7 @@ export const terminateEmployee = createServerFn({ method: "POST" })
 
 export const deleteEmployee = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), companyId: z.string().uuid() }).parse(d),
   )
   .handler(async ({ data, context }) => {

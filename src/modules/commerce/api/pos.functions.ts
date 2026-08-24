@@ -11,7 +11,7 @@ import { money } from "./shared";
 
 export const listRegisters = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await (context.supabase as any)
       .from("pos_registers")
@@ -24,7 +24,7 @@ export const listRegisters = createServerFn({ method: "POST" })
 
 export const createRegister = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -59,7 +59,7 @@ export const createRegister = createServerFn({ method: "POST" })
 
 export const getOpenSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: row } = await (context.supabase as any)
       .from("pos_sessions")
@@ -75,7 +75,7 @@ export const getOpenSession = createServerFn({ method: "POST" })
 
 export const openSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -120,7 +120,7 @@ export const openSession = createServerFn({ method: "POST" })
 
 export const closeSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         sessionId: z.string().uuid(),
@@ -171,7 +171,7 @@ export const closeSession = createServerFn({ method: "POST" })
 
 export const listSessions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ companyId: z.string().uuid(), limit: z.number().int().min(1).max(200).default(50) }).parse(d),
   )
   .handler(async ({ data, context }) => {

@@ -16,7 +16,7 @@ import { writeAudit } from "@/platform/audit.helpers";
 
 export const sendEmail = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: {
+  .validator((input: {
     templateKey: string;
     to: string;
     templateData?: Record<string, unknown>;

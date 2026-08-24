@@ -10,7 +10,7 @@ const LEAVE_STATUS = ["draft", "pending", "approved", "rejected", "cancelled"] a
 
 export const listLeaveRequests = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -38,7 +38,7 @@ export const listLeaveRequests = createServerFn({ method: "POST" })
 
 export const createLeaveRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -91,7 +91,7 @@ export const createLeaveRequest = createServerFn({ method: "POST" })
 
 export const decideLeaveRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -135,7 +135,7 @@ export const decideLeaveRequest = createServerFn({ method: "POST" })
 
 export const cancelLeaveRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase
       .from("leave_requests")

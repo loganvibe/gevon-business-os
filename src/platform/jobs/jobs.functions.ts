@@ -8,7 +8,7 @@ import { writeAudit } from "@/platform/audit.helpers";
 
 export const enqueueJob = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: {
+  .validator((input: {
     jobType: string;
     payload?: Record<string, unknown>;
     companyId?: string | null;
@@ -53,7 +53,7 @@ export const enqueueJob = createServerFn({ method: "POST" })
 
 export const listJobs = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { companyId?: string | null; status?: string; limit?: number }) =>
+  .validator((input: { companyId?: string | null; status?: string; limit?: number }) =>
     z.object({
       companyId: z.string().uuid().nullable().optional(),
       status: z.string().optional(),
@@ -75,7 +75,7 @@ export const listJobs = createServerFn({ method: "POST" })
 
 export const cancelJob = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) =>
+  .validator((input: { id: string }) =>
     z.object({ id: z.string().uuid() }).parse(input),
   )
   .handler(async ({ data, context }) => {

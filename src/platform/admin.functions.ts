@@ -46,7 +46,7 @@ export const adminSummary = createServerFn({ method: "POST" })
 // ============================================================
 export const listAllCompanies = createServerFn({ method: "POST" })
   .middleware([requirePlatformAdmin])
-  .inputValidator((d: unknown) => z.object({ search: z.string().optional() }).parse(d ?? {}))
+  .validator((d: unknown) => z.object({ search: z.string().optional() }).parse(d ?? {}))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     let q = supabase
@@ -62,7 +62,7 @@ export const listAllCompanies = createServerFn({ method: "POST" })
 
 export const setCompanyStatus = createServerFn({ method: "POST" })
   .middleware([requirePlatformRole(["super_admin", "operations", "support"])])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ companyId: z.string().uuid(), status: z.enum(["active", "suspended", "archived"]) }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -109,7 +109,7 @@ const grantInput = z.object({
 });
 export const grantPlatformAdmin = createServerFn({ method: "POST" })
   .middleware([requirePlatformRole("super_admin")])
-  .inputValidator((d: unknown) => grantInput.parse(d))
+  .validator((d: unknown) => grantInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: list, error } = await (supabaseAdmin as any).auth.admin.listUsers();
@@ -129,7 +129,7 @@ export const grantPlatformAdmin = createServerFn({ method: "POST" })
 
 export const revokePlatformAdmin = createServerFn({ method: "POST" })
   .middleware([requirePlatformRole("super_admin")])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const { error } = await supabase.from("platform_admins").delete().eq("id", data.id);
@@ -157,7 +157,7 @@ export const adminListModules = createServerFn({ method: "POST" })
 
 export const setModuleGlobalStatus = createServerFn({ method: "POST" })
   .middleware([requirePlatformRole(["super_admin", "operations"])])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ moduleId: z.string(), status: z.enum(["active", "deprecated", "disabled_global"]) }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -250,7 +250,7 @@ const flagOvInput = z.object({
 });
 export const setFlagOverride = createServerFn({ method: "POST" })
   .middleware([requirePlatformRole(["super_admin", "developer", "operations"])])
-  .inputValidator((d: unknown) => flagOvInput.parse(d))
+  .validator((d: unknown) => flagOvInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     // Try update-then-insert (upsert would need matching unique index shape).
@@ -282,7 +282,7 @@ export const setFlagOverride = createServerFn({ method: "POST" })
 
 export const deleteFlagOverride = createServerFn({ method: "POST" })
   .middleware([requirePlatformRole(["super_admin", "developer", "operations"])])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const { error } = await supabase.from("feature_flag_overrides").delete().eq("id", data.id);
@@ -316,7 +316,7 @@ const setPlanInput = z.object({
 });
 export const setCompanyPlan = createServerFn({ method: "POST" })
   .middleware([requirePlatformRole(["super_admin", "finance", "billing"])])
-  .inputValidator((d: unknown) => setPlanInput.parse(d))
+  .validator((d: unknown) => setPlanInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const patch: any = { plan_key: data.planKey };
@@ -346,7 +346,7 @@ export const adminAuditLog = createServerFn({ method: "POST" })
   .middleware([requirePlatformRole([
     "super_admin", "compliance", "security", "operations", "support",
   ])])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       limit: z.number().int().min(1).max(500).default(100),
       companyId: z.string().uuid().optional(),

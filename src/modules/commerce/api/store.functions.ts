@@ -17,7 +17,7 @@ const slugRe = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export const listStores = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await (context.supabase as any)
       .from("stores")
@@ -31,7 +31,7 @@ export const listStores = createServerFn({ method: "POST" })
 
 export const createStore = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -76,7 +76,7 @@ export const createStore = createServerFn({ method: "POST" })
 
 export const updateStore = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         storeId: z.string().uuid(),
@@ -127,7 +127,7 @@ export const updateStore = createServerFn({ method: "POST" })
 
 export const listStoreProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ storeId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ storeId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await (context.supabase as any)
       .from("store_products")
@@ -141,7 +141,7 @@ export const listStoreProducts = createServerFn({ method: "POST" })
 /** Publishes (or unpublishes) a product on a store. */
 export const publishProduct = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -189,7 +189,7 @@ export const publishProduct = createServerFn({ method: "POST" })
  * it uses the publishable (anon) key and projects only safe columns.
  */
 export const getPublicStorefront = createServerFn({ method: "GET" })
-  .inputValidator((d: unknown) => z.object({ slug: z.string().min(1).max(60).regex(slugRe) }).parse(d))
+  .validator((d: unknown) => z.object({ slug: z.string().min(1).max(60).regex(slugRe) }).parse(d))
   .handler(async ({ data }) => {
     const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
     const url = process.env["SUPABASE_URL"]!;

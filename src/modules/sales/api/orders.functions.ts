@@ -23,7 +23,7 @@ const createInput = z.object({
 
 export const createOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => createInput.parse(d))
+  .validator((d: unknown) => createInput.parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase;
     let subtotal = 0;
@@ -39,8 +39,9 @@ export const createOrder = createServerFn({ method: "POST" })
     const { data: num, error: numErr } = await supabase.rpc("next_document_number", {
       _company_id: data.companyId,
       _prefix: "ORD",
-    } as any);
+    });
     if (numErr) throw new Error(numErr.message);
+    const orderNumber = String(num ?? "");
 
     const defaultStatus = data.channel === "walk_in" ? "draft" : "pending";
     const { data: order, error } = await supabase
@@ -48,7 +49,7 @@ export const createOrder = createServerFn({ method: "POST" })
       .insert({
         company_id: data.companyId,
         branch_id: data.branchId,
-        order_number: num as any,
+        order_number: orderNumber,
         customer_id: data.customerId ?? null,
         channel: data.channel,
         status: defaultStatus,
@@ -92,7 +93,7 @@ export const createOrder = createServerFn({ method: "POST" })
 
 export const updateOrderStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       id: z.string().uuid(),
       status: z.enum(["draft", "pending", "confirmed", "completed", "cancelled"]),
@@ -127,7 +128,7 @@ export const updateOrderStatus = createServerFn({ method: "POST" })
 
 export const listOrders = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       companyId: z.string().uuid(),
       status: z.enum(["draft", "pending", "confirmed", "completed", "cancelled"]).optional(),
@@ -150,7 +151,7 @@ export const listOrders = createServerFn({ method: "POST" })
 
 export const getOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: row, error } = await context.supabase
       .from("orders")

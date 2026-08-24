@@ -10,7 +10,7 @@ const CANDIDATE_STATUS = [
 
 export const listPositions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("job_positions")
@@ -26,7 +26,7 @@ export const listPositions = createServerFn({ method: "POST" })
 
 export const createPosition = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -73,7 +73,7 @@ export const createPosition = createServerFn({ method: "POST" })
 
 export const setPositionStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), status: z.enum(POSITION_STATUS) }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -92,7 +92,7 @@ export const setPositionStatus = createServerFn({ method: "POST" })
 
 export const listCandidates = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -119,7 +119,7 @@ export const listCandidates = createServerFn({ method: "POST" })
 
 export const createCandidate = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -155,7 +155,7 @@ export const createCandidate = createServerFn({ method: "POST" })
 
 export const setCandidateStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),

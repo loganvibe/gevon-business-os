@@ -13,7 +13,7 @@ import { applySegmentFilters, emitMarketingEvent } from "./shared";
 
 export const listSegments = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("customer_segments")
@@ -26,7 +26,7 @@ export const listSegments = createServerFn({ method: "POST" })
 
 export const createSegment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -63,7 +63,7 @@ export const createSegment = createServerFn({ method: "POST" })
 
 export const updateSegment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -100,7 +100,7 @@ export const updateSegment = createServerFn({ method: "POST" })
 
 export const deleteSegment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ id: z.string().uuid(), companyId: z.string().uuid() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -127,7 +127,7 @@ export const deleteSegment = createServerFn({ method: "POST" })
  */
 export const evaluateSegment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -225,7 +225,7 @@ export const evaluateSegment = createServerFn({ method: "POST" })
 /** Preview: how many customers a rule set matches, without persisting. */
 export const previewSegment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ companyId: z.string().uuid(), rules: SegmentRulesSchema }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -242,7 +242,7 @@ export const previewSegment = createServerFn({ method: "POST" })
 
 export const listSegmentMembers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ companyId: z.string().uuid(), segmentId: z.string().uuid() }).parse(d),
   )
   .handler(async ({ data, context }) => {

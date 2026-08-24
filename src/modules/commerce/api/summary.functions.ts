@@ -9,7 +9,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const commerceSummary = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ companyId: z.string().uuid(), branchId: z.string().uuid().optional() }).parse(d),
   )
   .handler(async ({ data, context }) => {

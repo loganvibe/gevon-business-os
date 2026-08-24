@@ -8,7 +8,7 @@ const SHIFT_TYPES = ["morning", "afternoon", "night", "custom"] as const;
 
 export const listAttendance = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -38,7 +38,7 @@ export const listAttendance = createServerFn({ method: "POST" })
 
 export const recordAttendance = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -109,7 +109,7 @@ export const recordAttendance = createServerFn({ method: "POST" })
 
 export const deleteAttendance = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("attendance_records").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
@@ -120,7 +120,7 @@ export const deleteAttendance = createServerFn({ method: "POST" })
 
 export const listShifts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -149,7 +149,7 @@ export const listShifts = createServerFn({ method: "POST" })
 
 export const createShift = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -191,7 +191,7 @@ export const createShift = createServerFn({ method: "POST" })
 
 export const deleteShift = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("shift_schedules").delete().eq("id", data.id);
     if (error) throw new Error(error.message);

@@ -16,7 +16,7 @@ const channelEnum = z.enum(["walk_in", "online", "whatsapp", "phone", "external_
 
 export const createCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -65,7 +65,7 @@ export const createCheckout = createServerFn({ method: "POST" })
 
 export const getCart = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ cartId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ cartId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase as any;
     const { data: cart, error } = await supabase.from("carts").select("*").eq("id", data.cartId).single();
@@ -80,7 +80,7 @@ export const getCart = createServerFn({ method: "POST" })
 
 export const addCartItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         cartId: z.string().uuid(),
@@ -135,7 +135,7 @@ export const addCartItem = createServerFn({ method: "POST" })
 
 export const updateCartItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         itemId: z.string().uuid(),
@@ -169,7 +169,7 @@ export const updateCartItem = createServerFn({ method: "POST" })
 
 export const removeCartItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ itemId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ itemId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase as any;
     const { data: existing, error: eErr } = await supabase
@@ -187,7 +187,7 @@ export const removeCartItem = createServerFn({ method: "POST" })
 /** Applies a cart-level discount (e.g. from an M11 promotion or coupon). */
 export const applyCartDiscount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         cartId: z.string().uuid(),
@@ -214,7 +214,7 @@ export const applyCartDiscount = createServerFn({ method: "POST" })
 
 export const setCartCustomer = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ cartId: z.string().uuid(), customerId: z.string().uuid().nullable() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -232,7 +232,7 @@ export const setCartCustomer = createServerFn({ method: "POST" })
  */
 export const completeCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         cartId: z.string().uuid(),
@@ -415,7 +415,7 @@ export const completeCheckout = createServerFn({ method: "POST" })
 
 export const abandonCart = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ cartId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ cartId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase as any;
     const { error } = await supabase.from("carts").update({ status: "abandoned" }).eq("id", data.cartId);

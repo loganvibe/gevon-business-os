@@ -7,6 +7,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { handleEmailSend } from "./email.send";
 import { handleNotificationDigest } from "./notification.digest";
+import { handleIntegrationSync } from "./integration.sync";
+import { handleDataImport } from "./integration.import";
 
 export type JobHandler = (
   admin: SupabaseClient,
@@ -17,4 +19,6 @@ export type JobHandler = (
 export const JOB_HANDLERS: Record<string, JobHandler> = {
   "email.send": handleEmailSend,
   "notification.digest": handleNotificationDigest,
+  "integration.sync": handleIntegrationSync,
+  "integration.import": handleDataImport,
 };

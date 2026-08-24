@@ -39,7 +39,7 @@ function slugify(s: string) {
 
 export const createCompany = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => createCompanyInput.parse(d))
+  .validator((d: unknown) => createCompanyInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const baseSlug = slugify(data.name) || "company";
@@ -86,7 +86,7 @@ const updateCompanyInput = z.object({
 
 export const updateCompany = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => updateCompanyInput.parse(d))
+  .validator((d: unknown) => updateCompanyInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const patch = {
@@ -119,7 +119,7 @@ export const updateCompany = createServerFn({ method: "POST" })
 
 export const setDefaultCompany = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const { error } = await supabase.from("profiles").update({ default_company_id: data.companyId }).eq("id", userId);
@@ -133,7 +133,7 @@ export const setDefaultCompany = createServerFn({ method: "POST" })
 
 export const listBranches = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const { data: rows, error } = await supabase
@@ -154,7 +154,7 @@ const createBranchInput = z.object({
 
 export const createBranch = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => createBranchInput.parse(d))
+  .validator((d: unknown) => createBranchInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     if (data.isHeadquarters) {
@@ -186,7 +186,7 @@ export const createBranch = createServerFn({ method: "POST" })
 
 export const archiveBranch = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid(), branchId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid(), branchId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const { data: row, error } = await supabase
@@ -202,7 +202,7 @@ export const archiveBranch = createServerFn({ method: "POST" })
 
 export const listMembers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const { data: members, error } = await supabase
@@ -230,7 +230,7 @@ export const listMembers = createServerFn({ method: "POST" })
 
 export const listRoles = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const { data: roles, error } = await supabase
@@ -262,7 +262,7 @@ const inviteInput = z.object({
 
 export const inviteMember = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => inviteInput.parse(d))
+  .validator((d: unknown) => inviteInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     // Generate token, store hash
@@ -284,7 +284,7 @@ export const inviteMember = createServerFn({ method: "POST" })
 
 export const listInvites = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("company_invites")
@@ -298,7 +298,7 @@ export const listInvites = createServerFn({ method: "POST" })
 
 export const revokeInvite = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid(), inviteId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid(), inviteId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("company_invites").delete().eq("id", data.inviteId);
     if (error) throw new Error(error.message);
@@ -308,7 +308,7 @@ export const revokeInvite = createServerFn({ method: "POST" })
 
 export const acceptInvite = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ token: z.string().min(20) }).parse(d))
+  .validator((d: unknown) => z.object({ token: z.string().min(20) }).parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const tokenHash = await sha256(data.token);
@@ -350,7 +350,7 @@ const updateMemberRolesInput = z.object({
 });
 export const updateMemberRoles = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => updateMemberRolesInput.parse(d))
+  .validator((d: unknown) => updateMemberRolesInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     await supabase.from("member_roles").delete().eq("member_id", data.memberId);
@@ -363,7 +363,7 @@ export const updateMemberRoles = createServerFn({ method: "POST" })
 
 export const setMemberStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({
+  .validator((d: unknown) => z.object({
     companyId: z.string().uuid(),
     memberId: z.string().uuid(),
     status: z.enum(["active", "disabled"]),
@@ -388,7 +388,7 @@ const upsertRoleInput = z.object({
 });
 export const upsertRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => upsertRoleInput.parse(d))
+  .validator((d: unknown) => upsertRoleInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     let roleId = data.roleId;
@@ -415,7 +415,7 @@ export const upsertRole = createServerFn({ method: "POST" })
 
 export const deleteRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid(), roleId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid(), roleId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("roles").delete().eq("id", data.roleId);
     if (error) throw new Error(error.message);
@@ -429,7 +429,7 @@ export const deleteRole = createServerFn({ method: "POST" })
 
 export const listAuditLog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({
+  .validator((d: unknown) => z.object({
     companyId: z.string().uuid(),
     limit: z.number().int().min(1).max(200).default(50),
     offset: z.number().int().min(0).default(0),

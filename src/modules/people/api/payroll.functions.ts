@@ -5,7 +5,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const listPayrollCycles = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("payroll_cycles")
@@ -21,7 +21,7 @@ export const listPayrollCycles = createServerFn({ method: "POST" })
 
 export const listPayrollItems = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ cycleId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ cycleId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("payroll_items")
@@ -35,7 +35,7 @@ export const listPayrollItems = createServerFn({ method: "POST" })
 
 export const createPayrollCycle = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -108,7 +108,7 @@ export const createPayrollCycle = createServerFn({ method: "POST" })
 
 export const updatePayrollItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -132,7 +132,7 @@ export const updatePayrollItem = createServerFn({ method: "POST" })
 
 export const setPayrollCycleStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),

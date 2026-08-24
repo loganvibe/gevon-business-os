@@ -11,7 +11,7 @@ import { emitMarketingEvent, resolveTier } from "./shared";
 
 export const listLoyaltyPrograms = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("loyalty_programs")
@@ -26,7 +26,7 @@ export const listLoyaltyPrograms = createServerFn({ method: "POST" })
 
 export const upsertLoyaltyProgram = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid().optional(),
@@ -77,7 +77,7 @@ export const upsertLoyaltyProgram = createServerFn({ method: "POST" })
 
 export const getLoyaltyAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -100,7 +100,7 @@ export const getLoyaltyAccount = createServerFn({ method: "POST" })
 
 export const listLoyaltyAccounts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("loyalty_accounts")
@@ -137,7 +137,7 @@ async function ensureAccount(
 
 export const awardPoints = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -229,7 +229,7 @@ export const awardPoints = createServerFn({ method: "POST" })
 
 export const redeemPoints = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -306,7 +306,7 @@ export const redeemPoints = createServerFn({ method: "POST" })
 
 export const listLoyaltyTransactions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ companyId: z.string().uuid(), customerId: z.string().uuid().optional() }).parse(d),
   )
   .handler(async ({ data, context }) => {

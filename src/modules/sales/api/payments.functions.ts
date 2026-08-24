@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const recordPayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       companyId: z.string().uuid(),
       saleId: z.string().uuid().optional(),
@@ -41,7 +41,7 @@ export const recordPayment = createServerFn({ method: "POST" })
 
 export const listPayments = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       companyId: z.string().uuid(),
       saleId: z.string().uuid().optional(),

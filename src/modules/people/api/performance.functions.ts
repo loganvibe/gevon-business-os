@@ -7,7 +7,7 @@ const REVIEW_STATUS = ["draft", "in_progress", "submitted", "completed", "cancel
 
 export const listReviews = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -34,7 +34,7 @@ export const listReviews = createServerFn({ method: "POST" })
 
 export const createReview = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -67,7 +67,7 @@ export const createReview = createServerFn({ method: "POST" })
 
 export const updateReview = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -117,7 +117,7 @@ export const updateReview = createServerFn({ method: "POST" })
 
 export const deleteReview = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("performance_reviews").delete().eq("id", data.id);
     if (error) throw new Error(error.message);

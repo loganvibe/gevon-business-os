@@ -12,7 +12,7 @@ import { emitCommerceEvent } from "./shared";
 
 export const listReceipts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -36,7 +36,7 @@ export const listReceipts = createServerFn({ method: "POST" })
 
 export const getReceipt = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ receiptId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ receiptId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase as any;
     const { data: receipt, error } = await supabase.from("receipts").select("*").eq("id", data.receiptId).single();
@@ -48,7 +48,7 @@ export const getReceipt = createServerFn({ method: "POST" })
 /** Issues a receipt for an already completed sale (e.g. a reprint request). */
 export const createReceipt = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ saleId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ saleId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase as any;
     const { data: sale, error: sErr } = await supabase
@@ -133,7 +133,7 @@ export const createReceipt = createServerFn({ method: "POST" })
  */
 export const sendReceipt = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         receiptId: z.string().uuid(),

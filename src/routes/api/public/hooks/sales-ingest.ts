@@ -85,7 +85,7 @@ export const Route = createFileRoute("/api/public/hooks/sales-ingest")({
             currency_code: payload.currencyCode,
             external_reference: payload.externalReference,
             completed_at: payload.occurredAt ?? new Date().toISOString(),
-            created_by: "00000000-0000-0000-0000-000000000000",
+            created_by: null,
           })
           .select("id")
           .single();
@@ -125,7 +125,7 @@ export const Route = createFileRoute("/api/public/hooks/sales-ingest")({
             amount: p.amount,
             currency_code: payload.currencyCode,
             reference: p.reference ?? null,
-            created_by: "00000000-0000-0000-0000-000000000000",
+            created_by: null,
           });
         }
 

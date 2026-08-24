@@ -68,7 +68,7 @@ const companyIdInput = z.object({ companyId: z.string().uuid() });
 
 export const listAvailableModules = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => companyIdInput.parse(d))
+  .validator((d: unknown) => companyIdInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const [{ data: modulesRows }, { data: enabled }, { data: sub }, { data: planMods }] = await Promise.all([
@@ -95,7 +95,7 @@ const moduleActionInput = z.object({
 
 export const enableModule = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => moduleActionInput.parse(d))
+  .validator((d: unknown) => moduleActionInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const manifest = getModule(data.moduleId);
@@ -129,7 +129,7 @@ export const enableModule = createServerFn({ method: "POST" })
 
 export const disableModule = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => moduleActionInput.parse(d))
+  .validator((d: unknown) => moduleActionInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const m = getModule(data.moduleId);
@@ -161,7 +161,7 @@ const evalInput = z.object({
 
 export const evaluateFlags = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => evalInput.parse(d))
+  .validator((d: unknown) => evalInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
     const [{ data: defs }, { data: overrides }] = await Promise.all([
@@ -190,7 +190,7 @@ export const evaluateFlags = createServerFn({ method: "POST" })
 // ============================================================
 export const getMySubscription = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => companyIdInput.parse(d))
+  .validator((d: unknown) => companyIdInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase } = context;
     const [{ data: sub }, { data: modules }] = await Promise.all([
@@ -210,14 +210,17 @@ export const getMySubscription = createServerFn({ method: "POST" })
 // ============================================================
 export const getNavigation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => companyIdInput.parse(d))
+  .validator((d: unknown) => companyIdInput.parse(d))
   .handler(async ({ data, context }) => {
     const { supabase, userId } = context;
+    const [{ data: profile }] = await Promise.all([
+      supabase.from("company_profiles").select("industry_key").eq("company_id", data.companyId).maybeSingle(),
+    ]);
+    const industry = (profile as any)?.industry_key as string | undefined;
     const [enabledRes, permsSet, flagEval] = await Promise.all([
       supabase.from("company_modules").select("module_id").eq("company_id", data.companyId),
       resolveUserPermissions(supabase, userId, data.companyId),
       (async () => {
-        // Evaluate every flag once per nav build (cheap; cached client-side).
         const [{ data: defs }, { data: overrides }] = await Promise.all([
           supabase.from("feature_flags").select("*"),
           supabase.from("feature_flag_overrides").select("*")
@@ -251,6 +254,7 @@ export const getNavigation = createServerFn({ method: "POST" })
 
     const groups = allModules()
       .filter((m) => enabledIds.has(m.id))
+      .filter((m) => !industry || isModuleRelevantToIndustry(m.id, industry))
       .sort((a, b) => a.name.localeCompare(b.name))
       .map((m) => ({
         moduleId: m.id,
@@ -261,3 +265,21 @@ export const getNavigation = createServerFn({ method: "POST" })
 
     return { groups };
   });
+
+function isModuleRelevantToIndustry(moduleId: string, industryKey: string): boolean {
+  const industryModules: Record<string, string[]> = {
+    retail: ["sales", "inventory", "commerce", "crm", "expenses", "reports"],
+    restaurant: ["sales", "inventory", "commerce", "crm", "expenses", "reports"],
+    pharmacy: ["sales", "inventory", "crm", "expenses", "reports"],
+    wholesale: ["sales", "inventory", "enterprise", "crm", "expenses", "reports"],
+    construction: ["enterprise", "inventory", "expenses", "workflow", "reports"],
+    manufacturing: ["inventory", "enterprise", "sales", "expenses", "reports"],
+    service: ["sales", "crm", "workflow", "people", "expenses", "reports"],
+    hospitality: ["commerce", "crm", "inventory", "expenses", "reports"],
+    education: ["people", "crm", "expenses", "reports"],
+    agriculture: ["inventory", "sales", "enterprise", "expenses", "reports"],
+  };
+  const relevant = industryModules[industryKey] ?? [];
+  if (relevant.includes(moduleId)) return true;
+  return ["core"].includes(moduleId);
+}

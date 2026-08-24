@@ -25,7 +25,7 @@ const createDraftInput = z.object({
 
 export const createDraftSale = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => createDraftInput.parse(d))
+  .validator((d: unknown) => createDraftInput.parse(d))
   .handler(async ({ data, context }) => {
     const supabase = context.supabase;
     // Compute totals
@@ -45,15 +45,16 @@ export const createDraftSale = createServerFn({ method: "POST" })
     const { data: numberRow, error: numErr } = await supabase.rpc("next_document_number", {
       _company_id: data.companyId,
       _prefix: "SALE",
-    } as any);
+    });
     if (numErr) throw new Error(numErr.message);
+    const saleNumber = String(numberRow ?? "");
 
     const { data: sale, error: saleErr } = await supabase
       .from("sales")
       .insert({
         company_id: data.companyId,
         branch_id: data.branchId,
-        sale_number: numberRow as any,
+        sale_number: saleNumber,
         customer_id: data.customerId ?? null,
         channel: data.channel,
         status: "draft",
@@ -98,7 +99,7 @@ export const createDraftSale = createServerFn({ method: "POST" })
 
 export const completeSale = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ saleId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ saleId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.rpc("complete_sale_atomic", {
       _sale_id: data.saleId,
@@ -109,7 +110,7 @@ export const completeSale = createServerFn({ method: "POST" })
 
 export const cancelSale = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ saleId: z.string().uuid(), reason: z.string().max(500).optional() }).parse(d),
   )
   .handler(async ({ data, context }) => {
@@ -123,7 +124,7 @@ export const cancelSale = createServerFn({ method: "POST" })
 
 export const listSales = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       companyId: z.string().uuid(),
       status: z.enum(["draft", "completed", "cancelled"]).optional(),
@@ -154,7 +155,7 @@ export const listSales = createServerFn({ method: "POST" })
 
 export const getSale = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: sale, error } = await context.supabase
       .from("sales")

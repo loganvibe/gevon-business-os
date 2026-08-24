@@ -18,6 +18,8 @@ import { expensesModule } from "@/modules/expenses";
 import { peopleModule } from "@/modules/people";
 import { workflowModule } from "@/modules/workflow";
 import { commerceModule } from "@/modules/commerce";
+import { enterpriseModule } from "@/modules/enterprise";
+import { integrationsModule } from "@/modules/integrations";
 
 // ------------------------------ Types ---------------------------------
 export type SubscriptionTier = "starter" | "professional" | "enterprise" | "custom";
@@ -106,7 +108,7 @@ export const ModuleManifestSchema = z.object({
 });
 
 // ---------------------------- Registry --------------------------------
-const MODULES: ModuleManifest[] = [coreModule, inventoryModule, salesModule, expensesModule, peopleModule, workflowModule, commerceModule];
+const MODULES: ModuleManifest[] = [coreModule, inventoryModule, salesModule, expensesModule, peopleModule, workflowModule, commerceModule, enterpriseModule, integrationsModule];
 
 export function registerModule(m: ModuleManifest) {
   ModuleManifestSchema.parse(m);

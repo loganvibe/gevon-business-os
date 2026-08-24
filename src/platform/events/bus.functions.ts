@@ -17,7 +17,7 @@ import { writeAudit } from "@/platform/audit.helpers";
  */
 export const publishEvent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: {
+  .validator((input: {
     key: string;
     version?: number;
     companyId?: string | null;
@@ -80,7 +80,7 @@ export const publishEvent = createServerFn({ method: "POST" })
  */
 export const listEventQueue = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { companyId?: string | null; status?: string; limit?: number }) =>
+  .validator((input: { companyId?: string | null; status?: string; limit?: number }) =>
     z.object({
       companyId: z.string().uuid().nullable().optional(),
       status: z.string().optional(),

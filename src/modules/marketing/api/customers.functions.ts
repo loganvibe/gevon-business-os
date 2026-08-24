@@ -14,7 +14,7 @@ const CUSTOMER_COLUMNS =
 
 export const listCustomers = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -42,7 +42,7 @@ export const listCustomers = createServerFn({ method: "POST" })
 
 export const createCustomer = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -89,7 +89,7 @@ export const createCustomer = createServerFn({ method: "POST" })
 
 export const updateCustomer = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         id: z.string().uuid(),
@@ -138,7 +138,7 @@ export const updateCustomer = createServerFn({ method: "POST" })
 /** Consent is per channel; marketing delivery honours `opted_out` strictly. */
 export const setCustomerConsent = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -176,7 +176,7 @@ export const setCustomerConsent = createServerFn({ method: "POST" })
 
 export const listCustomerConsents = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({ companyId: z.string().uuid(), customerId: z.string().uuid() }).parse(d),
   )
   .handler(async ({ data, context }) => {

@@ -9,7 +9,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const listMyNotifications = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { status?: "unread" | "read" | "archived" | "all"; limit?: number }) =>
+  .validator((input: { status?: "unread" | "read" | "archived" | "all"; limit?: number }) =>
     z.object({
       status: z.enum(["unread", "read", "archived", "all"]).default("unread"),
       limit: z.number().int().min(1).max(100).default(50),
@@ -42,7 +42,7 @@ export const unreadCount = createServerFn({ method: "GET" })
 
 export const markNotificationRead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) =>
+  .validator((input: { id: string }) =>
     z.object({ id: z.string().uuid() }).parse(input),
   )
   .handler(async ({ data, context }) => {
@@ -69,7 +69,7 @@ export const markAllRead = createServerFn({ method: "POST" })
 
 export const archiveNotification = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: { id: string }) =>
+  .validator((input: { id: string }) =>
     z.object({ id: z.string().uuid() }).parse(input),
   )
   .handler(async ({ data, context }) => {
@@ -97,7 +97,7 @@ export const getMyPreferences = createServerFn({ method: "GET" })
 
 export const setPreference = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: {
+  .validator((input: {
     channel: "email" | "in_app" | "sms" | "whatsapp";
     category: "system" | "business" | "security" | "ai" | "billing" | "modules";
     enabled: boolean;

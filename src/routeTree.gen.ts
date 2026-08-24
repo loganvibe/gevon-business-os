@@ -20,20 +20,31 @@ import { Route as LegalTermsRouteImport } from './routes/legal.terms'
 import { Route as LegalPrivacyRouteImport } from './routes/legal.privacy'
 import { Route as PlatformDevelopersRouteImport } from './routes/_platform/developers'
 import { Route as PlatformAdminRouteImport } from './routes/_platform/admin'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedAppRouteImport } from './routes/_authenticated/app'
 import { Route as PlatformDevelopersIndexRouteImport } from './routes/_platform/developers.index'
 import { Route as PlatformAdminIndexRouteImport } from './routes/_platform/admin.index'
 import { Route as AuthenticatedAppIndexRouteImport } from './routes/_authenticated/app.index'
+import { Route as PlatformDevelopersKeysRouteImport } from './routes/_platform/developers.keys'
+import { Route as PlatformDevelopersDocsRouteImport } from './routes/_platform/developers.docs'
+import { Route as PlatformDevelopersAppsRouteImport } from './routes/_platform/developers.apps'
 import { Route as PlatformAdminUsersRouteImport } from './routes/_platform/admin.users'
 import { Route as PlatformAdminSubscriptionsRouteImport } from './routes/_platform/admin.subscriptions'
 import { Route as PlatformAdminModulesRouteImport } from './routes/_platform/admin.modules'
 import { Route as PlatformAdminJobsRouteImport } from './routes/_platform/admin.jobs'
+import { Route as PlatformAdminIntegrationsRouteImport } from './routes/_platform/admin.integrations'
+import { Route as PlatformAdminIntegrationLogsRouteImport } from './routes/_platform/admin.integration-logs'
+import { Route as PlatformAdminIndustryProfilesRouteImport } from './routes/_platform/admin.industry-profiles'
+import { Route as PlatformAdminHealthRouteImport } from './routes/_platform/admin.health'
 import { Route as PlatformAdminFeatureFlagsRouteImport } from './routes/_platform/admin.feature-flags'
 import { Route as PlatformAdminEventsRouteImport } from './routes/_platform/admin.events'
 import { Route as PlatformAdminCompaniesRouteImport } from './routes/_platform/admin.companies'
 import { Route as PlatformAdminCommunicationsRouteImport } from './routes/_platform/admin.communications'
 import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
+import { Route as PlatformAdminApiRouteImport } from './routes/_platform/admin.api'
 import { Route as PlatformAdminAnalyticsRouteImport } from './routes/_platform/admin.analytics'
+import { Route as AuthenticatedAppWarehousesRouteImport } from './routes/_authenticated/app.warehouses'
+import { Route as AuthenticatedAppVendorsRouteImport } from './routes/_authenticated/app.vendors'
 import { Route as AuthenticatedAppSuppliersRouteImport } from './routes/_authenticated/app.suppliers'
 import { Route as AuthenticatedAppStoreRouteImport } from './routes/_authenticated/app.store'
 import { Route as AuthenticatedAppStockHistoryRouteImport } from './routes/_authenticated/app.stock-history'
@@ -42,19 +53,28 @@ import { Route as AuthenticatedAppReturnsRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAppReservationsRouteImport } from './routes/_authenticated/app.reservations'
 import { Route as AuthenticatedAppReceiptsRouteImport } from './routes/_authenticated/app.receipts'
 import { Route as AuthenticatedAppProductsRouteImport } from './routes/_authenticated/app.products'
+import { Route as AuthenticatedAppProcurementRouteImport } from './routes/_authenticated/app.procurement'
 import { Route as AuthenticatedAppPosRouteImport } from './routes/_authenticated/app.pos'
 import { Route as AuthenticatedAppPaymentsRouteImport } from './routes/_authenticated/app.payments'
 import { Route as AuthenticatedAppOrdersRouteImport } from './routes/_authenticated/app.orders'
+import { Route as AuthenticatedAppOperationsRouteImport } from './routes/_authenticated/app.operations'
 import { Route as AuthenticatedAppOnboardingRouteImport } from './routes/_authenticated/app.onboarding'
 import { Route as AuthenticatedAppNotificationsRouteImport } from './routes/_authenticated/app.notifications'
+import { Route as AuthenticatedAppMaintenanceRouteImport } from './routes/_authenticated/app.maintenance'
 import { Route as AuthenticatedAppInventoryRouteImport } from './routes/_authenticated/app.inventory'
+import { Route as AuthenticatedAppIntegrationsRouteImport } from './routes/_authenticated/app.integrations'
+import { Route as AuthenticatedAppFleetRouteImport } from './routes/_authenticated/app.fleet'
 import { Route as AuthenticatedAppFinanceRouteImport } from './routes/_authenticated/app.finance'
 import { Route as AuthenticatedAppExpensesRouteImport } from './routes/_authenticated/app.expenses'
 import { Route as AuthenticatedAppDeliveriesRouteImport } from './routes/_authenticated/app.deliveries'
 import { Route as AuthenticatedAppCommerceRouteImport } from './routes/_authenticated/app.commerce'
+import { Route as AuthenticatedAppBranchesRouteImport } from './routes/_authenticated/app.branches'
+import { Route as AuthenticatedAppAssetsRouteImport } from './routes/_authenticated/app.assets'
 import { Route as AuthenticatedAppSettingsIndexRouteImport } from './routes/_authenticated/app.settings.index'
 import { Route as AuthenticatedAppSalesIndexRouteImport } from './routes/_authenticated/app.sales.index'
+import { Route as AuthenticatedAppOperationsIndexRouteImport } from './routes/_authenticated/app.operations.index'
 import { Route as AuthenticatedAppInventoryIndexRouteImport } from './routes/_authenticated/app.inventory.index'
+import { Route as AuthenticatedAppIntegrationsIndexRouteImport } from './routes/_authenticated/app.integrations.index'
 import { Route as AuthenticatedAppExpensesIndexRouteImport } from './routes/_authenticated/app.expenses.index'
 import { Route as ApiPublicHooksSalesIngestRouteImport } from './routes/api/public/hooks/sales-ingest'
 import { Route as ApiPublicHooksJobRunnerRouteImport } from './routes/api/public/hooks/job-runner'
@@ -66,6 +86,9 @@ import { Route as AuthenticatedAppSettingsNotificationsRouteImport } from './rou
 import { Route as AuthenticatedAppSettingsModulesRouteImport } from './routes/_authenticated/app.settings.modules'
 import { Route as AuthenticatedAppSettingsBranchesRouteImport } from './routes/_authenticated/app.settings.branches'
 import { Route as AuthenticatedAppSettingsAuditRouteImport } from './routes/_authenticated/app.settings.audit'
+import { Route as AuthenticatedAppIntegrationsWebhooksRouteImport } from './routes/_authenticated/app.integrations.webhooks'
+import { Route as AuthenticatedAppIntegrationsImportExportRouteImport } from './routes/_authenticated/app.integrations.import-export'
+import { Route as AuthenticatedAppIntegrationsApiKeysRouteImport } from './routes/_authenticated/app.integrations.api-keys'
 import { Route as AuthenticatedAppExpensesCategoriesRouteImport } from './routes/_authenticated/app.expenses.categories'
 import { Route as AuthenticatedAppAcceptInviteTokenRouteImport } from './routes/_authenticated/app.accept-invite.$token'
 
@@ -122,6 +145,11 @@ const PlatformAdminRoute = PlatformAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => PlatformRouteRoute,
 } as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAppRoute = AuthenticatedAppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -142,6 +170,21 @@ const AuthenticatedAppIndexRoute = AuthenticatedAppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const PlatformDevelopersKeysRoute = PlatformDevelopersKeysRouteImport.update({
+  id: '/keys',
+  path: '/keys',
+  getParentRoute: () => PlatformDevelopersRoute,
+} as any)
+const PlatformDevelopersDocsRoute = PlatformDevelopersDocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => PlatformDevelopersRoute,
+} as any)
+const PlatformDevelopersAppsRoute = PlatformDevelopersAppsRouteImport.update({
+  id: '/apps',
+  path: '/apps',
+  getParentRoute: () => PlatformDevelopersRoute,
+} as any)
 const PlatformAdminUsersRoute = PlatformAdminUsersRouteImport.update({
   id: '/users',
   path: '/users',
@@ -161,6 +204,29 @@ const PlatformAdminModulesRoute = PlatformAdminModulesRouteImport.update({
 const PlatformAdminJobsRoute = PlatformAdminJobsRouteImport.update({
   id: '/jobs',
   path: '/jobs',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
+const PlatformAdminIntegrationsRoute =
+  PlatformAdminIntegrationsRouteImport.update({
+    id: '/integrations',
+    path: '/integrations',
+    getParentRoute: () => PlatformAdminRoute,
+  } as any)
+const PlatformAdminIntegrationLogsRoute =
+  PlatformAdminIntegrationLogsRouteImport.update({
+    id: '/integration-logs',
+    path: '/integration-logs',
+    getParentRoute: () => PlatformAdminRoute,
+  } as any)
+const PlatformAdminIndustryProfilesRoute =
+  PlatformAdminIndustryProfilesRouteImport.update({
+    id: '/industry-profiles',
+    path: '/industry-profiles',
+    getParentRoute: () => PlatformAdminRoute,
+  } as any)
+const PlatformAdminHealthRoute = PlatformAdminHealthRouteImport.update({
+  id: '/health',
+  path: '/health',
   getParentRoute: () => PlatformAdminRoute,
 } as any)
 const PlatformAdminFeatureFlagsRoute =
@@ -190,10 +256,26 @@ const PlatformAdminAuditRoute = PlatformAdminAuditRouteImport.update({
   path: '/audit',
   getParentRoute: () => PlatformAdminRoute,
 } as any)
+const PlatformAdminApiRoute = PlatformAdminApiRouteImport.update({
+  id: '/api',
+  path: '/api',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
 const PlatformAdminAnalyticsRoute = PlatformAdminAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
   getParentRoute: () => PlatformAdminRoute,
+} as any)
+const AuthenticatedAppWarehousesRoute =
+  AuthenticatedAppWarehousesRouteImport.update({
+    id: '/warehouses',
+    path: '/warehouses',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppVendorsRoute = AuthenticatedAppVendorsRouteImport.update({
+  id: '/vendors',
+  path: '/vendors',
+  getParentRoute: () => AuthenticatedAppRoute,
 } as any)
 const AuthenticatedAppSuppliersRoute =
   AuthenticatedAppSuppliersRouteImport.update({
@@ -240,6 +322,12 @@ const AuthenticatedAppProductsRoute =
     path: '/products',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppProcurementRoute =
+  AuthenticatedAppProcurementRouteImport.update({
+    id: '/procurement',
+    path: '/procurement',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppPosRoute = AuthenticatedAppPosRouteImport.update({
   id: '/pos',
   path: '/pos',
@@ -256,6 +344,12 @@ const AuthenticatedAppOrdersRoute = AuthenticatedAppOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AuthenticatedAppRoute,
 } as any)
+const AuthenticatedAppOperationsRoute =
+  AuthenticatedAppOperationsRouteImport.update({
+    id: '/operations',
+    path: '/operations',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppOnboardingRoute =
   AuthenticatedAppOnboardingRouteImport.update({
     id: '/onboarding',
@@ -268,12 +362,29 @@ const AuthenticatedAppNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppMaintenanceRoute =
+  AuthenticatedAppMaintenanceRouteImport.update({
+    id: '/maintenance',
+    path: '/maintenance',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppInventoryRoute =
   AuthenticatedAppInventoryRouteImport.update({
     id: '/inventory',
     path: '/inventory',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppIntegrationsRoute =
+  AuthenticatedAppIntegrationsRouteImport.update({
+    id: '/integrations',
+    path: '/integrations',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppFleetRoute = AuthenticatedAppFleetRouteImport.update({
+  id: '/fleet',
+  path: '/fleet',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 const AuthenticatedAppFinanceRoute = AuthenticatedAppFinanceRouteImport.update({
   id: '/finance',
   path: '/finance',
@@ -297,6 +408,17 @@ const AuthenticatedAppCommerceRoute =
     path: '/commerce',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppBranchesRoute =
+  AuthenticatedAppBranchesRouteImport.update({
+    id: '/branches',
+    path: '/branches',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
+const AuthenticatedAppAssetsRoute = AuthenticatedAppAssetsRouteImport.update({
+  id: '/assets',
+  path: '/assets',
+  getParentRoute: () => AuthenticatedAppRoute,
+} as any)
 const AuthenticatedAppSettingsIndexRoute =
   AuthenticatedAppSettingsIndexRouteImport.update({
     id: '/settings/',
@@ -309,11 +431,23 @@ const AuthenticatedAppSalesIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedAppSalesRoute,
   } as any)
+const AuthenticatedAppOperationsIndexRoute =
+  AuthenticatedAppOperationsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppOperationsRoute,
+  } as any)
 const AuthenticatedAppInventoryIndexRoute =
   AuthenticatedAppInventoryIndexRouteImport.update({
     id: '/',
     path: '/',
     getParentRoute: () => AuthenticatedAppInventoryRoute,
+  } as any)
+const AuthenticatedAppIntegrationsIndexRoute =
+  AuthenticatedAppIntegrationsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAppIntegrationsRoute,
   } as any)
 const AuthenticatedAppExpensesIndexRoute =
   AuthenticatedAppExpensesIndexRouteImport.update({
@@ -380,6 +514,24 @@ const AuthenticatedAppSettingsAuditRoute =
     path: '/settings/audit',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppIntegrationsWebhooksRoute =
+  AuthenticatedAppIntegrationsWebhooksRouteImport.update({
+    id: '/webhooks',
+    path: '/webhooks',
+    getParentRoute: () => AuthenticatedAppIntegrationsRoute,
+  } as any)
+const AuthenticatedAppIntegrationsImportExportRoute =
+  AuthenticatedAppIntegrationsImportExportRouteImport.update({
+    id: '/import-export',
+    path: '/import-export',
+    getParentRoute: () => AuthenticatedAppIntegrationsRoute,
+  } as any)
+const AuthenticatedAppIntegrationsApiKeysRoute =
+  AuthenticatedAppIntegrationsApiKeysRouteImport.update({
+    id: '/api-keys',
+    path: '/api-keys',
+    getParentRoute: () => AuthenticatedAppIntegrationsRoute,
+  } as any)
 const AuthenticatedAppExpensesCategoriesRoute =
   AuthenticatedAppExpensesCategoriesRouteImport.update({
     id: '/categories',
@@ -399,21 +551,29 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/app': typeof AuthenticatedAppRouteWithChildren
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/admin': typeof PlatformAdminRouteWithChildren
   '/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/app/assets': typeof AuthenticatedAppAssetsRoute
+  '/app/branches': typeof AuthenticatedAppBranchesRoute
   '/app/commerce': typeof AuthenticatedAppCommerceRoute
   '/app/deliveries': typeof AuthenticatedAppDeliveriesRoute
   '/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
   '/app/finance': typeof AuthenticatedAppFinanceRoute
+  '/app/fleet': typeof AuthenticatedAppFleetRoute
+  '/app/integrations': typeof AuthenticatedAppIntegrationsRouteWithChildren
   '/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
+  '/app/maintenance': typeof AuthenticatedAppMaintenanceRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
+  '/app/operations': typeof AuthenticatedAppOperationsRouteWithChildren
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/payments': typeof AuthenticatedAppPaymentsRoute
   '/app/pos': typeof AuthenticatedAppPosRoute
+  '/app/procurement': typeof AuthenticatedAppProcurementRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/receipts': typeof AuthenticatedAppReceiptsRoute
   '/app/reservations': typeof AuthenticatedAppReservationsRoute
@@ -422,21 +582,34 @@ export interface FileRoutesByFullPath {
   '/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
   '/app/store': typeof AuthenticatedAppStoreRoute
   '/app/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/app/vendors': typeof AuthenticatedAppVendorsRoute
+  '/app/warehouses': typeof AuthenticatedAppWarehousesRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
+  '/admin/api': typeof PlatformAdminApiRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
   '/admin/communications': typeof PlatformAdminCommunicationsRoute
   '/admin/companies': typeof PlatformAdminCompaniesRoute
   '/admin/events': typeof PlatformAdminEventsRoute
   '/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/admin/health': typeof PlatformAdminHealthRoute
+  '/admin/industry-profiles': typeof PlatformAdminIndustryProfilesRoute
+  '/admin/integration-logs': typeof PlatformAdminIntegrationLogsRoute
+  '/admin/integrations': typeof PlatformAdminIntegrationsRoute
   '/admin/jobs': typeof PlatformAdminJobsRoute
   '/admin/modules': typeof PlatformAdminModulesRoute
   '/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
   '/admin/users': typeof PlatformAdminUsersRoute
+  '/developers/apps': typeof PlatformDevelopersAppsRoute
+  '/developers/docs': typeof PlatformDevelopersDocsRoute
+  '/developers/keys': typeof PlatformDevelopersKeysRoute
   '/app/': typeof AuthenticatedAppIndexRoute
   '/admin/': typeof PlatformAdminIndexRoute
   '/developers/': typeof PlatformDevelopersIndexRoute
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
+  '/app/integrations/api-keys': typeof AuthenticatedAppIntegrationsApiKeysRoute
+  '/app/integrations/import-export': typeof AuthenticatedAppIntegrationsImportExportRoute
+  '/app/integrations/webhooks': typeof AuthenticatedAppIntegrationsWebhooksRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -448,7 +621,9 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
   '/app/expenses/': typeof AuthenticatedAppExpensesIndexRoute
+  '/app/integrations/': typeof AuthenticatedAppIntegrationsIndexRoute
   '/app/inventory/': typeof AuthenticatedAppInventoryIndexRoute
+  '/app/operations/': typeof AuthenticatedAppOperationsIndexRoute
   '/app/sales/': typeof AuthenticatedAppSalesIndexRoute
   '/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
@@ -457,17 +632,23 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/app/assets': typeof AuthenticatedAppAssetsRoute
+  '/app/branches': typeof AuthenticatedAppBranchesRoute
   '/app/commerce': typeof AuthenticatedAppCommerceRoute
   '/app/deliveries': typeof AuthenticatedAppDeliveriesRoute
   '/app/finance': typeof AuthenticatedAppFinanceRoute
+  '/app/fleet': typeof AuthenticatedAppFleetRoute
+  '/app/maintenance': typeof AuthenticatedAppMaintenanceRoute
   '/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/app/onboarding': typeof AuthenticatedAppOnboardingRoute
   '/app/orders': typeof AuthenticatedAppOrdersRoute
   '/app/payments': typeof AuthenticatedAppPaymentsRoute
   '/app/pos': typeof AuthenticatedAppPosRoute
+  '/app/procurement': typeof AuthenticatedAppProcurementRoute
   '/app/products': typeof AuthenticatedAppProductsRoute
   '/app/receipts': typeof AuthenticatedAppReceiptsRoute
   '/app/reservations': typeof AuthenticatedAppReservationsRoute
@@ -475,21 +656,34 @@ export interface FileRoutesByTo {
   '/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
   '/app/store': typeof AuthenticatedAppStoreRoute
   '/app/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/app/vendors': typeof AuthenticatedAppVendorsRoute
+  '/app/warehouses': typeof AuthenticatedAppWarehousesRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
+  '/admin/api': typeof PlatformAdminApiRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
   '/admin/communications': typeof PlatformAdminCommunicationsRoute
   '/admin/companies': typeof PlatformAdminCompaniesRoute
   '/admin/events': typeof PlatformAdminEventsRoute
   '/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/admin/health': typeof PlatformAdminHealthRoute
+  '/admin/industry-profiles': typeof PlatformAdminIndustryProfilesRoute
+  '/admin/integration-logs': typeof PlatformAdminIntegrationLogsRoute
+  '/admin/integrations': typeof PlatformAdminIntegrationsRoute
   '/admin/jobs': typeof PlatformAdminJobsRoute
   '/admin/modules': typeof PlatformAdminModulesRoute
   '/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
   '/admin/users': typeof PlatformAdminUsersRoute
+  '/developers/apps': typeof PlatformDevelopersAppsRoute
+  '/developers/docs': typeof PlatformDevelopersDocsRoute
+  '/developers/keys': typeof PlatformDevelopersKeysRoute
   '/app': typeof AuthenticatedAppIndexRoute
   '/admin': typeof PlatformAdminIndexRoute
   '/developers': typeof PlatformDevelopersIndexRoute
   '/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
+  '/app/integrations/api-keys': typeof AuthenticatedAppIntegrationsApiKeysRoute
+  '/app/integrations/import-export': typeof AuthenticatedAppIntegrationsImportExportRoute
+  '/app/integrations/webhooks': typeof AuthenticatedAppIntegrationsWebhooksRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -501,7 +695,9 @@ export interface FileRoutesByTo {
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
   '/app/expenses': typeof AuthenticatedAppExpensesIndexRoute
+  '/app/integrations': typeof AuthenticatedAppIntegrationsIndexRoute
   '/app/inventory': typeof AuthenticatedAppInventoryIndexRoute
+  '/app/operations': typeof AuthenticatedAppOperationsIndexRoute
   '/app/sales': typeof AuthenticatedAppSalesIndexRoute
   '/app/settings': typeof AuthenticatedAppSettingsIndexRoute
 }
@@ -514,21 +710,29 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/app': typeof AuthenticatedAppRouteWithChildren
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_platform/admin': typeof PlatformAdminRouteWithChildren
   '/_platform/developers': typeof PlatformDevelopersRouteWithChildren
   '/legal/privacy': typeof LegalPrivacyRoute
   '/legal/terms': typeof LegalTermsRoute
   '/store/$slug': typeof StoreSlugRoute
+  '/_authenticated/app/assets': typeof AuthenticatedAppAssetsRoute
+  '/_authenticated/app/branches': typeof AuthenticatedAppBranchesRoute
   '/_authenticated/app/commerce': typeof AuthenticatedAppCommerceRoute
   '/_authenticated/app/deliveries': typeof AuthenticatedAppDeliveriesRoute
   '/_authenticated/app/expenses': typeof AuthenticatedAppExpensesRouteWithChildren
   '/_authenticated/app/finance': typeof AuthenticatedAppFinanceRoute
+  '/_authenticated/app/fleet': typeof AuthenticatedAppFleetRoute
+  '/_authenticated/app/integrations': typeof AuthenticatedAppIntegrationsRouteWithChildren
   '/_authenticated/app/inventory': typeof AuthenticatedAppInventoryRouteWithChildren
+  '/_authenticated/app/maintenance': typeof AuthenticatedAppMaintenanceRoute
   '/_authenticated/app/notifications': typeof AuthenticatedAppNotificationsRoute
   '/_authenticated/app/onboarding': typeof AuthenticatedAppOnboardingRoute
+  '/_authenticated/app/operations': typeof AuthenticatedAppOperationsRouteWithChildren
   '/_authenticated/app/orders': typeof AuthenticatedAppOrdersRoute
   '/_authenticated/app/payments': typeof AuthenticatedAppPaymentsRoute
   '/_authenticated/app/pos': typeof AuthenticatedAppPosRoute
+  '/_authenticated/app/procurement': typeof AuthenticatedAppProcurementRoute
   '/_authenticated/app/products': typeof AuthenticatedAppProductsRoute
   '/_authenticated/app/receipts': typeof AuthenticatedAppReceiptsRoute
   '/_authenticated/app/reservations': typeof AuthenticatedAppReservationsRoute
@@ -537,21 +741,34 @@ export interface FileRoutesById {
   '/_authenticated/app/stock-history': typeof AuthenticatedAppStockHistoryRoute
   '/_authenticated/app/store': typeof AuthenticatedAppStoreRoute
   '/_authenticated/app/suppliers': typeof AuthenticatedAppSuppliersRoute
+  '/_authenticated/app/vendors': typeof AuthenticatedAppVendorsRoute
+  '/_authenticated/app/warehouses': typeof AuthenticatedAppWarehousesRoute
   '/_platform/admin/analytics': typeof PlatformAdminAnalyticsRoute
+  '/_platform/admin/api': typeof PlatformAdminApiRoute
   '/_platform/admin/audit': typeof PlatformAdminAuditRoute
   '/_platform/admin/communications': typeof PlatformAdminCommunicationsRoute
   '/_platform/admin/companies': typeof PlatformAdminCompaniesRoute
   '/_platform/admin/events': typeof PlatformAdminEventsRoute
   '/_platform/admin/feature-flags': typeof PlatformAdminFeatureFlagsRoute
+  '/_platform/admin/health': typeof PlatformAdminHealthRoute
+  '/_platform/admin/industry-profiles': typeof PlatformAdminIndustryProfilesRoute
+  '/_platform/admin/integration-logs': typeof PlatformAdminIntegrationLogsRoute
+  '/_platform/admin/integrations': typeof PlatformAdminIntegrationsRoute
   '/_platform/admin/jobs': typeof PlatformAdminJobsRoute
   '/_platform/admin/modules': typeof PlatformAdminModulesRoute
   '/_platform/admin/subscriptions': typeof PlatformAdminSubscriptionsRoute
   '/_platform/admin/users': typeof PlatformAdminUsersRoute
+  '/_platform/developers/apps': typeof PlatformDevelopersAppsRoute
+  '/_platform/developers/docs': typeof PlatformDevelopersDocsRoute
+  '/_platform/developers/keys': typeof PlatformDevelopersKeysRoute
   '/_authenticated/app/': typeof AuthenticatedAppIndexRoute
   '/_platform/admin/': typeof PlatformAdminIndexRoute
   '/_platform/developers/': typeof PlatformDevelopersIndexRoute
   '/_authenticated/app/accept-invite/$token': typeof AuthenticatedAppAcceptInviteTokenRoute
   '/_authenticated/app/expenses/categories': typeof AuthenticatedAppExpensesCategoriesRoute
+  '/_authenticated/app/integrations/api-keys': typeof AuthenticatedAppIntegrationsApiKeysRoute
+  '/_authenticated/app/integrations/import-export': typeof AuthenticatedAppIntegrationsImportExportRoute
+  '/_authenticated/app/integrations/webhooks': typeof AuthenticatedAppIntegrationsWebhooksRoute
   '/_authenticated/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/_authenticated/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/_authenticated/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -563,7 +780,9 @@ export interface FileRoutesById {
   '/api/public/hooks/job-runner': typeof ApiPublicHooksJobRunnerRoute
   '/api/public/hooks/sales-ingest': typeof ApiPublicHooksSalesIngestRoute
   '/_authenticated/app/expenses/': typeof AuthenticatedAppExpensesIndexRoute
+  '/_authenticated/app/integrations/': typeof AuthenticatedAppIntegrationsIndexRoute
   '/_authenticated/app/inventory/': typeof AuthenticatedAppInventoryIndexRoute
+  '/_authenticated/app/operations/': typeof AuthenticatedAppOperationsIndexRoute
   '/_authenticated/app/sales/': typeof AuthenticatedAppSalesIndexRoute
   '/_authenticated/app/settings/': typeof AuthenticatedAppSettingsIndexRoute
 }
@@ -575,21 +794,29 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/reset-password'
     | '/app'
+    | '/onboarding'
     | '/admin'
     | '/developers'
     | '/legal/privacy'
     | '/legal/terms'
     | '/store/$slug'
+    | '/app/assets'
+    | '/app/branches'
     | '/app/commerce'
     | '/app/deliveries'
     | '/app/expenses'
     | '/app/finance'
+    | '/app/fleet'
+    | '/app/integrations'
     | '/app/inventory'
+    | '/app/maintenance'
     | '/app/notifications'
     | '/app/onboarding'
+    | '/app/operations'
     | '/app/orders'
     | '/app/payments'
     | '/app/pos'
+    | '/app/procurement'
     | '/app/products'
     | '/app/receipts'
     | '/app/reservations'
@@ -598,21 +825,34 @@ export interface FileRouteTypes {
     | '/app/stock-history'
     | '/app/store'
     | '/app/suppliers'
+    | '/app/vendors'
+    | '/app/warehouses'
     | '/admin/analytics'
+    | '/admin/api'
     | '/admin/audit'
     | '/admin/communications'
     | '/admin/companies'
     | '/admin/events'
     | '/admin/feature-flags'
+    | '/admin/health'
+    | '/admin/industry-profiles'
+    | '/admin/integration-logs'
+    | '/admin/integrations'
     | '/admin/jobs'
     | '/admin/modules'
     | '/admin/subscriptions'
     | '/admin/users'
+    | '/developers/apps'
+    | '/developers/docs'
+    | '/developers/keys'
     | '/app/'
     | '/admin/'
     | '/developers/'
     | '/app/accept-invite/$token'
     | '/app/expenses/categories'
+    | '/app/integrations/api-keys'
+    | '/app/integrations/import-export'
+    | '/app/integrations/webhooks'
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
@@ -624,7 +864,9 @@ export interface FileRouteTypes {
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
     | '/app/expenses/'
+    | '/app/integrations/'
     | '/app/inventory/'
+    | '/app/operations/'
     | '/app/sales/'
     | '/app/settings/'
   fileRoutesByTo: FileRoutesByTo
@@ -633,17 +875,23 @@ export interface FileRouteTypes {
     | '/auth'
     | '/pricing'
     | '/reset-password'
+    | '/onboarding'
     | '/legal/privacy'
     | '/legal/terms'
     | '/store/$slug'
+    | '/app/assets'
+    | '/app/branches'
     | '/app/commerce'
     | '/app/deliveries'
     | '/app/finance'
+    | '/app/fleet'
+    | '/app/maintenance'
     | '/app/notifications'
     | '/app/onboarding'
     | '/app/orders'
     | '/app/payments'
     | '/app/pos'
+    | '/app/procurement'
     | '/app/products'
     | '/app/receipts'
     | '/app/reservations'
@@ -651,21 +899,34 @@ export interface FileRouteTypes {
     | '/app/stock-history'
     | '/app/store'
     | '/app/suppliers'
+    | '/app/vendors'
+    | '/app/warehouses'
     | '/admin/analytics'
+    | '/admin/api'
     | '/admin/audit'
     | '/admin/communications'
     | '/admin/companies'
     | '/admin/events'
     | '/admin/feature-flags'
+    | '/admin/health'
+    | '/admin/industry-profiles'
+    | '/admin/integration-logs'
+    | '/admin/integrations'
     | '/admin/jobs'
     | '/admin/modules'
     | '/admin/subscriptions'
     | '/admin/users'
+    | '/developers/apps'
+    | '/developers/docs'
+    | '/developers/keys'
     | '/app'
     | '/admin'
     | '/developers'
     | '/app/accept-invite/$token'
     | '/app/expenses/categories'
+    | '/app/integrations/api-keys'
+    | '/app/integrations/import-export'
+    | '/app/integrations/webhooks'
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
@@ -677,7 +938,9 @@ export interface FileRouteTypes {
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
     | '/app/expenses'
+    | '/app/integrations'
     | '/app/inventory'
+    | '/app/operations'
     | '/app/sales'
     | '/app/settings'
   id:
@@ -689,21 +952,29 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/reset-password'
     | '/_authenticated/app'
+    | '/_authenticated/onboarding'
     | '/_platform/admin'
     | '/_platform/developers'
     | '/legal/privacy'
     | '/legal/terms'
     | '/store/$slug'
+    | '/_authenticated/app/assets'
+    | '/_authenticated/app/branches'
     | '/_authenticated/app/commerce'
     | '/_authenticated/app/deliveries'
     | '/_authenticated/app/expenses'
     | '/_authenticated/app/finance'
+    | '/_authenticated/app/fleet'
+    | '/_authenticated/app/integrations'
     | '/_authenticated/app/inventory'
+    | '/_authenticated/app/maintenance'
     | '/_authenticated/app/notifications'
     | '/_authenticated/app/onboarding'
+    | '/_authenticated/app/operations'
     | '/_authenticated/app/orders'
     | '/_authenticated/app/payments'
     | '/_authenticated/app/pos'
+    | '/_authenticated/app/procurement'
     | '/_authenticated/app/products'
     | '/_authenticated/app/receipts'
     | '/_authenticated/app/reservations'
@@ -712,21 +983,34 @@ export interface FileRouteTypes {
     | '/_authenticated/app/stock-history'
     | '/_authenticated/app/store'
     | '/_authenticated/app/suppliers'
+    | '/_authenticated/app/vendors'
+    | '/_authenticated/app/warehouses'
     | '/_platform/admin/analytics'
+    | '/_platform/admin/api'
     | '/_platform/admin/audit'
     | '/_platform/admin/communications'
     | '/_platform/admin/companies'
     | '/_platform/admin/events'
     | '/_platform/admin/feature-flags'
+    | '/_platform/admin/health'
+    | '/_platform/admin/industry-profiles'
+    | '/_platform/admin/integration-logs'
+    | '/_platform/admin/integrations'
     | '/_platform/admin/jobs'
     | '/_platform/admin/modules'
     | '/_platform/admin/subscriptions'
     | '/_platform/admin/users'
+    | '/_platform/developers/apps'
+    | '/_platform/developers/docs'
+    | '/_platform/developers/keys'
     | '/_authenticated/app/'
     | '/_platform/admin/'
     | '/_platform/developers/'
     | '/_authenticated/app/accept-invite/$token'
     | '/_authenticated/app/expenses/categories'
+    | '/_authenticated/app/integrations/api-keys'
+    | '/_authenticated/app/integrations/import-export'
+    | '/_authenticated/app/integrations/webhooks'
     | '/_authenticated/app/settings/audit'
     | '/_authenticated/app/settings/branches'
     | '/_authenticated/app/settings/modules'
@@ -738,7 +1022,9 @@ export interface FileRouteTypes {
     | '/api/public/hooks/job-runner'
     | '/api/public/hooks/sales-ingest'
     | '/_authenticated/app/expenses/'
+    | '/_authenticated/app/integrations/'
     | '/_authenticated/app/inventory/'
+    | '/_authenticated/app/operations/'
     | '/_authenticated/app/sales/'
     | '/_authenticated/app/settings/'
   fileRoutesById: FileRoutesById
@@ -837,6 +1123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlatformAdminRouteImport
       parentRoute: typeof PlatformRouteRoute
     }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/app': {
       id: '/_authenticated/app'
       path: '/app'
@@ -865,6 +1158,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppIndexRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_platform/developers/keys': {
+      id: '/_platform/developers/keys'
+      path: '/keys'
+      fullPath: '/developers/keys'
+      preLoaderRoute: typeof PlatformDevelopersKeysRouteImport
+      parentRoute: typeof PlatformDevelopersRoute
+    }
+    '/_platform/developers/docs': {
+      id: '/_platform/developers/docs'
+      path: '/docs'
+      fullPath: '/developers/docs'
+      preLoaderRoute: typeof PlatformDevelopersDocsRouteImport
+      parentRoute: typeof PlatformDevelopersRoute
+    }
+    '/_platform/developers/apps': {
+      id: '/_platform/developers/apps'
+      path: '/apps'
+      fullPath: '/developers/apps'
+      preLoaderRoute: typeof PlatformDevelopersAppsRouteImport
+      parentRoute: typeof PlatformDevelopersRoute
+    }
     '/_platform/admin/users': {
       id: '/_platform/admin/users'
       path: '/users'
@@ -891,6 +1205,34 @@ declare module '@tanstack/react-router' {
       path: '/jobs'
       fullPath: '/admin/jobs'
       preLoaderRoute: typeof PlatformAdminJobsRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/integrations': {
+      id: '/_platform/admin/integrations'
+      path: '/integrations'
+      fullPath: '/admin/integrations'
+      preLoaderRoute: typeof PlatformAdminIntegrationsRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/integration-logs': {
+      id: '/_platform/admin/integration-logs'
+      path: '/integration-logs'
+      fullPath: '/admin/integration-logs'
+      preLoaderRoute: typeof PlatformAdminIntegrationLogsRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/industry-profiles': {
+      id: '/_platform/admin/industry-profiles'
+      path: '/industry-profiles'
+      fullPath: '/admin/industry-profiles'
+      preLoaderRoute: typeof PlatformAdminIndustryProfilesRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/health': {
+      id: '/_platform/admin/health'
+      path: '/health'
+      fullPath: '/admin/health'
+      preLoaderRoute: typeof PlatformAdminHealthRouteImport
       parentRoute: typeof PlatformAdminRoute
     }
     '/_platform/admin/feature-flags': {
@@ -928,12 +1270,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlatformAdminAuditRouteImport
       parentRoute: typeof PlatformAdminRoute
     }
+    '/_platform/admin/api': {
+      id: '/_platform/admin/api'
+      path: '/api'
+      fullPath: '/admin/api'
+      preLoaderRoute: typeof PlatformAdminApiRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
     '/_platform/admin/analytics': {
       id: '/_platform/admin/analytics'
       path: '/analytics'
       fullPath: '/admin/analytics'
       preLoaderRoute: typeof PlatformAdminAnalyticsRouteImport
       parentRoute: typeof PlatformAdminRoute
+    }
+    '/_authenticated/app/warehouses': {
+      id: '/_authenticated/app/warehouses'
+      path: '/warehouses'
+      fullPath: '/app/warehouses'
+      preLoaderRoute: typeof AuthenticatedAppWarehousesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/vendors': {
+      id: '/_authenticated/app/vendors'
+      path: '/vendors'
+      fullPath: '/app/vendors'
+      preLoaderRoute: typeof AuthenticatedAppVendorsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/suppliers': {
       id: '/_authenticated/app/suppliers'
@@ -991,6 +1354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppProductsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/procurement': {
+      id: '/_authenticated/app/procurement'
+      path: '/procurement'
+      fullPath: '/app/procurement'
+      preLoaderRoute: typeof AuthenticatedAppProcurementRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/pos': {
       id: '/_authenticated/app/pos'
       path: '/pos'
@@ -1012,6 +1382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppOrdersRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/operations': {
+      id: '/_authenticated/app/operations'
+      path: '/operations'
+      fullPath: '/app/operations'
+      preLoaderRoute: typeof AuthenticatedAppOperationsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/onboarding': {
       id: '/_authenticated/app/onboarding'
       path: '/onboarding'
@@ -1026,11 +1403,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppNotificationsRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/maintenance': {
+      id: '/_authenticated/app/maintenance'
+      path: '/maintenance'
+      fullPath: '/app/maintenance'
+      preLoaderRoute: typeof AuthenticatedAppMaintenanceRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/inventory': {
       id: '/_authenticated/app/inventory'
       path: '/inventory'
       fullPath: '/app/inventory'
       preLoaderRoute: typeof AuthenticatedAppInventoryRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/integrations': {
+      id: '/_authenticated/app/integrations'
+      path: '/integrations'
+      fullPath: '/app/integrations'
+      preLoaderRoute: typeof AuthenticatedAppIntegrationsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/fleet': {
+      id: '/_authenticated/app/fleet'
+      path: '/fleet'
+      fullPath: '/app/fleet'
+      preLoaderRoute: typeof AuthenticatedAppFleetRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
     '/_authenticated/app/finance': {
@@ -1061,6 +1459,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppCommerceRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/branches': {
+      id: '/_authenticated/app/branches'
+      path: '/branches'
+      fullPath: '/app/branches'
+      preLoaderRoute: typeof AuthenticatedAppBranchesRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
+    '/_authenticated/app/assets': {
+      id: '/_authenticated/app/assets'
+      path: '/assets'
+      fullPath: '/app/assets'
+      preLoaderRoute: typeof AuthenticatedAppAssetsRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/settings/': {
       id: '/_authenticated/app/settings/'
       path: '/settings'
@@ -1075,12 +1487,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSalesIndexRouteImport
       parentRoute: typeof AuthenticatedAppSalesRoute
     }
+    '/_authenticated/app/operations/': {
+      id: '/_authenticated/app/operations/'
+      path: '/'
+      fullPath: '/app/operations/'
+      preLoaderRoute: typeof AuthenticatedAppOperationsIndexRouteImport
+      parentRoute: typeof AuthenticatedAppOperationsRoute
+    }
     '/_authenticated/app/inventory/': {
       id: '/_authenticated/app/inventory/'
       path: '/'
       fullPath: '/app/inventory/'
       preLoaderRoute: typeof AuthenticatedAppInventoryIndexRouteImport
       parentRoute: typeof AuthenticatedAppInventoryRoute
+    }
+    '/_authenticated/app/integrations/': {
+      id: '/_authenticated/app/integrations/'
+      path: '/'
+      fullPath: '/app/integrations/'
+      preLoaderRoute: typeof AuthenticatedAppIntegrationsIndexRouteImport
+      parentRoute: typeof AuthenticatedAppIntegrationsRoute
     }
     '/_authenticated/app/expenses/': {
       id: '/_authenticated/app/expenses/'
@@ -1159,6 +1585,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSettingsAuditRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/integrations/webhooks': {
+      id: '/_authenticated/app/integrations/webhooks'
+      path: '/webhooks'
+      fullPath: '/app/integrations/webhooks'
+      preLoaderRoute: typeof AuthenticatedAppIntegrationsWebhooksRouteImport
+      parentRoute: typeof AuthenticatedAppIntegrationsRoute
+    }
+    '/_authenticated/app/integrations/import-export': {
+      id: '/_authenticated/app/integrations/import-export'
+      path: '/import-export'
+      fullPath: '/app/integrations/import-export'
+      preLoaderRoute: typeof AuthenticatedAppIntegrationsImportExportRouteImport
+      parentRoute: typeof AuthenticatedAppIntegrationsRoute
+    }
+    '/_authenticated/app/integrations/api-keys': {
+      id: '/_authenticated/app/integrations/api-keys'
+      path: '/api-keys'
+      fullPath: '/app/integrations/api-keys'
+      preLoaderRoute: typeof AuthenticatedAppIntegrationsApiKeysRouteImport
+      parentRoute: typeof AuthenticatedAppIntegrationsRoute
+    }
     '/_authenticated/app/expenses/categories': {
       id: '/_authenticated/app/expenses/categories'
       path: '/categories'
@@ -1193,6 +1640,30 @@ const AuthenticatedAppExpensesRouteWithChildren =
     AuthenticatedAppExpensesRouteChildren,
   )
 
+interface AuthenticatedAppIntegrationsRouteChildren {
+  AuthenticatedAppIntegrationsApiKeysRoute: typeof AuthenticatedAppIntegrationsApiKeysRoute
+  AuthenticatedAppIntegrationsImportExportRoute: typeof AuthenticatedAppIntegrationsImportExportRoute
+  AuthenticatedAppIntegrationsWebhooksRoute: typeof AuthenticatedAppIntegrationsWebhooksRoute
+  AuthenticatedAppIntegrationsIndexRoute: typeof AuthenticatedAppIntegrationsIndexRoute
+}
+
+const AuthenticatedAppIntegrationsRouteChildren: AuthenticatedAppIntegrationsRouteChildren =
+  {
+    AuthenticatedAppIntegrationsApiKeysRoute:
+      AuthenticatedAppIntegrationsApiKeysRoute,
+    AuthenticatedAppIntegrationsImportExportRoute:
+      AuthenticatedAppIntegrationsImportExportRoute,
+    AuthenticatedAppIntegrationsWebhooksRoute:
+      AuthenticatedAppIntegrationsWebhooksRoute,
+    AuthenticatedAppIntegrationsIndexRoute:
+      AuthenticatedAppIntegrationsIndexRoute,
+  }
+
+const AuthenticatedAppIntegrationsRouteWithChildren =
+  AuthenticatedAppIntegrationsRoute._addFileChildren(
+    AuthenticatedAppIntegrationsRouteChildren,
+  )
+
 interface AuthenticatedAppInventoryRouteChildren {
   AuthenticatedAppInventoryIndexRoute: typeof AuthenticatedAppInventoryIndexRoute
 }
@@ -1205,6 +1676,20 @@ const AuthenticatedAppInventoryRouteChildren: AuthenticatedAppInventoryRouteChil
 const AuthenticatedAppInventoryRouteWithChildren =
   AuthenticatedAppInventoryRoute._addFileChildren(
     AuthenticatedAppInventoryRouteChildren,
+  )
+
+interface AuthenticatedAppOperationsRouteChildren {
+  AuthenticatedAppOperationsIndexRoute: typeof AuthenticatedAppOperationsIndexRoute
+}
+
+const AuthenticatedAppOperationsRouteChildren: AuthenticatedAppOperationsRouteChildren =
+  {
+    AuthenticatedAppOperationsIndexRoute: AuthenticatedAppOperationsIndexRoute,
+  }
+
+const AuthenticatedAppOperationsRouteWithChildren =
+  AuthenticatedAppOperationsRoute._addFileChildren(
+    AuthenticatedAppOperationsRouteChildren,
   )
 
 interface AuthenticatedAppSalesRouteChildren {
@@ -1221,16 +1706,23 @@ const AuthenticatedAppSalesRouteWithChildren =
   )
 
 interface AuthenticatedAppRouteChildren {
+  AuthenticatedAppAssetsRoute: typeof AuthenticatedAppAssetsRoute
+  AuthenticatedAppBranchesRoute: typeof AuthenticatedAppBranchesRoute
   AuthenticatedAppCommerceRoute: typeof AuthenticatedAppCommerceRoute
   AuthenticatedAppDeliveriesRoute: typeof AuthenticatedAppDeliveriesRoute
   AuthenticatedAppExpensesRoute: typeof AuthenticatedAppExpensesRouteWithChildren
   AuthenticatedAppFinanceRoute: typeof AuthenticatedAppFinanceRoute
+  AuthenticatedAppFleetRoute: typeof AuthenticatedAppFleetRoute
+  AuthenticatedAppIntegrationsRoute: typeof AuthenticatedAppIntegrationsRouteWithChildren
   AuthenticatedAppInventoryRoute: typeof AuthenticatedAppInventoryRouteWithChildren
+  AuthenticatedAppMaintenanceRoute: typeof AuthenticatedAppMaintenanceRoute
   AuthenticatedAppNotificationsRoute: typeof AuthenticatedAppNotificationsRoute
   AuthenticatedAppOnboardingRoute: typeof AuthenticatedAppOnboardingRoute
+  AuthenticatedAppOperationsRoute: typeof AuthenticatedAppOperationsRouteWithChildren
   AuthenticatedAppOrdersRoute: typeof AuthenticatedAppOrdersRoute
   AuthenticatedAppPaymentsRoute: typeof AuthenticatedAppPaymentsRoute
   AuthenticatedAppPosRoute: typeof AuthenticatedAppPosRoute
+  AuthenticatedAppProcurementRoute: typeof AuthenticatedAppProcurementRoute
   AuthenticatedAppProductsRoute: typeof AuthenticatedAppProductsRoute
   AuthenticatedAppReceiptsRoute: typeof AuthenticatedAppReceiptsRoute
   AuthenticatedAppReservationsRoute: typeof AuthenticatedAppReservationsRoute
@@ -1239,6 +1731,8 @@ interface AuthenticatedAppRouteChildren {
   AuthenticatedAppStockHistoryRoute: typeof AuthenticatedAppStockHistoryRoute
   AuthenticatedAppStoreRoute: typeof AuthenticatedAppStoreRoute
   AuthenticatedAppSuppliersRoute: typeof AuthenticatedAppSuppliersRoute
+  AuthenticatedAppVendorsRoute: typeof AuthenticatedAppVendorsRoute
+  AuthenticatedAppWarehousesRoute: typeof AuthenticatedAppWarehousesRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
   AuthenticatedAppAcceptInviteTokenRoute: typeof AuthenticatedAppAcceptInviteTokenRoute
   AuthenticatedAppSettingsAuditRoute: typeof AuthenticatedAppSettingsAuditRoute
@@ -1252,16 +1746,24 @@ interface AuthenticatedAppRouteChildren {
 }
 
 const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
+  AuthenticatedAppAssetsRoute: AuthenticatedAppAssetsRoute,
+  AuthenticatedAppBranchesRoute: AuthenticatedAppBranchesRoute,
   AuthenticatedAppCommerceRoute: AuthenticatedAppCommerceRoute,
   AuthenticatedAppDeliveriesRoute: AuthenticatedAppDeliveriesRoute,
   AuthenticatedAppExpensesRoute: AuthenticatedAppExpensesRouteWithChildren,
   AuthenticatedAppFinanceRoute: AuthenticatedAppFinanceRoute,
+  AuthenticatedAppFleetRoute: AuthenticatedAppFleetRoute,
+  AuthenticatedAppIntegrationsRoute:
+    AuthenticatedAppIntegrationsRouteWithChildren,
   AuthenticatedAppInventoryRoute: AuthenticatedAppInventoryRouteWithChildren,
+  AuthenticatedAppMaintenanceRoute: AuthenticatedAppMaintenanceRoute,
   AuthenticatedAppNotificationsRoute: AuthenticatedAppNotificationsRoute,
   AuthenticatedAppOnboardingRoute: AuthenticatedAppOnboardingRoute,
+  AuthenticatedAppOperationsRoute: AuthenticatedAppOperationsRouteWithChildren,
   AuthenticatedAppOrdersRoute: AuthenticatedAppOrdersRoute,
   AuthenticatedAppPaymentsRoute: AuthenticatedAppPaymentsRoute,
   AuthenticatedAppPosRoute: AuthenticatedAppPosRoute,
+  AuthenticatedAppProcurementRoute: AuthenticatedAppProcurementRoute,
   AuthenticatedAppProductsRoute: AuthenticatedAppProductsRoute,
   AuthenticatedAppReceiptsRoute: AuthenticatedAppReceiptsRoute,
   AuthenticatedAppReservationsRoute: AuthenticatedAppReservationsRoute,
@@ -1270,6 +1772,8 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppStockHistoryRoute: AuthenticatedAppStockHistoryRoute,
   AuthenticatedAppStoreRoute: AuthenticatedAppStoreRoute,
   AuthenticatedAppSuppliersRoute: AuthenticatedAppSuppliersRoute,
+  AuthenticatedAppVendorsRoute: AuthenticatedAppVendorsRoute,
+  AuthenticatedAppWarehousesRoute: AuthenticatedAppWarehousesRoute,
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
   AuthenticatedAppAcceptInviteTokenRoute:
     AuthenticatedAppAcceptInviteTokenRoute,
@@ -1290,10 +1794,12 @@ const AuthenticatedAppRouteWithChildren =
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAppRoute: typeof AuthenticatedAppRouteWithChildren
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAppRoute: AuthenticatedAppRouteWithChildren,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -1301,11 +1807,16 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface PlatformAdminRouteChildren {
   PlatformAdminAnalyticsRoute: typeof PlatformAdminAnalyticsRoute
+  PlatformAdminApiRoute: typeof PlatformAdminApiRoute
   PlatformAdminAuditRoute: typeof PlatformAdminAuditRoute
   PlatformAdminCommunicationsRoute: typeof PlatformAdminCommunicationsRoute
   PlatformAdminCompaniesRoute: typeof PlatformAdminCompaniesRoute
   PlatformAdminEventsRoute: typeof PlatformAdminEventsRoute
   PlatformAdminFeatureFlagsRoute: typeof PlatformAdminFeatureFlagsRoute
+  PlatformAdminHealthRoute: typeof PlatformAdminHealthRoute
+  PlatformAdminIndustryProfilesRoute: typeof PlatformAdminIndustryProfilesRoute
+  PlatformAdminIntegrationLogsRoute: typeof PlatformAdminIntegrationLogsRoute
+  PlatformAdminIntegrationsRoute: typeof PlatformAdminIntegrationsRoute
   PlatformAdminJobsRoute: typeof PlatformAdminJobsRoute
   PlatformAdminModulesRoute: typeof PlatformAdminModulesRoute
   PlatformAdminSubscriptionsRoute: typeof PlatformAdminSubscriptionsRoute
@@ -1315,11 +1826,16 @@ interface PlatformAdminRouteChildren {
 
 const PlatformAdminRouteChildren: PlatformAdminRouteChildren = {
   PlatformAdminAnalyticsRoute: PlatformAdminAnalyticsRoute,
+  PlatformAdminApiRoute: PlatformAdminApiRoute,
   PlatformAdminAuditRoute: PlatformAdminAuditRoute,
   PlatformAdminCommunicationsRoute: PlatformAdminCommunicationsRoute,
   PlatformAdminCompaniesRoute: PlatformAdminCompaniesRoute,
   PlatformAdminEventsRoute: PlatformAdminEventsRoute,
   PlatformAdminFeatureFlagsRoute: PlatformAdminFeatureFlagsRoute,
+  PlatformAdminHealthRoute: PlatformAdminHealthRoute,
+  PlatformAdminIndustryProfilesRoute: PlatformAdminIndustryProfilesRoute,
+  PlatformAdminIntegrationLogsRoute: PlatformAdminIntegrationLogsRoute,
+  PlatformAdminIntegrationsRoute: PlatformAdminIntegrationsRoute,
   PlatformAdminJobsRoute: PlatformAdminJobsRoute,
   PlatformAdminModulesRoute: PlatformAdminModulesRoute,
   PlatformAdminSubscriptionsRoute: PlatformAdminSubscriptionsRoute,
@@ -1332,10 +1848,16 @@ const PlatformAdminRouteWithChildren = PlatformAdminRoute._addFileChildren(
 )
 
 interface PlatformDevelopersRouteChildren {
+  PlatformDevelopersAppsRoute: typeof PlatformDevelopersAppsRoute
+  PlatformDevelopersDocsRoute: typeof PlatformDevelopersDocsRoute
+  PlatformDevelopersKeysRoute: typeof PlatformDevelopersKeysRoute
   PlatformDevelopersIndexRoute: typeof PlatformDevelopersIndexRoute
 }
 
 const PlatformDevelopersRouteChildren: PlatformDevelopersRouteChildren = {
+  PlatformDevelopersAppsRoute: PlatformDevelopersAppsRoute,
+  PlatformDevelopersDocsRoute: PlatformDevelopersDocsRoute,
+  PlatformDevelopersKeysRoute: PlatformDevelopersKeysRoute,
   PlatformDevelopersIndexRoute: PlatformDevelopersIndexRoute,
 }
 
@@ -1373,3 +1895,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

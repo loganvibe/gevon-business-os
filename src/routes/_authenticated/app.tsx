@@ -9,6 +9,7 @@ import {
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { supabase } from "@/integrations/supabase/client";
 import { listMyCompanies, setDefaultCompany } from "@/lib/core.functions";
+import { DynamicNav } from "@/components/core/DynamicNav";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
@@ -18,19 +19,6 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_authenticated/app")({
   component: AppShell,
 });
-
-const NAV: Array<{ to: string; label: string; icon: any; exact?: boolean }> = [
-  { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/app/notifications", label: "Notifications", icon: Bell },
-  { to: "/app/settings", label: "Company Settings", icon: Settings },
-  { to: "/app/settings/users", label: "Team", icon: Users },
-  { to: "/app/settings/branches", label: "Branches", icon: Building2 },
-  { to: "/app/settings/roles", label: "Roles", icon: ShieldCheck },
-  { to: "/app/settings/modules", label: "Modules", icon: Blocks },
-  { to: "/app/settings/subscription", label: "Subscription", icon: Gem },
-  { to: "/app/settings/notifications", label: "Notification Prefs", icon: Bell },
-  { to: "/app/settings/audit", label: "Audit Log", icon: ScrollText },
-];
 
 function AppShell() {
   const location = useLocation();
@@ -63,7 +51,7 @@ function AppShell() {
       </div>
     );
   }
-  if (data.companies.length === 0) return null; // navigating
+  if (data.companies.length === 0) return null;
 
   const active = data.companies.find((c) => c.id === activeId) ?? data.companies[0]!;
 
@@ -91,24 +79,7 @@ function AppShell() {
             />
           </div>
           <nav className="flex-1 space-y-0.5 p-3">
-            {NAV.map((item) => {
-              const path = location.pathname;
-              const isActive = item.exact ? path === item.to : path.startsWith(item.to);
-              return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm transition ${
-                    isActive
-                      ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium"
-                      : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
-                  }`}
-                >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
-                </Link>
-              );
-            })}
+            <DynamicNav companyId={active.id} />
           </nav>
           <UserMenu />
         </aside>

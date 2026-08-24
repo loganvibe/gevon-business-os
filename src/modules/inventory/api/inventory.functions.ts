@@ -4,7 +4,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const getInventory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       companyId: z.string().uuid(),
       branchId: z.string().uuid().optional(),
@@ -26,7 +26,7 @@ export const getInventory = createServerFn({ method: "POST" })
 
 export const getLowStockItems = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const { data: rows, error } = await context.supabase
       .from("inventory_items")
@@ -56,7 +56,7 @@ const movementInput = z.object({
 
 export const receiveStock = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => movementInput.parse(d))
+  .validator((d: unknown) => movementInput.parse(d))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("stock_movements").insert({
       company_id: data.companyId,
@@ -74,7 +74,7 @@ export const receiveStock = createServerFn({ method: "POST" })
 
 export const adjustStock = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       companyId: z.string().uuid(),
       productId: z.string().uuid(),
@@ -100,7 +100,7 @@ export const adjustStock = createServerFn({ method: "POST" })
 
 export const listStockMovements = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z.object({
       companyId: z.string().uuid(),
       productId: z.string().uuid().optional(),
@@ -122,7 +122,7 @@ export const listStockMovements = createServerFn({ method: "POST" })
 
 export const inventorySummary = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
+  .validator((d: unknown) => z.object({ companyId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const [{ count: productCount }, { data: items }] = await Promise.all([
       context.supabase.from("products").select("id", { count: "exact", head: true }).eq("company_id", data.companyId).is("deleted_at", null),

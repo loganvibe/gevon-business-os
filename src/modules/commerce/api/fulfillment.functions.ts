@@ -21,7 +21,7 @@ const deliveryStatus = z.enum([
 
 export const listDeliveries = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -45,7 +45,7 @@ export const listDeliveries = createServerFn({ method: "POST" })
 
 export const createDelivery = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -106,7 +106,7 @@ export const createDelivery = createServerFn({ method: "POST" })
 
 export const updateDeliveryStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         deliveryId: z.string().uuid(),
@@ -162,7 +162,7 @@ const reservationStatus = z.enum(["requested", "confirmed", "checked_in", "compl
 
 export const listReservations = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -186,7 +186,7 @@ export const listReservations = createServerFn({ method: "POST" })
 
 export const createReservation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         companyId: z.string().uuid(),
@@ -240,7 +240,7 @@ export const createReservation = createServerFn({ method: "POST" })
 
 export const updateReservation = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: unknown) =>
+  .validator((d: unknown) =>
     z
       .object({
         reservationId: z.string().uuid(),

@@ -25,6 +25,8 @@ import { expenseEvents } from "./definitions/expenses";
 import { peopleEvents } from "./definitions/people";
 import { workflowEvents } from "./definitions/workflow";
 import { marketingEvents } from "./definitions/marketing";
+import { enterpriseEvents } from "./definitions/enterprise";
+import { integrationEvents } from "./definitions/integrations";
 
 export type EventSubscriberKind = "notification" | "email" | "job" | "ai";
 
@@ -79,19 +81,21 @@ export interface EventDefinition<P extends z.ZodTypeAny = z.ZodTypeAny> {
 // -------------------------- Registry -----------------------------------
 
 const EVENTS: EventDefinition[] = [
-  ...identityEvents,
-  ...companyEvents,
-  ...moduleEvents,
-  ...billingEvents,
-  ...securityEvents,
-  ...inventoryEvents,
-  ...salesEvents,
-  ...commerceEvents,
-  ...expenseEvents,
-  ...peopleEvents,
-  ...workflowEvents,
-  ...marketingEvents,
-];
+   ...identityEvents,
+   ...companyEvents,
+   ...moduleEvents,
+   ...billingEvents,
+   ...securityEvents,
+   ...inventoryEvents,
+   ...salesEvents,
+   ...commerceEvents,
+   ...expenseEvents,
+   ...peopleEvents,
+   ...workflowEvents,
+   ...marketingEvents,
+   ...enterpriseEvents,
+   ...integrationEvents,
+  ];
 
 const BY_KEY = new Map<string, EventDefinition>(EVENTS.map((e) => [e.key, e]));
 
