@@ -1,13 +1,11 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { getNavigation } from "@/platform/customer.functions";
 import {
   Collapsible, CollapsibleContent, CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 import * as Icons from "lucide-react";
 import type { ComponentType } from "react";
+import { useNavigationGroups } from "@/lib/navigation-context";
 
 function Icon({ name, className }: { name?: string; className?: string }) {
   if (!name) return null;
@@ -17,25 +15,21 @@ function Icon({ name, className }: { name?: string; className?: string }) {
   return <Cmp className={className} />;
 }
 
-/**
- * Renders sidebar navigation built from the module registry, filtered by
- * enabled modules × user permissions × feature flags — resolved server-side
- * via `getNavigation`.
- */
-export function DynamicNav({ companyId }: { companyId: string }) {
+export function DynamicNav() {
   const location = useLocation();
-  const fn = useServerFn(getNavigation);
-  const { data } = useQuery({
-    queryKey: ["nav", companyId],
-    queryFn: () => fn({ data: { companyId } }),
-    staleTime: 30_000,
-  });
+  const groups = useNavigationGroups();
+
+  if (!groups || groups.length === 0) {
+    return (
+      <div className="p-3 text-xs text-muted-foreground">No modules enabled yet.</div>
+    );
+  }
 
   return (
     <nav className="flex-1 space-y-3 p-3">
-      {(data?.groups ?? []).map((group) => (
+      {groups.map((group) => (
         <div key={group.moduleId} className="space-y-0.5">
-          {(data?.groups.length ?? 0) > 1 && (
+          {groups.length > 1 && (
             <div className="px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-sidebar-foreground/50">
               {group.moduleName}
             </div>

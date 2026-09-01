@@ -9,6 +9,7 @@ import { handleEmailSend } from "./email.send";
 import { handleNotificationDigest } from "./notification.digest";
 import { handleIntegrationSync } from "./integration.sync";
 import { handleDataImport } from "./integration.import";
+import { handleAIExecute } from "./ai.execute";
 
 export type JobHandler = (
   admin: SupabaseClient,
@@ -21,4 +22,5 @@ export const JOB_HANDLERS: Record<string, JobHandler> = {
   "notification.digest": handleNotificationDigest,
   "integration.sync": handleIntegrationSync,
   "integration.import": handleDataImport,
+  "ai.execute": handleAIExecute,
 };

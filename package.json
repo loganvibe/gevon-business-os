@@ -11,7 +11,8 @@
     "start": "node .output/server/index.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "create-admin": "node scripts/create-admin.js"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",

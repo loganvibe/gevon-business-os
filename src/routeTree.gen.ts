@@ -43,6 +43,7 @@ import { Route as PlatformAdminCommunicationsRouteImport } from './routes/_platf
 import { Route as PlatformAdminAuditRouteImport } from './routes/_platform/admin.audit'
 import { Route as PlatformAdminApiRouteImport } from './routes/_platform/admin.api'
 import { Route as PlatformAdminAnalyticsRouteImport } from './routes/_platform/admin.analytics'
+import { Route as PlatformAdminAiRouteImport } from './routes/_platform/admin.ai'
 import { Route as AuthenticatedAppWarehousesRouteImport } from './routes/_authenticated/app.warehouses'
 import { Route as AuthenticatedAppVendorsRouteImport } from './routes/_authenticated/app.vendors'
 import { Route as AuthenticatedAppSuppliersRouteImport } from './routes/_authenticated/app.suppliers'
@@ -86,6 +87,7 @@ import { Route as AuthenticatedAppSettingsNotificationsRouteImport } from './rou
 import { Route as AuthenticatedAppSettingsModulesRouteImport } from './routes/_authenticated/app.settings.modules'
 import { Route as AuthenticatedAppSettingsBranchesRouteImport } from './routes/_authenticated/app.settings.branches'
 import { Route as AuthenticatedAppSettingsAuditRouteImport } from './routes/_authenticated/app.settings.audit'
+import { Route as AuthenticatedAppSettingsAiUsageRouteImport } from './routes/_authenticated/app.settings.ai-usage'
 import { Route as AuthenticatedAppIntegrationsWebhooksRouteImport } from './routes/_authenticated/app.integrations.webhooks'
 import { Route as AuthenticatedAppIntegrationsImportExportRouteImport } from './routes/_authenticated/app.integrations.import-export'
 import { Route as AuthenticatedAppIntegrationsApiKeysRouteImport } from './routes/_authenticated/app.integrations.api-keys'
@@ -264,6 +266,11 @@ const PlatformAdminApiRoute = PlatformAdminApiRouteImport.update({
 const PlatformAdminAnalyticsRoute = PlatformAdminAnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
+  getParentRoute: () => PlatformAdminRoute,
+} as any)
+const PlatformAdminAiRoute = PlatformAdminAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
   getParentRoute: () => PlatformAdminRoute,
 } as any)
 const AuthenticatedAppWarehousesRoute =
@@ -514,6 +521,12 @@ const AuthenticatedAppSettingsAuditRoute =
     path: '/settings/audit',
     getParentRoute: () => AuthenticatedAppRoute,
   } as any)
+const AuthenticatedAppSettingsAiUsageRoute =
+  AuthenticatedAppSettingsAiUsageRouteImport.update({
+    id: '/settings/ai-usage',
+    path: '/settings/ai-usage',
+    getParentRoute: () => AuthenticatedAppRoute,
+  } as any)
 const AuthenticatedAppIntegrationsWebhooksRoute =
   AuthenticatedAppIntegrationsWebhooksRouteImport.update({
     id: '/webhooks',
@@ -584,6 +597,7 @@ export interface FileRoutesByFullPath {
   '/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/app/vendors': typeof AuthenticatedAppVendorsRoute
   '/app/warehouses': typeof AuthenticatedAppWarehousesRoute
+  '/admin/ai': typeof PlatformAdminAiRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/admin/api': typeof PlatformAdminApiRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
@@ -610,6 +624,7 @@ export interface FileRoutesByFullPath {
   '/app/integrations/api-keys': typeof AuthenticatedAppIntegrationsApiKeysRoute
   '/app/integrations/import-export': typeof AuthenticatedAppIntegrationsImportExportRoute
   '/app/integrations/webhooks': typeof AuthenticatedAppIntegrationsWebhooksRoute
+  '/app/settings/ai-usage': typeof AuthenticatedAppSettingsAiUsageRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -658,6 +673,7 @@ export interface FileRoutesByTo {
   '/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/app/vendors': typeof AuthenticatedAppVendorsRoute
   '/app/warehouses': typeof AuthenticatedAppWarehousesRoute
+  '/admin/ai': typeof PlatformAdminAiRoute
   '/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/admin/api': typeof PlatformAdminApiRoute
   '/admin/audit': typeof PlatformAdminAuditRoute
@@ -684,6 +700,7 @@ export interface FileRoutesByTo {
   '/app/integrations/api-keys': typeof AuthenticatedAppIntegrationsApiKeysRoute
   '/app/integrations/import-export': typeof AuthenticatedAppIntegrationsImportExportRoute
   '/app/integrations/webhooks': typeof AuthenticatedAppIntegrationsWebhooksRoute
+  '/app/settings/ai-usage': typeof AuthenticatedAppSettingsAiUsageRoute
   '/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -743,6 +760,7 @@ export interface FileRoutesById {
   '/_authenticated/app/suppliers': typeof AuthenticatedAppSuppliersRoute
   '/_authenticated/app/vendors': typeof AuthenticatedAppVendorsRoute
   '/_authenticated/app/warehouses': typeof AuthenticatedAppWarehousesRoute
+  '/_platform/admin/ai': typeof PlatformAdminAiRoute
   '/_platform/admin/analytics': typeof PlatformAdminAnalyticsRoute
   '/_platform/admin/api': typeof PlatformAdminApiRoute
   '/_platform/admin/audit': typeof PlatformAdminAuditRoute
@@ -769,6 +787,7 @@ export interface FileRoutesById {
   '/_authenticated/app/integrations/api-keys': typeof AuthenticatedAppIntegrationsApiKeysRoute
   '/_authenticated/app/integrations/import-export': typeof AuthenticatedAppIntegrationsImportExportRoute
   '/_authenticated/app/integrations/webhooks': typeof AuthenticatedAppIntegrationsWebhooksRoute
+  '/_authenticated/app/settings/ai-usage': typeof AuthenticatedAppSettingsAiUsageRoute
   '/_authenticated/app/settings/audit': typeof AuthenticatedAppSettingsAuditRoute
   '/_authenticated/app/settings/branches': typeof AuthenticatedAppSettingsBranchesRoute
   '/_authenticated/app/settings/modules': typeof AuthenticatedAppSettingsModulesRoute
@@ -827,6 +846,7 @@ export interface FileRouteTypes {
     | '/app/suppliers'
     | '/app/vendors'
     | '/app/warehouses'
+    | '/admin/ai'
     | '/admin/analytics'
     | '/admin/api'
     | '/admin/audit'
@@ -853,6 +873,7 @@ export interface FileRouteTypes {
     | '/app/integrations/api-keys'
     | '/app/integrations/import-export'
     | '/app/integrations/webhooks'
+    | '/app/settings/ai-usage'
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
@@ -901,6 +922,7 @@ export interface FileRouteTypes {
     | '/app/suppliers'
     | '/app/vendors'
     | '/app/warehouses'
+    | '/admin/ai'
     | '/admin/analytics'
     | '/admin/api'
     | '/admin/audit'
@@ -927,6 +949,7 @@ export interface FileRouteTypes {
     | '/app/integrations/api-keys'
     | '/app/integrations/import-export'
     | '/app/integrations/webhooks'
+    | '/app/settings/ai-usage'
     | '/app/settings/audit'
     | '/app/settings/branches'
     | '/app/settings/modules'
@@ -985,6 +1008,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/suppliers'
     | '/_authenticated/app/vendors'
     | '/_authenticated/app/warehouses'
+    | '/_platform/admin/ai'
     | '/_platform/admin/analytics'
     | '/_platform/admin/api'
     | '/_platform/admin/audit'
@@ -1011,6 +1035,7 @@ export interface FileRouteTypes {
     | '/_authenticated/app/integrations/api-keys'
     | '/_authenticated/app/integrations/import-export'
     | '/_authenticated/app/integrations/webhooks'
+    | '/_authenticated/app/settings/ai-usage'
     | '/_authenticated/app/settings/audit'
     | '/_authenticated/app/settings/branches'
     | '/_authenticated/app/settings/modules'
@@ -1282,6 +1307,13 @@ declare module '@tanstack/react-router' {
       path: '/analytics'
       fullPath: '/admin/analytics'
       preLoaderRoute: typeof PlatformAdminAnalyticsRouteImport
+      parentRoute: typeof PlatformAdminRoute
+    }
+    '/_platform/admin/ai': {
+      id: '/_platform/admin/ai'
+      path: '/ai'
+      fullPath: '/admin/ai'
+      preLoaderRoute: typeof PlatformAdminAiRouteImport
       parentRoute: typeof PlatformAdminRoute
     }
     '/_authenticated/app/warehouses': {
@@ -1585,6 +1617,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAppSettingsAuditRouteImport
       parentRoute: typeof AuthenticatedAppRoute
     }
+    '/_authenticated/app/settings/ai-usage': {
+      id: '/_authenticated/app/settings/ai-usage'
+      path: '/settings/ai-usage'
+      fullPath: '/app/settings/ai-usage'
+      preLoaderRoute: typeof AuthenticatedAppSettingsAiUsageRouteImport
+      parentRoute: typeof AuthenticatedAppRoute
+    }
     '/_authenticated/app/integrations/webhooks': {
       id: '/_authenticated/app/integrations/webhooks'
       path: '/webhooks'
@@ -1735,6 +1774,7 @@ interface AuthenticatedAppRouteChildren {
   AuthenticatedAppWarehousesRoute: typeof AuthenticatedAppWarehousesRoute
   AuthenticatedAppIndexRoute: typeof AuthenticatedAppIndexRoute
   AuthenticatedAppAcceptInviteTokenRoute: typeof AuthenticatedAppAcceptInviteTokenRoute
+  AuthenticatedAppSettingsAiUsageRoute: typeof AuthenticatedAppSettingsAiUsageRoute
   AuthenticatedAppSettingsAuditRoute: typeof AuthenticatedAppSettingsAuditRoute
   AuthenticatedAppSettingsBranchesRoute: typeof AuthenticatedAppSettingsBranchesRoute
   AuthenticatedAppSettingsModulesRoute: typeof AuthenticatedAppSettingsModulesRoute
@@ -1777,6 +1817,7 @@ const AuthenticatedAppRouteChildren: AuthenticatedAppRouteChildren = {
   AuthenticatedAppIndexRoute: AuthenticatedAppIndexRoute,
   AuthenticatedAppAcceptInviteTokenRoute:
     AuthenticatedAppAcceptInviteTokenRoute,
+  AuthenticatedAppSettingsAiUsageRoute: AuthenticatedAppSettingsAiUsageRoute,
   AuthenticatedAppSettingsAuditRoute: AuthenticatedAppSettingsAuditRoute,
   AuthenticatedAppSettingsBranchesRoute: AuthenticatedAppSettingsBranchesRoute,
   AuthenticatedAppSettingsModulesRoute: AuthenticatedAppSettingsModulesRoute,
@@ -1806,6 +1847,7 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface PlatformAdminRouteChildren {
+  PlatformAdminAiRoute: typeof PlatformAdminAiRoute
   PlatformAdminAnalyticsRoute: typeof PlatformAdminAnalyticsRoute
   PlatformAdminApiRoute: typeof PlatformAdminApiRoute
   PlatformAdminAuditRoute: typeof PlatformAdminAuditRoute
@@ -1825,6 +1867,7 @@ interface PlatformAdminRouteChildren {
 }
 
 const PlatformAdminRouteChildren: PlatformAdminRouteChildren = {
+  PlatformAdminAiRoute: PlatformAdminAiRoute,
   PlatformAdminAnalyticsRoute: PlatformAdminAnalyticsRoute,
   PlatformAdminApiRoute: PlatformAdminApiRoute,
   PlatformAdminAuditRoute: PlatformAdminAuditRoute,

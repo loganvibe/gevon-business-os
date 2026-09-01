@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
-  LayoutDashboard, Building2, Users, Gem, Blocks, Flag, ScrollText, LineChart, LogOut, ShieldAlert, Code2, Radio, Cpu, Send, Plug, Key, FileJson, Activity, Store,
+  LayoutDashboard, Building2, Users, Gem, Blocks, Flag, ScrollText, LineChart, LogOut, ShieldAlert, Code2, Radio, Cpu, Send, Plug, Key, FileJson, Activity, Store, Brain,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ const NAV = [
   { to: "/admin/health", label: "System Health", icon: Activity },
   { to: "/admin/events", label: "Event Registry", icon: Radio },
   { to: "/admin/jobs", label: "Jobs", icon: Cpu },
+  { to: "/admin/ai", label: "AI Control Center", icon: Brain },
   { to: "/admin/communications", label: "Communications", icon: Send },
   { to: "/admin/audit", label: "Global Audit", icon: ScrollText },
   { to: "/admin/analytics", label: "Analytics", icon: LineChart },

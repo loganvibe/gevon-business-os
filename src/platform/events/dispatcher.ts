@@ -20,6 +20,24 @@ function interpolate(template: string, vars: Record<string, unknown>): string {
   });
 }
 
+function buildPromptForCapability(capabilityKey: string, payload: Record<string, unknown>): string {
+  const context = JSON.stringify(payload, null, 2);
+  switch (capabilityKey) {
+    case "sales.sales_forecast":
+      return `You are a sales forecasting assistant. Analyze the following business data and provide a sales forecast.\n\nData:\n${context}\n\nProvide a structured forecast with confidence intervals and key assumptions.`;
+    case "inventory.low_stock_analysis":
+      return `You are an inventory analyst. Identify low-stock risks from the following data.\n\nData:\n${context}\n\nList at-risk items, impact assessment, and recommended actions.`;
+    case "expenses.spend_analysis":
+      return `You are an expense analyst. Analyze spending patterns from the following data.\n\nData:\n${context}\n\nIdentify major cost drivers, trends, and anomalies.`;
+    case "workflow.workflow_suggestions":
+      return `You are a workflow optimization consultant. Suggest workflow improvements based on the following data.\n\nData:\n${context}\n\nPropose optimized workflows with expected impact.`;
+    case "core.summarize_audit":
+      return `You are an audit summarization assistant. Summarize the following audit log entries.\n\nData:\n${context}\n\nProvide a concise summary with key findings and risk indicators.`;
+    default:
+      return `You are a business assistant for Gevon BusinessOS. Help with the following request.\n\nContext:\n${context}\n\nProvide a clear, actionable response.`;
+  }
+}
+
 async function resolveRecipients(
   admin: SupabaseClient,
   spec: EventSubscriber & { recipient?: string },
@@ -194,12 +212,19 @@ async function dispatchSubscriber(
   }
 
   if (spec.kind === "ai") {
-    // AI dispatch is recorded but not executed here (no LLM calls in M3).
-    await (admin as any).from("event_log").insert({
-      event_queue_id: ev.id,
-      level: "info",
-      message: `ai capability dispatched: ${spec.capabilityKey}`,
-      meta: { payload },
+    await (admin as any).from("jobs").insert({
+      company_id: ev.company_id,
+      module_id: "core",
+      job_type: "ai.execute",
+      payload: {
+        capabilityKey: spec.capabilityKey,
+        companyId: ev.company_id,
+        eventQueueId: ev.id,
+        prompt: buildPromptForCapability(spec.capabilityKey, ev.payload),
+        context: ev.payload,
+      },
+      scheduled_for: new Date().toISOString(),
+      max_attempts: 3,
     });
     return;
   }

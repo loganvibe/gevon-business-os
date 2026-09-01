@@ -7970,6 +7970,357 @@ export type Database = {
           },
         ]
       }
+      ai_capability_configs: {
+        Row: {
+          capability_key: string
+          created_at: string
+          enabled: boolean
+          id: string
+          max_tokens: number
+          model: string
+          provider: string
+          temperature: number
+          updated_at: string
+          credit_cost_per_1k_tokens: number
+        }
+        Insert: {
+          capability_key: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          max_tokens?: number
+          model?: string
+          provider?: string
+          temperature?: number
+          updated_at?: string
+          credit_cost_per_1k_tokens?: number
+        }
+        Update: {
+          capability_key?: string
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          max_tokens?: number
+          model?: string
+          provider?: string
+          temperature?: number
+          updated_at?: string
+          credit_cost_per_1k_tokens?: number
+        }
+        Relationships: []
+      }
+      ai_capability_overrides: {
+        Row: {
+          capability_key: string
+          company_id: string
+          created_at: string
+          enabled: boolean | null
+          id: string
+          max_tokens: number | null
+          model: string | null
+          provider: string | null
+          temperature: number | null
+          updated_at: string
+        }
+        Insert: {
+          capability_key: string
+          company_id: string
+          created_at?: string
+          enabled?: boolean | null
+          id?: string
+          max_tokens?: number | null
+          model?: string | null
+          provider?: string | null
+          temperature?: number | null
+          updated_at?: string
+        }
+        Update: {
+          capability_key?: string
+          company_id?: string
+          created_at?: string
+          enabled?: boolean | null
+          id?: string
+          max_tokens?: number | null
+          model?: string | null
+          provider?: string | null
+          temperature?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_capability_overrides_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_usage_logs: {
+        Row: {
+          capability_key: string
+          company_id: string | null
+          created_at: string
+          credits_used: number
+          error_message: string | null
+          id: string
+          input_tokens: number
+          model: string
+          output_tokens: number
+          provider: string
+          status: string
+          total_tokens: number
+          user_id: string | null
+          request_duration_ms: number | null
+          provider_cost_usd: number | null
+        }
+        Insert: {
+          capability_key: string
+          company_id?: string | null
+          created_at?: string
+          credits_used?: number
+          error_message?: string | null
+          id?: string
+          input_tokens?: number
+          model: string
+          output_tokens?: number
+          provider: string
+          status?: string
+          total_tokens?: number
+          user_id?: string | null
+          request_duration_ms?: number | null
+          provider_cost_usd?: number | null
+        }
+        Update: {
+          capability_key?: string
+          company_id?: string | null
+          created_at?: string
+          credits_used?: number
+          error_message?: string | null
+          id?: string
+          input_tokens?: number
+          model?: string
+          output_tokens?: number
+          provider?: string
+          status?: string
+          total_tokens?: number
+          user_id?: string | null
+          request_duration_ms?: number | null
+          provider_cost_usd?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_usage_logs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_model_pricing: {
+        Row: {
+          created_at: string
+          currency: string
+          id: string
+          input_price_per_1k: number
+          is_active: boolean
+          model: string
+          output_price_per_1k: number
+          provider: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          id?: string
+          input_price_per_1k?: number
+          is_active?: boolean
+          model: string
+          output_price_per_1k?: number
+          provider: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          id?: string
+          input_price_per_1k?: number
+          is_active?: boolean
+          model?: string
+          output_price_per_1k?: number
+          provider?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      plan_ai_limits: {
+        Row: {
+          created_at: string
+          daily_limit: number
+          max_tokens_per_request: number
+          monthly_credits: number
+          plan_key: string
+          trial_credits: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          daily_limit?: number
+          max_tokens_per_request?: number
+          monthly_credits?: number
+          plan_key: string
+          trial_credits?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          daily_limit?: number
+          max_tokens_per_request?: number
+          monthly_credits?: number
+          plan_key?: string
+          trial_credits?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plan_ai_limits_plan_key_fkey"
+            columns: ["plan_key"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["key"]
+          },
+        ]
+      }
+      company_ai_credits: {
+        Row: {
+          bonus_credits: number
+          company_id: string
+          consumed_credits: number
+          monthly_credits: number
+          period_end: string | null
+          period_start: string
+          updated_at: string
+        }
+        Insert: {
+          bonus_credits?: number
+          company_id: string
+          consumed_credits?: number
+          monthly_credits?: number
+          period_end?: string | null
+          period_start?: string
+          updated_at?: string
+        }
+        Update: {
+          bonus_credits?: number
+          company_id?: string
+          consumed_credits?: number
+          monthly_credits?: number
+          period_end?: string | null
+          period_start?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_ai_credits_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_ai_daily_usage: {
+        Row: {
+          company_id: string
+          created_at: string
+          credits: number
+          day: string
+          id: string
+          requests: number
+          tokens: number
+          updated_at: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          credits?: number
+          day: string
+          id?: string
+          requests?: number
+          tokens?: number
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          credits?: number
+          day?: string
+          id?: string
+          requests?: number
+          tokens?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_ai_daily_usage_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_credit_adjustments: {
+        Row: {
+          admin_user_id: string | null
+          amount: number
+          company_id: string
+          created_at: string
+          id: string
+          new_bonus_credits: number | null
+          new_monthly_credits: number | null
+          previous_bonus_credits: number | null
+          previous_monthly_credits: number | null
+          reason: string | null
+          adjustment_type: string
+        }
+        Insert: {
+          admin_user_id?: string | null
+          amount: number
+          company_id: string
+          created_at?: string
+          id?: string
+          new_bonus_credits?: number | null
+          new_monthly_credits?: number | null
+          previous_bonus_credits?: number | null
+          previous_monthly_credits?: number | null
+          reason?: string | null
+          adjustment_type: string
+        }
+        Update: {
+          admin_user_id?: string | null
+          amount?: number
+          company_id?: string
+          created_at?: string
+          id?: string
+          new_bonus_credits?: number | null
+          new_monthly_credits?: number | null
+          previous_bonus_credits?: number | null
+          previous_monthly_credits?: number | null
+          reason?: string | null
+          adjustment_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_credit_adjustments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

@@ -39,10 +39,30 @@ function AuthPage() {
   const [tab, setTab] = useState<"signin" | "signup" | "forgot">(search.mode ?? "signin");
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: next, replace: true });
+    let active = true;
+    const storedNext = typeof sessionStorage !== "undefined" ? sessionStorage.getItem("gevon:next") : null;
+    if (storedNext) sessionStorage.removeItem("gevon:next");
+    const finalNext = sanitizeNext(search.next || storedNext || undefined);
+
+    const handleAuth = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (active && data.session) {
+        navigate({ to: finalNext, replace: true });
+      }
+    };
+    handleAuth();
+
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        navigate({ to: finalNext, replace: true });
+      }
     });
-  }, [navigate, next]);
+
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
+  }, [navigate, search.next]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -142,7 +162,7 @@ function GoogleButton({ next }: { next: string }) {
           sessionStorage.setItem("gevon:next", next);
         } catch {}
         const result = await lovable.auth.signInWithOAuth("google", {
-          redirect_uri: window.location.origin,
+          redirect_uri: window.location.origin + "/auth",
         });
         if (result.error) {
           toast.error(result.error.message || "Google sign-in failed");
@@ -150,7 +170,7 @@ function GoogleButton({ next }: { next: string }) {
           return;
         }
         if (result.redirected) return;
-        window.location.href = next;
+        setLoading(false);
       }}
     >
       {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : (
@@ -221,7 +241,7 @@ function SignUpForm({ next }: { next: string }) {
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin + "/auth",
+            emailRedirectTo: window.location.origin + "/auth" + (next !== "/app" ? `?next=${encodeURIComponent(next)}` : ""),
             data: { full_name: fullName },
           },
         });

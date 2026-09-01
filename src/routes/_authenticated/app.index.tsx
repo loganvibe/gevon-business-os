@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useActiveCompany } from "./app";
-import { useQuery } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
-import { getNavigation } from "@/platform/customer.functions";
+import { useActiveCompany } from "@/routes/_authenticated/app";
+import { useNavigationGroups } from "@/lib/navigation-context";
 import { PageHeader } from "@/components/core/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -14,10 +12,8 @@ export const Route = createFileRoute("/_authenticated/app/")({
 
 function Dashboard() {
   const company = useActiveCompany();
-  const fnNav = useServerFn(getNavigation);
-  const nav = useQuery({ queryKey: ["nav", company.id], queryFn: () => fnNav({ data: { companyId: company.id } }) });
-
-  const enabledModules = (nav.data?.groups ?? []).flatMap((g) => g.items.map((i) => ({ ...i, moduleName: g.moduleName })));
+  const groups = useNavigationGroups();
+  const enabledModules = (groups ?? []).flatMap((g) => g.items.map((i) => ({ ...i, moduleName: g.moduleName })));
   const moduleCount = enabledModules.length;
 
   return (
